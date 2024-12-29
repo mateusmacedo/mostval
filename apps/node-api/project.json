@@ -1,0 +1,63 @@
+{
+  "name": "@mostval/node-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/node-api/src",
+  "projectType": "application",
+  "tags": ["app"],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/node-api",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/node-api/src/main.ts",
+        "tsConfig": "apps/node-api/tsconfig.app.json",
+        "assets": ["apps/node-api/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generateLockfile": true,
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "@mostval/node-api:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@mostval/node-api:build:development"
+        },
+        "production": {
+          "buildTarget": "@mostval/node-api:build:production"
+        }
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/node-api/Dockerfile . -t node-api"
+    }
+  }
+}

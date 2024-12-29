@@ -1,0 +1,79 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.js"
+    ],
+    "sharedGlobals": []
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview"
+      }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
+  "targetDefaults": {
+    "@nx/js:swc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    }
+  },
+  "release": {
+    "projectsRelationship": "independent",
+    "releaseTagPattern": "release/{projectName}/{version}",
+    "conventionalCommits": {
+      "types": {
+        "docs": {
+          "semverBump": "none"
+        },
+        "style": false,
+        "refactor": false,
+        "perf": false,
+        "test": false,
+        "build": false,
+        "ci": false,
+        "chore": false
+      }
+    },
+    "changelog": {
+      "projectChangelogs": {
+        "renderOptions": {
+          "authors": true,
+          "mapAuthorsToGitHubUsernames": true,
+          "commitReferences": true,
+          "versionTitleDate": true
+        }
+      }
+    },
+    "version": {
+      "preVersionCommand": "npx nx run-many -t build",
+      "generatorOptions": {
+      }
+    }
+  }
+}

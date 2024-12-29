@@ -4,6 +4,13 @@
   "sourceRoot": "packages/common/src",
   "projectType": "library",
   "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "packages/common/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": [

@@ -5,6 +5,13 @@
   "projectType": "application",
   "tags": ["app"],
   "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "apps/nest-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",

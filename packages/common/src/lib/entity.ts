@@ -3,15 +3,15 @@ export interface Timestamper {
   updatedAt: Date | string | undefined;
 }
 
-export interface Entity {
-  id: string | number
-  timestamper: Timestamper
-  version: number
+export interface Entity<TIdentifier> {
+  readonly id: TIdentifier;
+  readonly timestamper: Timestamper;
+  readonly version: number;
 }
 
-export abstract class BaseEntity implements Entity {
+export abstract class BaseEntity<TIdentifier> implements Entity<TIdentifier> {
   constructor(
-    public readonly id: string | number,
+    public readonly id: TIdentifier,
     public readonly timestamper: Timestamper,
     public readonly version: number
   ) {}

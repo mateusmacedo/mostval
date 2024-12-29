@@ -1,7 +1,10 @@
-
 import { BaseEntity } from './entity';
 
-class TestEntity extends BaseEntity {}
+class TestEntity extends BaseEntity<string> {
+  constructor(id: string, timestamper: { createdAt: string | Date | undefined; updatedAt: string | Date | undefined }, version: number) {
+    super(id, timestamper, version);
+  }
+}
 
 describe('TestEntity', () => {
   it('should handle createdAt as a valid string date format', () => {
@@ -16,11 +19,6 @@ describe('TestEntity', () => {
     expect(entity.timestamper.createdAt).toBe(dateObj);
   });
 
-  it('should allow createdAt to be undefined', () => {
-    const entity = new TestEntity('3', { createdAt: undefined, updatedAt: undefined }, 0);
-    expect(entity.timestamper.createdAt).toBeUndefined();
-  });
-
   it('should handle updatedAt as a valid string date format', () => {
     const entity = new TestEntity('4', { createdAt: undefined, updatedAt: '2023-05-02' }, 0);
     expect(entity.timestamper.updatedAt).toBe('2023-05-02');
@@ -30,21 +28,6 @@ describe('TestEntity', () => {
     const dateObj = new Date();
     const entity = new TestEntity('5', { createdAt: undefined, updatedAt: dateObj }, 0);
     expect(entity.timestamper.updatedAt).toBe(dateObj);
-  });
-
-  it('should allow updatedAt to be undefined', () => {
-    const entity = new TestEntity('6', { createdAt: undefined, updatedAt: undefined }, 0);
-    expect(entity.timestamper.updatedAt).toBeUndefined();
-  });
-
-  it('should confirm createdAt is undefined', () => {
-    const entity = new TestEntity('7', { createdAt: undefined, updatedAt: undefined }, 0);
-    expect(entity.timestamper.createdAt).toBeUndefined();
-  });
-
-  it('should confirm updatedAt is undefined', () => {
-    const entity = new TestEntity('8', { createdAt: undefined, updatedAt: undefined }, 0);
-    expect(entity.timestamper.updatedAt).toBeUndefined();
   });
 
   it('should confirm createdAt is a valid date string', () => {

@@ -12,10 +12,15 @@
       "!{projectRoot}/.eslintrc.json",
       "!{projectRoot}/eslint.config.js"
     ],
-    "sharedGlobals": []
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
   "plugins": [
-    { "plugin": "@nx/jest/plugin", "options": { "targetName": "test" } },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    },
     {
       "plugin": "@nx/webpack/plugin",
       "options": {
@@ -24,7 +29,12 @@
         "previewTargetName": "preview"
       }
     },
-    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } }
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
   ],
   "targetDefaults": {
     "@nx/esbuild:esbuild": {
@@ -38,7 +48,9 @@
     "releaseTagPattern": "release/{projectName}/{version}",
     "conventionalCommits": {
       "types": {
-        "docs": { "semverBump": "none" },
+        "docs": {
+          "semverBump": "none"
+        },
         "style": false,
         "refactor": false,
         "perf": false,
@@ -58,7 +70,10 @@
         }
       }
     },
-    "version": { "preVersionCommand": "npx nx run-many -t build", "generatorOptions": {} }
+    "version": {
+      "preVersionCommand": "npx nx run-many -t build",
+      "generatorOptions": {}
+    }
   },
   "nxCloudId": "67714dd93c27485c6fe7291c"
 }

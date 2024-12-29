@@ -53,7 +53,6 @@ describe('Result', () => {
     it('should narrow types correctly with isOk', () => {
       const result: Result<number, Error> = Result.Ok(42);
       if (result.isOk()) {
-        // TypeScript should recognize this as Result<number, never>
         const value: number = result.getValue();
         expect(value).toBe(42);
       }
@@ -62,7 +61,6 @@ describe('Result', () => {
     it('should narrow types correctly with isErr', () => {
       const result: Result<number, Error> = Result.Err(new Error('test'));
       if (result.isErr()) {
-        // TypeScript should recognize this as Result<never, Error>
         const error: Error = result.getError();
         expect(error.message).toBe('test');
       }
@@ -94,4 +92,4 @@ describe('Result', () => {
       expect(result.getError()).toBeNull();
     });
   });
-}); 
+});

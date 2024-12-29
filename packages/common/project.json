@@ -6,14 +6,23 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/common",
         "main": "packages/common/src/index.ts",
         "tsConfig": "packages/common/tsconfig.lib.json",
-        "assets": [],
-        "generatePackageJson": true,
-        "format": ["cjs"]
+        "assets": [
+          {
+            "input": "packages/common",
+            "glob": "README.md",
+            "output": "/"
+          }
+        ],
+        "format": [
+          "cjs"
+        ]
       }
     },
     "nx-release-publish": {
@@ -22,7 +31,9 @@
       }
     }
   },
-  "tags": ["package"],
+  "tags": [
+    "package"
+  ],
   "release": {
     "version": {
       "generatorOptions": {

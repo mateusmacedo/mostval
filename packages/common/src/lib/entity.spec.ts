@@ -1,9 +1,9 @@
 import { BaseEntity } from './entity';
 
 class TestEntity extends BaseEntity<string> {
-  constructor(id: string, timestamper: { createdAt: string | Date | undefined; updatedAt: string | Date | undefined }, version: number) {
-    super(id, timestamper, version);
-  }
+  constructor(id: string, timestamper: { createdAt: string | Date | number | undefined; updatedAt: string | Date | number | undefined }, version: number) {
+      super(id, timestamper, version);
+    }
 }
 
 describe('TestEntity', () => {
@@ -11,7 +11,6 @@ describe('TestEntity', () => {
     const entity = new TestEntity('1', { createdAt: '2023-05-01', updatedAt: undefined }, 0);
     expect(entity.timestamper.createdAt).toBe('2023-05-01');
   });
-
 
   it('should handle createdAt as a Date object', () => {
     const dateObj = new Date();
@@ -74,5 +73,22 @@ describe('TestEntity', () => {
     const pastDate = new Date(Date.now() - 1000000);
     const entity = new TestEntity('16', { createdAt: undefined, updatedAt: pastDate }, 0);
     expect((entity.timestamper.updatedAt as Date).getTime()).toBeLessThan(Date.now());
+  });
+
+  it('should handle createdAt as a numeric timestamp', () => {
+    const numericTimestamp = Date.now();
+    const entity = new TestEntity('60', { createdAt: numericTimestamp, updatedAt: undefined }, 2);
+    expect(entity.timestamper.createdAt).toBe(numericTimestamp);
+  });
+
+  it('should handle updatedAt as a numeric timestamp', () => {
+    const numericTimestamp = Date.now();
+    const entity = new TestEntity('61', { createdAt: undefined, updatedAt: numericTimestamp }, 2);
+    expect(entity.timestamper.updatedAt).toBe(numericTimestamp);
+  });
+
+  it('should confirm version is set correctly', () => {
+    const entity = new TestEntity('70', { createdAt: undefined, updatedAt: undefined }, 5);
+    expect(entity.version).toBe(5);
   });
 });

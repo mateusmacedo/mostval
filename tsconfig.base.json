@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "target": "es2015",
-    "paths": {},
+    "paths": {
+      "@mostval/common": ["packages/common/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

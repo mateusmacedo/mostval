@@ -1,5 +1,5 @@
 export default {
-  displayName: 'nest-api',
+  displayName: '@mostval/nest-api',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

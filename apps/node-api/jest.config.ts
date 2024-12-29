@@ -1,5 +1,5 @@
 export default {
-  displayName: 'node-api',
+  displayName: '@mostval/node-api',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

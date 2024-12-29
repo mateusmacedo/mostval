@@ -9,8 +9,7 @@
       "executor": "@nx/jest:jest",
       "options": {
         "jestConfig": "apps/nest-api/jest.config.ts",
-        "passWithNoTests": true,
-        "cache": true
+        "passWithNoTests": true
       }
     },
     "serve": {

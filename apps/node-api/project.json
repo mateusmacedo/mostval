@@ -11,8 +11,7 @@
       "executor": "@nx/jest:jest",
       "options": {
         "jestConfig": "apps/node-api/jest.config.ts",
-        "passWithNoTests": true,
-        "cache": true
+        "passWithNoTests": true
       }
     },
     "build": {

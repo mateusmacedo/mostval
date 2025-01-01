@@ -29,20 +29,31 @@ export interface Query {
   readonly _: string;
 }
 
+export interface ExtractedData {
+  codigoDocumento: string;
+  numeroProcesso: string;
+  relator: string;
+  classeJudicial: string;
+  orgaoJulgador: string;
+  dataAssinatura: string;
+  dataJulgamento: string;
+  texto: string;
+  resumo: string;
+  orgao: string;
+}
+
 export class DataExtractorResult {
   constructor(
     readonly draw: number,
     readonly recordsTotal: number,
     readonly recordsFiltered: number,
-    readonly data: Array<any>,
+    readonly data: Array<ExtractedData>,
     readonly error: string | null,
     readonly criteria: string
   ) {}
 }
 
 export class DataExtractorStage<TInput extends BotInputData, TOutput extends DataExtractorResult> implements Stage<TInput, TOutput> {
-  constructor() {}
-
   async execute(data: TInput): Promise<TOutput> {
     if (!(data instanceof BotInputData)) {
       throw new Error('Invalid data type');

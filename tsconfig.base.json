@@ -16,7 +16,8 @@
     "target": "es2015",
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "@mostval/common": ["packages/common/src/index.ts"]
+      "@mostval/common": ["packages/common/src/index.ts"],
+      "@mostval/pipeline": ["packages/pipeline/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

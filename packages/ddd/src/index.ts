@@ -1,1 +1,1 @@
-export * from './lib/ddd'
+export * from './lib/value-object';

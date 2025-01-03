@@ -17,6 +17,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
       "@mostval/common": ["packages/common/src/index.ts"],
+      "@mostval/ddd": ["packages/ddd/src/index.ts"],
       "@mostval/pipeline": ["packages/pipeline/src/index.ts"]
     }
   },

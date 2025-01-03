@@ -1,15 +1,20 @@
-export interface IVersion<TVersion> {
-  readonly version: TVersion;
-}
-
 export interface IEntity<TIdentifier> {
   readonly id: TIdentifier;
 }
 
-export interface ITimestamper {
+export interface IVersion<TVersion> {
+  readonly version: TVersion;
+}
+
+export interface ICreatedAt {
   readonly createdAt: Date;
+}
+
+export interface IUpdatedAt {
   readonly updatedAt: Date;
 }
+
+export type ITimestamper = ICreatedAt & IUpdatedAt;
 
 export type TEntity<TIdentifier, TVersion> = IEntity<TIdentifier> & IVersion<TVersion>;
 

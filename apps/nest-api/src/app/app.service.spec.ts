@@ -1,7 +1,6 @@
 import { Test } from '@nestjs/testing'
 
 import { AppService, PIPELINE_SYMBOL } from './app.service'
-import { Result } from '@mostval/common'
 import { of } from 'rxjs'
 
 describe('AppService', () => {

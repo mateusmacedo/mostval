@@ -6,4 +6,11 @@ export interface IEntity<TIdentifier> {
   readonly id: TIdentifier;
 }
 
-export type TEntity<TIdentifier, TVersion> = IEntity<TIdentifier> & IVersion<TVersion>;
+export interface ITimestamper {
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+export type TEntity<TIdentifier, TVersion> = IEntity<TIdentifier> & IVersion<TVersion> & ITimestamper;
+
+export type TEntityWithTimestamps<TIdentifier, TVersion> = IEntity<TIdentifier> & IVersion<TVersion>;

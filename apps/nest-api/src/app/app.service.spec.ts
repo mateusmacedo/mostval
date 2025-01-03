@@ -1,21 +1,28 @@
 import { Test } from '@nestjs/testing'
 
-import { AppService } from './app.service'
+import { AppService, PIPELINE_SYMBOL } from './app.service'
+import { Result } from '@mostval/common'
+import { of } from 'rxjs'
 
 describe('AppService', () => {
   let service: AppService
 
   beforeAll(async () => {
     const app = await Test.createTestingModule({
-      providers: [AppService],
+      providers: [AppService, { provide: PIPELINE_SYMBOL, useValue: {
+        execute: jest.fn().mockReturnValue(of({ message: 'Hello API' }))
+      } }],
     }).compile()
 
     service = app.get<AppService>(AppService)
   })
 
   describe('getData', () => {
-    it('should return "Hello API"', () => {
-      expect(service.getData().getValue()).toEqual({ message: 'Hello API' })
+    it('should return "Hello API"', async () => {
+      const result = await service.getData();
+      expect(result.isOk()).toBe(true);
+      expect(result.isErr()).toBe(false);
+      expect(result.getValue()).toEqual({ message: 'Hello API' });
     })
   })
 })

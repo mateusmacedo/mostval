@@ -10,7 +10,10 @@ interface DataItem {
 
 function main(): void {
     const pipeline = new Pipeline()
-        .addStage(new ValidationStage<DataItem>((data: DataItem) => data.value > 0))
+        .addStage(new ValidationStage<DataItem>([{
+            validate: async (data: DataItem) =>
+                data.value > 0 ? [] : ['Value must be positive']
+        }]))
         .addStage(new TransformationStage<DataItem, DataItem>((data: DataItem) => ({
             ...data,
             value: data.value * 2
@@ -22,6 +25,27 @@ function main(): void {
     };
 
     pipeline.execute(inputData).subscribe({
+        next: (result) => console.log('Resultado:', result),
+        error: (error) => console.error('Erro:', error),
+        complete: () => console.log('Processamento completo')
+    });
+
+    const errorPipeline = new Pipeline()
+        .addStage(new ValidationStage<DataItem>([{
+            validate: async (data: DataItem) =>
+                data.value > 0 ? [] : ['Value must be positive']
+        }]))
+        .addStage(new TransformationStage<DataItem, DataItem>((data: DataItem) => ({
+            ...data,
+            value: data.value * 2
+        })));
+
+    const errorInputData: DataItem = {
+        id: '123',
+        value: -42
+    };
+
+    errorPipeline.execute(errorInputData).subscribe({
         next: (result) => console.log('Resultado:', result),
         error: (error) => console.error('Erro:', error),
         complete: () => console.log('Processamento completo')

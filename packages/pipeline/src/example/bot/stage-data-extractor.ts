@@ -1,4 +1,4 @@
-import { Stage } from '../../lib/stage';
+import { Stage } from '../../lib/pipeline';
 import { BotInputData } from './pipeline-dummy-bot';
 
 export interface ColumnSearch {
@@ -54,6 +54,8 @@ export class DataExtractorResult {
 }
 
 export class DataExtractorStage<TInput extends BotInputData, TOutput extends DataExtractorResult> implements Stage<TInput, TOutput> {
+  name = 'DataExtractorStage';
+
   async execute(data: TInput): Promise<TOutput> {
     if (!(data instanceof BotInputData)) {
       throw new Error('Invalid data type');

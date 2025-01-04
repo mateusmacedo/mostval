@@ -85,7 +85,10 @@ export function dataTransformer(data: DataExtractorResult): BotOutputData {
 
 function main() {
     const pipeline = new Pipeline()
-        .addStage(new ValidationStage<BotInputData>((data: BotInputData) => data.value.page > 0))
+        .addStage(new ValidationStage<BotInputData>([{
+            validate: async (data: BotInputData) =>
+                data.value.page > 0 ? [] : ['Page must be positive']
+        }]))
         .addStage(new DataExtractorStage<BotInputData, DataExtractorResult>())
         .addStage(new TransformationStage<DataExtractorResult, BotOutputData>(dataTransformer))
 

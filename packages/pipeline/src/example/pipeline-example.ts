@@ -9,8 +9,8 @@ interface DataItem {
 }
 
 function main(): void {
-    const pipeline = new Pipeline()
-        .addStage(new ValidationStage<DataItem>([{
+    const pipeline = new Pipeline<DataItem, DataItem>()
+        .addStage(new ValidationStage<DataItem, DataItem>([{
             validate: async (data: DataItem) =>
                 data.value > 0 ? [] : ['Value must be positive']
         }]))
@@ -30,8 +30,8 @@ function main(): void {
         complete: () => console.log('Processamento completo')
     });
 
-    const errorPipeline = new Pipeline()
-        .addStage(new ValidationStage<DataItem>([{
+    const errorPipeline = new Pipeline<DataItem, DataItem>()
+        .addStage(new ValidationStage<DataItem, DataItem>([{
             validate: async (data: DataItem) =>
                 data.value > 0 ? [] : ['Value must be positive']
         }]))

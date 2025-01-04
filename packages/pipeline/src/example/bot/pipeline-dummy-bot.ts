@@ -1,6 +1,6 @@
 import { Pipeline } from '../../lib/pipeline';
 import { TransformationStage } from '../../lib/stages/transformation-stage';
-import { ValidationStage } from '../../lib/stages/validation-stage';
+import { ValidationRule, ValidationStage } from '../../lib/stages/validation-stage';
 import { DataExtractorResult, DataExtractorStage, Query } from './stage-data-extractor';
 
 type State = {
@@ -10,6 +10,12 @@ type State = {
 
 export class BotInputData {
     constructor(readonly id: string, readonly value: State) {}
+}
+
+export class BotInputDataValidator implements ValidationRule<BotInputData> {
+    validate(data: BotInputData): Promise<string[]> {
+        return Promise.resolve(data.value.page > 0 ? [] : ['Page must be positive']);
+    }
 }
 
 export class TransformedData {
@@ -85,12 +91,9 @@ export function dataTransformer(data: DataExtractorResult): BotOutputData {
 
 function main() {
     const pipeline = new Pipeline()
-        .addStage(new ValidationStage<BotInputData>([{
-            validate: async (data: BotInputData) =>
-                data.value.page > 0 ? [] : ['Page must be positive']
-        }]))
+        .addStage(new ValidationStage<BotInputData, BotInputData>([new BotInputDataValidator()]))
         .addStage(new DataExtractorStage<BotInputData, DataExtractorResult>())
-        .addStage(new TransformationStage<DataExtractorResult, BotOutputData>(dataTransformer))
+        .addStage(new TransformationStage<DataExtractorResult, BotOutputData>(dataTransformer));
 
     const inputData = new BotInputData('123', { date: '2021-01-01', page: 42 });
 

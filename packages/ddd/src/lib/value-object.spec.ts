@@ -90,6 +90,12 @@ describe('TestComplexNestedValueObject', () => {
         expect(vo.toString()).toBe(JSON.stringify(value));
     });
 
+    test('should convert to JSON correctly', () => {
+        const value = { value: 'test', nested: { value: 1 } };
+        const vo = new TestComplexNestedValueObject(value);
+        expect(vo.toJSON()).toBe(JSON.stringify(value));
+    });
+
     test('should be able to access nested properties', () => {
         const value = { value: 'test', nested: { value: 1 } };
         const vo = new TestComplexNestedValueObject(value);

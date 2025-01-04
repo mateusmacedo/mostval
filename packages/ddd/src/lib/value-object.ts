@@ -2,6 +2,7 @@ export interface IValueObject<T> {
   value: T;
   equals(other: IValueObject<T>): boolean;
   toString(): string;
+  toJSON(): string;
 }
 
 export abstract class ValueObject<T> implements IValueObject<T> {
@@ -26,5 +27,9 @@ export abstract class ValueObject<T> implements IValueObject<T> {
         return JSON.stringify(this.value);
       }
       return String(this.value);
+    }
+
+    public toJSON(): string {
+      return JSON.stringify(this.value);
     }
   }

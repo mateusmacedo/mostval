@@ -62,7 +62,7 @@ describe('Pipeline', () => {
     }
   }
 
-  let pipeline: Pipeline;
+  let pipeline: Pipeline<number, number>;
 
   beforeEach(() => {
     pipeline = new Pipeline();

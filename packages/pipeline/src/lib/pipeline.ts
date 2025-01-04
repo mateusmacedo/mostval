@@ -18,14 +18,12 @@ export class PipelineError extends Error {
   }
 }
 
-export class Pipeline {
-  private stages: Stage<unknown, unknown>[] = [];
+export class Pipeline<TIn, TOut> {
+  private stages: Stage<any, any>[] = [];
 
-  addStage<TInput = unknown, TStageOutput = unknown>(
-    stage: Stage<TInput, TStageOutput>
-  ): Pipeline {
+  addStage<TNewOut>(stage: Stage<TOut, TNewOut>): Pipeline<TIn, TNewOut> {
     this.stages.push(stage);
-    return this;
+    return (this as unknown) as Pipeline<TIn, TNewOut>;
   }
 
   getStages(): Stage<unknown, unknown>[] {
@@ -36,15 +34,13 @@ export class Pipeline {
     return this.stages[index];
   }
 
-  execute<TInput = unknown, TOutput = unknown>(
-    initialData: TInput
-  ): Observable<TOutput> {
-    return new Observable<TOutput>(subscriber => {
-      let result: unknown = initialData;
+  execute(input: TIn): Observable<TOut> {
+    return new Observable<TOut>(subscriber => {
+      let result: unknown = input;
 
       const executeStages = async (index: number) => {
         if (index >= this.stages.length) {
-          subscriber.next(result as TOutput);
+          subscriber.next(result as TOut);
           subscriber.complete();
           return;
         }

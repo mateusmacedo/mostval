@@ -11,16 +11,16 @@ describe('AppController', () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService, { provide: PIPELINE_SYMBOL, useValue: {
-        execute: jest.fn().mockReturnValue(of({ message: 'Hello API' }))
+        execute: jest.fn().mockReturnValue(of({ message: 'Execute App Service' }))
       } }],
     }).compile()
   })
 
-  describe('getData', () => {
+  describe('executeAppService', () => {
     it('should return "Hello API"', async () => {
       const appController = app.get<AppController>(AppController)
-      const result = await appController.getData()
-      expect(result.getValue()).toEqual({ message: 'Hello API' })
+      const result = await appController.executeAppService()
+      expect(result).toEqual({ message: 'Execute App Service' })
     })
   })
 })

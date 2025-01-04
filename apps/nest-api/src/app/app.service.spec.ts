@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing'
 
-import { AppService, PIPELINE_SYMBOL } from './app.service'
+import { AppService, DataItem, PIPELINE_SYMBOL } from './app.service'
 import { of } from 'rxjs'
 
 describe('AppService', () => {
@@ -16,9 +16,12 @@ describe('AppService', () => {
     service = app.get<AppService>(AppService)
   })
 
-  describe('getData', () => {
+  describe('execute', () => {
     it('should return "Hello API"', async () => {
-      const result = await service.getData();
+      const message = {
+        message: 'Hello API'
+      } as DataItem
+      const result = await service.execute(message);
       expect(result.isOk()).toBe(true);
       expect(result.isErr()).toBe(false);
       expect(result.getValue()).toEqual({ message: 'Hello API' });

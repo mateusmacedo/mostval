@@ -74,7 +74,7 @@ describe('ValidationStage', () => {
         }
       };
 
-      const validationStage = new ValidationStage<TestData>([idRule, nameRule]);
+      const validationStage = new ValidationStage<TestData, TestData>([idRule, nameRule]);
 
       // Valid data
       const validData: TestData = { id: 1, name: 'John' };
@@ -96,28 +96,27 @@ describe('ValidationStage', () => {
 
   describe('error handling', () => {
     it('should handle validation errors through handleError method', async () => {
-      const failingRule: ValidationRule<string> = {
-        async validate(): Promise<string[]> {
-          return ['Always fails'];
-        }
-      };
-
-      const validationStage = new ValidationStage([failingRule]);
+      const validationStage = new ValidationStage([]);
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const validationError = new ValidationError('Test error', ['Error 1']);
 
-      try {
-        await validationStage.handleError(
-          new ValidationError('Test error', ['Error 1']),
-          'test data'
-        );
-      } catch (error) {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Validation errors:',
-          ['Error 1']
-        );
-      }
+      await expect(
+        validationStage.handleError(validationError, 'test data')
+      ).rejects.toBe(validationError);
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Validation errors:',
+        ['Error 1']
+      );
 
       consoleSpy.mockRestore();
+    });
+
+    it('should handle non-validation errors correctly', async () => {
+      const validationStage = new ValidationStage<string, string>([]);
+      const genericError = new Error('Generic error');
+      const result = await validationStage.handleError(genericError, 'fallback data');
+      expect(result).toBe('fallback data');
     });
   });
 });

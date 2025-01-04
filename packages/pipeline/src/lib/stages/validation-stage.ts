@@ -11,12 +11,12 @@ export interface ValidationRule<T> {
   validate(data: T): Promise<string[]>;
 }
 
-export class ValidationStage<T> implements Stage<T, T> {
+export class ValidationStage<TIn, TOut> implements Stage<TIn, TOut> {
   name = 'Validation Stage';
 
-  constructor(private readonly rules: ValidationRule<T>[]) {}
+  constructor(private readonly rules: ValidationRule<TIn>[]) {}
 
-  async execute(data: T): Promise<T> {
+  async execute(data: TIn): Promise<TOut> {
     const errors: string[] = [];
 
     for (const rule of this.rules) {
@@ -28,16 +28,14 @@ export class ValidationStage<T> implements Stage<T, T> {
       throw new ValidationError('Validation failed', errors);
     }
 
-    return data;
+    return data as unknown as TOut;
   }
 
-  async handleError(error: Error, context: T): Promise<T> {
+  async handleError(error: Error, context: TIn): Promise<TOut> {
     if (error instanceof ValidationError) {
-      // Aqui você pode implementar lógica de correção automática
-      // ou logging específico para erros de validação
       console.warn('Validation errors:', error.validationErrors);
+      throw error;
     }
-
-    throw error; // Re-throw se não puder recuperar
+    return context as unknown as TOut;
   }
 }

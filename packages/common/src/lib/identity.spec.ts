@@ -1,9 +1,9 @@
-import { createEntity, createTimestampedEntity, TEntityWithTimestamps } from './entity';
+import { createIdentity, createTimestampedIdentity, TIdetityWithTimestamps } from './identity';
 
 describe('entity', () => {
   describe('createEntity', () => {
     it('should create an entity with the correct id and version', () => {
-      const entity = createEntity('123', 1);
+      const entity = createIdentity('123', 1);
       expect(entity.id).toBe('123');
       expect(entity.version).toBe(1);
     });
@@ -11,7 +11,7 @@ describe('entity', () => {
 
   describe('createTimestampedEntity', () => {
     it('should create an entity with the correct id, version, createdAt, and updatedAt', () => {
-      const entity = createTimestampedEntity('123', 1);
+      const entity = createTimestampedIdentity('123', 1);
       expect(entity.id).toBe('123');
       expect(entity.version).toBe(1);
       expect(entity.createdAt).toBeInstanceOf(Date);

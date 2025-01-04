@@ -2,185 +2,161 @@
 
 ## Description
 
-A TypeScript library for data pipeline processing, providing a flexible and extensible approach to data transformation and validation using RxJS Observables.
+A TypeScript library for data pipeline processing, providing a flexible and extensible approach to data transformation, validation, caching, logging, and enrichment using RxJS Observables.
 
 ## Installation
 
 ```bash
-npm install edtech-ava-libs-flux
+npm install @mostval/pipeline
 ```
 
 ## Key Features
 
 - ✨ Synchronous and asynchronous pipeline processing
 - 🔄 Observable-based chain processing (RxJS)
-- ✅ Customizable validation and transformation stages
-- 📝 Strong TypeScript typing
+- ✅ Validation with custom rules
+- 🧹 Data sanitization
+- 🔍 Data enrichment
+- 📝 Logging with sensitive data masking
+- 💾 Caching with TTL support
+- 🔁 Retry mechanism with custom policies
+- 📊 Strong TypeScript typing
 - 🔌 Extensible architecture
-- 🧪 Comprehensive test coverage
+- 🧪 100% test coverage
 
-## Quick Start
+## Core Stages
 
-### Basic Pipeline
+### ValidationStage
 
-```typescript
-import { Pipeline, ValidationStage, TransformationStage } from '@mostval/pipeline';
-
-// Define your data structure
-interface DataItem {
-  id: string;
-  value: number;
-}
-
-// Create and configure pipeline
-const pipeline = new Pipeline<DataItem, DataItem>();
-
-// Add validation stage
-pipeline.addStage(
-  new ValidationStage<DataItem>((data) =>
-    data.id !== '' && data.value >= 0
-  )
-);
-
-// Add transformation stage
-pipeline.addStage(
-  new TransformationStage<DataItem, DataItem>((data) => ({
-    ...data,
-    value: data.value * 2
-  }))
-);
-
-// Execute pipeline
-pipeline.execute({
-  id: '123',
-  value: 42
-}).subscribe({
-  next: (result) => console.log('Success:', result),
-  error: (error) => console.error('Error:', error),
-  complete: () => console.log('Processing completed')
-});
-```
-
-## Core Components
-
-### Pipeline
-
-The main class for sequential data processing:
+Validates input data against a set of rules:
 
 ```typescript
-const pipeline = new Pipeline<InputType, OutputType>();
-pipeline
-  .addStage(new ValidationStage(...))
-  .addStage(new TransformationStage(...))
-  .execute(data);
+const validationStage = new ValidationStage<UserData>([{
+  validate: async (data) => {
+    const errors = [];
+    if (!data.email) errors.push('Email is required');
+    return errors;
+  }
+}]);
 ```
 
-### Stages
-
-#### ValidationStage
-
-Validates input data:
-
-```typescript
-new ValidationStage<T>((data: T) => boolean);
-```
-
-#### TransformationStage
+### TransformationStage
 
 Transforms data between stages:
 
 ```typescript
-new TransformationStage<Input, Output>((data: Input) => Output);
-```
-
-## Advanced Usage
-
-### Async Transformations
-
-```typescript
-const asyncPipeline = new Pipeline<number, string>();
-
-asyncPipeline.addStage(
-  new TransformationStage<number, string>(async (num) => {
-    const result = await someAsyncOperation(num);
-    return result.toString();
-  })
+const transformStage = new TransformationStage<Input, Output>(
+  data => ({ ...data, timestamp: Date.now() })
 );
 ```
 
-### Complex Data Validation
+### SanitizationStage
+
+Cleanses and normalizes data:
 
 ```typescript
-interface UserData {
-  email: string;
-  age: number;
-}
+const sanitizationStage = new SanitizationStage<UserData>([{
+  field: 'email',
+  sanitize: value => String(value).trim().toLowerCase()
+}]);
+```
 
-const userValidation = new ValidationStage<UserData>((user) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(user.email) && user.age >= 18;
+### EnrichmentStage
+
+Enriches data with external information:
+
+```typescript
+const enrichmentStage = new EnrichmentStage({
+  name: 'UserEnricher',
+  enrich: async (user) => {
+    const details = await fetchUserDetails(user.id);
+    return { ...user, ...details };
+  }
 });
 ```
 
-### Type Transformation Chain
+### LoggingStage
+
+Logs pipeline execution with sensitive data masking:
 
 ```typescript
-const pipeline = new Pipeline<number, string>()
-  .addStage(new TransformationStage<number, number>(n => n * 2))
-  .addStage(new ValidationStage<number>(n => n > 0))
-  .addStage(new TransformationStage<number, string>(n => n.toString()));
+const loggingStage = new LoggingStage(logger, {
+  logData: true,
+  maskFields: ['password', 'creditCard']
+});
 ```
 
-## Error Handling
+### CachingStage
 
-The pipeline uses RxJS error handling:
+Caches stage results with TTL support:
 
 ```typescript
-pipeline.execute(data).subscribe({
+const cachingStage = new CachingStage(innerStage, cache, {
+  ttl: 3600,
+  keyGenerator: (data) => `user:${data.id}`
+});
+```
+
+### RetryStage
+
+Retries failed operations with custom policies:
+
+```typescript
+const retryStage = new RetryStage(innerStage, {
+  maxAttempts: 3,
+  delay: 1000,
+  shouldRetry: (error) => error.code === 'NETWORK_ERROR'
+});
+```
+
+## Pipeline Composition
+
+```typescript
+const pipeline = new Pipeline<InputData, OutputData>()
+  .addStage(new LoggingStage(logger))
+  .addStage(new ValidationStage(validators))
+  .addStage(new SanitizationStage(sanitizers))
+  .addStage(new CachingStage(
+    new EnrichmentStage(enricher),
+    cache,
+    cacheOptions
+  ))
+  .addStage(new RetryStage(
+    new TransformationStage(transformer),
+    retryPolicy
+  ));
+
+pipeline.execute(inputData).subscribe({
   next: (result) => console.log('Success:', result),
-  error: (error) => {
-    if (error.message.includes('validation')) {
-      console.error('Validation failed:', error);
-    } else {
-      console.error('Processing error:', error);
-    }
-  },
+  error: (error) => console.error('Error:', error),
   complete: () => console.log('Pipeline completed')
 });
 ```
 
+## Error Handling
+
+Each stage can implement custom error handling:
+
+```typescript
+class CustomStage implements Stage<Input, Output> {
+  async handleError(error: Error, context: Input): Promise<Output> {
+    if (error instanceof ValidationError) {
+      // Handle validation errors
+      return fallbackValue;
+    }
+    throw error; // Re-throw other errors
+  }
+}
+```
+
 ## Development
 
-### Building
-
 ```bash
-npm run build
+npm run build   # Build the library
+npm run test    # Run tests with coverage
+npm run lint    # Run linting
 ```
-
-### Testing
-
-```bash
-npm run test
-```
-
-### Linting
-
-```bash
-npm run lint
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support, please open an issue in the GitHub repository or contact the maintainers.
+MIT License

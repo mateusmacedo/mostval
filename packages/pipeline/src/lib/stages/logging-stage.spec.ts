@@ -1,3 +1,6 @@
+/*
+eslint @typescript-eslint/no-explicit-any: 0
+*/
 import { LoggingStage, Logger } from './logging-stage';
 
 describe('LoggingStage', () => {
@@ -229,7 +232,9 @@ describe('LoggingStage', () => {
           parent: undefined
         }
       };
-      data.nested!.parent = data;
+      if (data.nested) {
+        data.nested.parent = data;
+      }
 
       const stage = new LoggingStage<TestData>(mockLogger, {
         logData: true,
@@ -833,7 +838,9 @@ describe('LoggingStage', () => {
         maskFields: ['field']
       });
 
-      const fn = () => {};
+      const fn = () => {
+        return null;
+      };
       await stage.execute(fn as any);
       expect(mockLogger.info).toHaveBeenCalledWith('Processing data', fn);
 

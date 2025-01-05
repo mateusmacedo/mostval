@@ -13,7 +13,7 @@ export class RetryError extends Error {
   }
 }
 
-export type RetryAwaitable = (delay: number) => Promise<void>;
+export type RetryAwaitable = (data:any) => Promise<void>;
 
 export class RetryStage<TInput, TOutput> implements Stage<TInput, TOutput> {
   name = 'RetryStage';

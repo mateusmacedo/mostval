@@ -21,7 +21,6 @@
         "main": "packages/ddd/src/index.ts",
         "tsConfig": "packages/ddd/tsconfig.lib.json",
         "assets": ["packages/ddd/*.md"],
-        "generatePackageJson": true,
         "format": ["cjs"]
       }
     },

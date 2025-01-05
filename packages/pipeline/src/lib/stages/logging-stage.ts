@@ -67,32 +67,29 @@ export class LoggingStage<T extends object> implements Stage<T, T> {
   private applyMask(obj: any, pathParts: string[]): void {
     const [current, ...rest] = pathParts;
 
-    if (!obj || typeof obj !== 'object') {
-      return;
-    }
+    if (!obj || typeof obj !== 'object') return;
 
     if (rest.length === 0) {
-      if (current === '*' && Array.isArray(obj)) {
-        obj.forEach((_, index) => {
-          obj[index] = '***';
-        });
-      } else if (current in obj) {
-        obj[current] = '***';
-      }
+      this.applyFinalMask(obj, current);
       return;
     }
 
+    this.applyMaskToNestedObjects(obj, current, rest);
+  }
+
+  private applyFinalMask(obj: any, current: string): void {
     if (current === '*' && Array.isArray(obj)) {
-      obj.forEach(item => {
-        if (item && typeof item === 'object') {
-          this.applyMask(item, rest);
-        }
-      });
+      obj.fill('***');
     } else if (current in obj) {
-      const value = obj[current];
-      if (value && typeof value === 'object') {
-        this.applyMask(value, rest);
-      }
+      obj[current] = '***';
+    }
+  }
+
+  private applyMaskToNestedObjects(obj: any, current: string, rest: string[]): void {
+    if (current === '*' && Array.isArray(obj)) {
+      obj.forEach(item => this.applyMask(item, rest));
+    } else if (current in obj) {
+      this.applyMask(obj[current], rest);
     }
   }
 }

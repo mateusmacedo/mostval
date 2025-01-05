@@ -10,12 +10,6 @@ export class DataItem {
   message: string
 }
 
-export class DataItemValueObject extends ValueObject<DataItem> {
-  constructor(value: DataItem) {
-    super(value)
-  }
-}
-
 @Injectable()
 export class AppService {
   constructor(@Inject(PIPELINE_SYMBOL) private readonly pipeline: Pipeline<DataItem, DataItem>) {}

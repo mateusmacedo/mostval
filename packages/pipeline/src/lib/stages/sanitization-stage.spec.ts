@@ -31,7 +31,7 @@ describe('SanitizationStage', () => {
       };
 
       const stage = new SanitizationStage([rule]);
-      const result = await stage.execute({ active: 1 as any });
+      const result = await stage.execute({ active: 1 as unknown as boolean });
       expect(result.active).toBe(true);
     });
   });

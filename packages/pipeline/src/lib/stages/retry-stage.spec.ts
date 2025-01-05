@@ -1,4 +1,4 @@
-import { RetryStage, RetryPolicy, RetryError } from './retry-stage';
+import { RetryStage, RetryPolicy, RetryError, RetryAwaitable } from './retry-stage';
 import { Stage } from '../pipeline';
 
 describe('RetryStage', () => {
@@ -20,7 +20,7 @@ describe('RetryStage', () => {
       delay: 100,
       shouldRetry: jest.fn().mockReturnValue(true),
     };
-    retryPromise = jest.fn();
+    retryPromise = jest.fn() as unknown as RetryAwaitable<number>;
     retryStage = new RetryStage<number, number>(mockInnerStage, policy, retryPromise);
   });
 
@@ -103,7 +103,9 @@ describe('RetryStage', () => {
     policy.maxAttempts = 5;
     mockExecute.mockRejectedValue(new Error('Retry error'));
 
-    await retryStage.execute(10).catch(() => {});
+    await retryStage.execute(10 as unknown as number).catch(() => {
+      return;
+    });
 
     expect(mockExecute).toHaveBeenCalledTimes(5);
   });
@@ -151,7 +153,7 @@ describe('RetryStage', () => {
 
   it('handles a zero maxAttempts gracefully', async () => {
     policy.maxAttempts = 0;
-    retryStage = new RetryStage<number, number>(mockInnerStage, policy, (delay) => new Promise((resolve) => setTimeout(resolve, delay)));
+    retryStage = new RetryStage<number, number>(mockInnerStage, policy, (delay: number) => new Promise((resolve) => setTimeout(resolve, delay)));
 
     mockExecute.mockRejectedValueOnce(new Error('Immediate failure'));
 
@@ -248,7 +250,7 @@ describe('RetryStage', () => {
   });
 
   it('handles an inner stage that returns undefined', async () => {
-    mockExecute.mockResolvedValueOnce(undefined as any);
+    mockExecute.mockResolvedValueOnce(undefined as unknown as number);
 
     const result = await retryStage.execute(100);
     expect(result).toBeUndefined();

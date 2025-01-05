@@ -1,0 +1,9 @@
+{
+    "[typescript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "modificationsIfAvailable",
+        "editor.formatOnType": false,
+        "editor.formatOnPaste": true
+    }
+}

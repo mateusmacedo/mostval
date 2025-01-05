@@ -1,0 +1,71 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug App",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+      "args": [
+        "-r", "tsconfig-paths/register",
+        "-P", "${workspaceFolder}/apps/${input:appName}/tsconfig.app.json",
+        "${workspaceFolder}/apps/${input:appName}/src/main.ts"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "env": {
+        "TS_NODE_PROJECT": "${workspaceFolder}/apps/${input:appName}/tsconfig.app.json",
+        "NODE_PATH": "${workspaceFolder}/node_modules"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug package",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+      "args": [
+        "-r", "tsconfig-paths/register",
+        "-P", "${workspaceFolder}/packages/${input:packageName}/tsconfig.lib.json",
+        "${file}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "env": {
+        "TS_NODE_PROJECT": "${workspaceFolder}/packages/${input:packageName}/tsconfig.lib.json",
+        "NODE_PATH": "${workspaceFolder}/node_modules"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "packageName",
+      "type": "pickString",
+      "description": "Selecione o pacote",
+      "options": [
+        "common",
+        "pipeline",
+      ]
+    },
+    {
+      "id": "appName",
+      "type": "pickString",
+      "description": "Selecione o app",
+      "options": [
+        "nest-api",
+        "node-api"
+      ]
+    }
+  ]
+}

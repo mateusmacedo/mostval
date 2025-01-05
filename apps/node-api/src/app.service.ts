@@ -7,10 +7,10 @@ export interface DataItem {
 }
 
 export class AppService {
-  constructor(private readonly pipeline: Pipeline) {}
+  constructor(private readonly pipeline: Pipeline<DataItem, DataItem>) {}
 
   async getData(): Promise<Result<DataItem, Error>> {
-    const pResult = await lastValueFrom(this.pipeline.execute<DataItem, DataItem>({ message: 'Hello API' }))
+    const pResult = await lastValueFrom(this.pipeline.execute({ message: 'Hello API' }))
     return Result.Ok(pResult)
   }
 }

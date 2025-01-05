@@ -10,7 +10,7 @@ import { NestjsHealthCheckService } from './nestjs-health-check.service';
   check(): Promise<T>;
 }
 
-@Controller('nestjs-utils-controllers')
+@Controller('health')
 export class NestjsHealthCheckController implements ICheckEndpoint<HealthCheckResult> {
   constructor(private readonly nestjsHealthCheckService: NestjsHealthCheckService) {}
 

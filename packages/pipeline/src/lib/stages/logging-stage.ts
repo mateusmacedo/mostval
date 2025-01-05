@@ -1,3 +1,6 @@
+/*
+eslint @typescript-eslint/no-explicit-any: 0
+*/
 import { Stage } from '../pipeline';
 
 export interface Logger {
@@ -34,37 +37,29 @@ export class LoggingStage<T extends object> implements Stage<T, T> {
     return this.cloneAndMask(data, seen);
   }
 
-  private cloneAndMask(obj: any, seen: WeakSet<object>): any {
+  private cloneAndMask(obj: T | T[], seen: WeakSet<object>): T | T[] {
     if (!obj || typeof obj !== 'object') {
       return obj;
     }
 
     if (seen.has(obj)) {
-      return '[Circular]';
+      return '[Circular]' as unknown as T;
     }
 
     seen.add(obj);
 
-    const masked = Array.isArray(obj)
-      ? [...obj]
-      : { ...obj };
-
-    for (const key in masked) {
-      if (Object.prototype.hasOwnProperty.call(masked, key)) {
-        masked[key] = this.cloneAndMask(masked[key], seen);
-      }
-    }
+    const result = Array.isArray(obj) ? [...obj] : { ...obj } as T;
 
     if (this.options.maskFields?.length) {
       for (const path of this.options.maskFields) {
-        this.applyMask(masked, String(path).split('.'));
+        this.applyMask(result, String(path).split('.'));
       }
     }
 
-    return masked;
+    return result;
   }
 
-  private applyMask(obj: any, pathParts: string[]): void {
+  private applyMask(obj: T | T[], pathParts: string[]): void {
     const [current, ...rest] = pathParts;
 
     if (!obj || typeof obj !== 'object') return;
@@ -74,22 +69,26 @@ export class LoggingStage<T extends object> implements Stage<T, T> {
       return;
     }
 
-    this.applyMaskToNestedObjects(obj, current, rest);
-  }
-
-  private applyFinalMask(obj: any, current: string): void {
     if (current === '*' && Array.isArray(obj)) {
-      obj.fill('***');
+      (obj as any[]).forEach(item => this.applyMask(item, rest));
     } else if (current in obj) {
-      obj[current] = '***';
+      this.applyMask((obj as any)[current], rest);
     }
   }
 
-  private applyMaskToNestedObjects(obj: any, current: string, rest: string[]): void {
+  private applyFinalMask(obj: T | T[], current: string): void {
     if (current === '*' && Array.isArray(obj)) {
-      obj.forEach(item => this.applyMask(item, rest));
+      (obj as unknown as any[]).fill('***');
     } else if (current in obj) {
-      this.applyMask(obj[current], rest);
+      (obj as any)[current] = '***';
+    }
+  }
+
+  private applyMaskToNestedObjects(obj: T, current: string, rest: string[]): void {
+    if (current === '*' && Array.isArray(obj)) {
+      obj.forEach(item => this.applyMask(item as T, rest));
+    } else if (current in obj) {
+      this.applyMask((obj as any)[current], rest);
     }
   }
 }

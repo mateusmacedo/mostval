@@ -40,12 +40,12 @@ describe('ValueObject', () => {
 
     test('should return false when comparing with null', () => {
         const vo = new TestStringValueObject('test');
-        expect(vo.equals(null as any)).toBe(false);
+        expect(vo.equals(null as unknown as TestStringValueObject)).toBe(false);
     });
 
     test('should return false when comparing with undefined', () => {
         const vo = new TestStringValueObject('test');
-        expect(vo.equals(undefined as any)).toBe(false);
+        expect(vo.equals(undefined as unknown as TestStringValueObject)).toBe(false);
     });
 
     test('should convert to string correctly', () => {
@@ -76,12 +76,12 @@ describe('TestComplexNestedValueObject', () => {
 
     test('should return false when comparing with null', () => {
         const vo = new TestComplexNestedValueObject({ value: 'test', nested: { value: 1 } });
-        expect(vo.equals(null as any)).toBe(false);
+        expect(vo.equals(null as unknown as TestComplexNestedValueObject)).toBe(false);
     });
 
     test('should return false when comparing with undefined', () => {
         const vo = new TestComplexNestedValueObject({ value: 'test', nested: { value: 1 } });
-        expect(vo.equals(undefined as any)).toBe(false);
+        expect(vo.equals(undefined as unknown as TestComplexNestedValueObject)).toBe(false);
     });
 
     test('should convert to string correctly', () => {

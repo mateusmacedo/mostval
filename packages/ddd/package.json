@@ -1,7 +1,9 @@
 {
   "name": "@mostval/ddd",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@mostval/common": "workspace:*"
+  },
   "type": "commonjs",
   "main": "./index.cjs"
 }

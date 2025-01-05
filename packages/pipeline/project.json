@@ -21,7 +21,6 @@
         "main": "packages/pipeline/src/index.ts",
         "tsConfig": "packages/pipeline/tsconfig.lib.json",
         "assets": ["packages/pipeline/*.md"],
-        "generatePackageJson": true,
         "format": ["cjs"]
       }
     },

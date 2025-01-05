@@ -1,4 +1,4 @@
-import { createIdentity, createTimestampedIdentity, TIdetityWithTimestamps } from './identity';
+import { createIdentity, createTimestampedIdentity } from './identity';
 
 describe('entity', () => {
   describe('createEntity', () => {

@@ -25,7 +25,7 @@ export class SanitizationStage<T extends object> implements Stage<T, T> {
         sanitized[rule.field] = rule.sanitize(sanitized[rule.field]);
       } catch (error) {
         throw new SanitizationError(
-          `Failed to sanitize field ${String(rule.field)}`,
+          `Failed to sanitize field ${String(rule.field)} with error: ${error}`,
           String(rule.field)
         );
       }

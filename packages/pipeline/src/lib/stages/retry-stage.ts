@@ -13,7 +13,7 @@ export class RetryError extends Error {
   }
 }
 
-export type RetryAwaitable = (data:any) => Promise<void>;
+export type RetryAwaitable<T> = (data: T) => Promise<void>;
 
 export class RetryStage<TInput, TOutput> implements Stage<TInput, TOutput> {
   name = 'RetryStage';
@@ -21,7 +21,7 @@ export class RetryStage<TInput, TOutput> implements Stage<TInput, TOutput> {
   constructor(
     private innerStage: Stage<TInput, TOutput>,
     private policy: RetryPolicy,
-    private awaitable: RetryAwaitable
+    private awaitable: RetryAwaitable<number>
   ) {}
 
   async execute(data: TInput): Promise<TOutput> {

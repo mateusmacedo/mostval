@@ -22,7 +22,7 @@ export class EnrichmentStage<TInput, TOutput> implements Stage<TInput, TOutput> 
       return await this.source.enrich(data);
     } catch (error) {
       throw new EnrichmentError(
-        `Enrichment failed from source ${this.source.name}`,
+        `Enrichment failed from source ${this.source.name} with error: ${error}`,
         this.source.name
       );
     }

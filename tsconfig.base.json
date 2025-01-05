@@ -19,7 +19,8 @@
       "@mostval/common": ["packages/common/src/index.ts"],
       "@mostval/ddd": ["packages/ddd/src/index.ts"],
       "@mostval/nestjs-utils": ["packages/nestjs-utils/src/index.ts"],
-      "@mostval/pipeline": ["packages/pipeline/src/index.ts"]
+      "@mostval/pipeline": ["packages/pipeline/src/index.ts"],
+      "@mostval/users": ["packages/users/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

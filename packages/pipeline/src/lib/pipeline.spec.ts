@@ -56,7 +56,7 @@ describe('Pipeline', () => {
 
   class AsyncStage implements Stage<number, number> {
     name = 'AsyncStage';
-    constructor(private delay: 10) {}
+    constructor(private delay: number) {}
     async execute(data: number): Promise<number> {
       return new Promise(resolve => setTimeout(() => resolve(data * 2), this.delay));
     }

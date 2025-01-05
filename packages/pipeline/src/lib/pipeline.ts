@@ -19,7 +19,7 @@ export class PipelineError extends Error {
 }
 
 export class Pipeline<TIn, TOut> {
-  private stages: Stage<any, any>[] = [];
+  private stages: Stage<unknown, unknown>[] = [];
 
   addStage<TNewOut>(stage: Stage<TOut, TNewOut>): Pipeline<TIn, TNewOut> {
     this.stages.push(stage);

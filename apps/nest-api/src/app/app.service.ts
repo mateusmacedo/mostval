@@ -20,9 +20,8 @@ export class DataItemValueObject extends ValueObject<DataItem> {
 export class AppService {
   constructor(@Inject(PIPELINE_SYMBOL) private readonly pipeline: Pipeline<DataItem, DataItem>) {}
   async execute(data: DataItem): Promise<Result<DataItem, Error>> {
-    const dataItem = new DataItemValueObject(data)
     try {
-      const executed = await lastValueFrom(this.pipeline.execute(dataItem.value))
+      const executed = await lastValueFrom(this.pipeline.execute(data))
       const result = Result.Ok(executed)
       return result as Result<DataItem, Error>
     } catch (error) {

@@ -1,7 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common'
 
-import { AppService, DataItem, DataItemValueObject } from './app.service'
-import { lastValueFrom } from 'rxjs'
+import { AppService, DataItem } from './app.service'
 
 @Controller()
 export class AppController {

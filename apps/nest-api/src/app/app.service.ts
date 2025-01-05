@@ -1,5 +1,4 @@
 import { Result } from '@mostval/common'
-import { ValueObject } from '@mostval/ddd'
 import { Pipeline } from '@mostval/pipeline'
 import { Inject, Injectable } from '@nestjs/common'
 import { lastValueFrom } from 'rxjs'

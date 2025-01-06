@@ -1,9 +1,13 @@
-import { MessageStore } from '@mostval/common'
+import { IMessageStore } from '@mostval/common'
 import { User, UserProps } from './model'
 import { UserCreated } from './message'
 
-export class UserFactory {
-  constructor(private readonly msgStore: MessageStore) {}
+export interface IUserFactory {
+  create(props: UserProps): User<UserProps>
+}
+
+export class UserFactory implements IUserFactory {
+  constructor(private readonly msgStore: IMessageStore) {}
 
   create(props: UserProps): User<UserProps> {
     const user = new User(props, this.msgStore)
@@ -18,3 +22,5 @@ export class UserFactory {
     return user
   }
 }
+
+export const USER_FACTORY = Symbol('IUserFactory')

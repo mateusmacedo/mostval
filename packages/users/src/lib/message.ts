@@ -8,7 +8,7 @@ export class CreateUserCommand extends Message {
   }
 }
 
-export class UserCreated extends Message {
+export class UserCreatedEvent extends Message {
   constructor(payload: UserProps, metadata: IMetadata) {
     super(payload, metadata)
   }
@@ -20,7 +20,7 @@ export class ChangeUserCredentialsCommand extends Message {
   }
 }
 
-export class UserCredentialsChanged extends Message {
+export class UserCredentialsChangedEvent extends Message {
   constructor(payload: ICredentials, metadata: IMetadata) {
     super(payload, metadata)
   }

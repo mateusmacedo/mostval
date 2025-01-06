@@ -121,9 +121,6 @@ describe('UserController', () => {
       } as User<UserProps>
       jest.spyOn(service, 'updateUserCredentials').mockResolvedValue(updatedUserCredentials)
 
-      const criteria: TUserCriteria[] = [
-        ['id', '1'],
-      ]
       await controller.updateUserCredentials('1', { id: 'john.doe.updated@example.com', secret: 'password_updated' })
     })
     it('should throw an error when user credentials are invalid', async () => {

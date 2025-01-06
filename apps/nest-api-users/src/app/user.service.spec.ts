@@ -1,9 +1,7 @@
+import { IMetadata, InMemoryMessageStore } from '@mostval/common'
+import { ChangeUserCredentialsCommand, IUserFactory, IUserRepository, User, USER_FACTORY, USER_REPOSITORY, UserProps } from '@mostval/users'
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserService } from './user.service'
-import { ChangeUserCredentialsCommand, IUserFactory, IUserRepository, User, USER_FACTORY, USER_REPOSITORY, UserProps } from '@mostval/users'
-import { ICredentials } from '@mostval/iam'
-import { IMetadata, InMemoryMessageStore } from '@mostval/common'
-import { IMessageStore } from '../../../../packages/common/src/lib/message'
 
 describe('UserService', () => {
   let app: TestingModule

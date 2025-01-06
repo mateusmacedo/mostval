@@ -23,7 +23,7 @@ describe('ValueObject', () => {
     test('should create value object with correct value', () => {
         const value = 'test';
         const vo = new TestStringValueObject(value);
-        expect(vo.value).toBe(value);
+        expect(vo.getValue()).toBe(value);
     });
 
     test('should return true when comparing equal value objects', () => {
@@ -59,7 +59,7 @@ describe('TestComplexNestedValueObject', () => {
     test('should create value object with correct value', () => {
         const value = { value: 'test', nested: { value: 1 } };
         const vo = new TestComplexNestedValueObject(value);
-        expect(vo.value).toBe(value);
+        expect(vo.getValue()).toBe(value);
     });
 
     test('should return true when comparing equal value objects', () => {
@@ -99,6 +99,6 @@ describe('TestComplexNestedValueObject', () => {
     test('should be able to access nested properties', () => {
         const value = { value: 'test', nested: { value: 1 } };
         const vo = new TestComplexNestedValueObject(value);
-        expect(vo.value.nested.value).toBe(1);
+        expect(vo.getValue().nested.value).toBe(1);
     });
 });

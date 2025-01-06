@@ -1,35 +1,37 @@
 export interface IValueObject<T> {
-  value: T;
+  getValue(): T;
   equals(other: IValueObject<T>): boolean;
   toString(): string;
   toJSON(): string;
 }
 
 export abstract class ValueObject<T> implements IValueObject<T> {
-    public readonly value: T;
 
-    constructor(value: T) {
-      this.value = value;
+    constructor(private readonly value: T) {
     }
 
-    public equals(other: IValueObject<T>): boolean {
+    getValue(): T {
+      return this.value;
+    }
+
+    equals(other: IValueObject<T>): boolean {
       if (other === null || other === undefined) {
         return false;
       }
-      if (typeof this.value === 'object' && typeof other.value === 'object') {
-        return JSON.stringify(this.value) === JSON.stringify(other.value);
+      if (typeof this.value === 'object' && typeof other.getValue() === 'object') {
+        return JSON.stringify(this.value) === JSON.stringify(other.getValue());
       }
-      return this.value === other.value;
+      return this.value === other.getValue();
     }
 
-    public toString(): string {
+    toString(): string {
       if (typeof this.value === 'object') {
         return JSON.stringify(this.value);
       }
       return String(this.value);
     }
 
-    public toJSON(): string {
+    toJSON(): string {
       return JSON.stringify(this.value);
     }
   }

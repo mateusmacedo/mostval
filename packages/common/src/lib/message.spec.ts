@@ -15,21 +15,7 @@ describe('Message', () => {
         const message = new MessageSpec(new MessageProps('123', 'test@test.com'), {
             schema: 'payload',
             type: 'payload',
-            id: '123',
-            correlationId: '123',
             timestamp: Date.now(),
-        });
-        expect(message).toBeDefined();
-    });
-
-    it('should be able to create a payload with extra metadata', () => {
-        const message = new MessageSpec(new MessageProps('123', 'test@test.com'), {
-            schema: 'payload',
-            type: 'payload',
-            id: '123',
-            correlationId: '123',
-            timestamp: Date.now(),
-            extra: 'extra',
         });
         expect(message).toBeDefined();
     });
@@ -38,8 +24,6 @@ describe('Message', () => {
         const message = new MessageSpec(new MessageProps('123', 'test@test.com'), {
             schema: 'payload',
             type: 'payload',
-            id: '123',
-            correlationId: '123',
             timestamp: Date.now(),
         });
         expect(message.payload).toBeDefined();
@@ -49,8 +33,6 @@ describe('Message', () => {
         const message = new MessageSpec(new MessageProps('123', 'test@test.com'), {
             schema: 'payload',
             type: 'payload',
-            id: '123',
-            correlationId: '123',
             timestamp: Date.now(),
         });
         expect(message.metadata).toBeDefined();

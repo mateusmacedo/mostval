@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common'
-import { HealthCheckService, HttpHealthIndicator, HealthCheck, HealthCheckResult } from '@nestjs/terminus';
+import { Injectable } from '@nestjs/common';
+import { HealthCheckResult, HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
 export interface ICheck<T> {
     check(): Promise<T>

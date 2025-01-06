@@ -1,7 +1,6 @@
 import { User, UserProps, IUserRepository, IUserFactory, TUserCriteria, ChangeUserCredentialsCommand, UserNotFoundError } from '@mostval/users'
 import { Injectable, Inject } from '@nestjs/common'
 import { USER_FACTORY, USER_REPOSITORY } from '@mostval/users'
-import { ICredentials } from '@mostval/iam'
 
 @Injectable()
 export class UserService {

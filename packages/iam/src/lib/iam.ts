@@ -1,3 +1,7 @@
-export type TClientId = string;
-export type TClientSecret = string;
-export type TClientCredentials = TClientId & TClientSecret;
+export type TCredentialsId = string;
+export type TCredentialsSecret = string;
+
+export interface ICredentials {
+  readonly id: TCredentialsId
+  readonly secret: TCredentialsSecret
+}

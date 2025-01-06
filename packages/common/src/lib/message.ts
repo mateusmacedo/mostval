@@ -1,6 +1,4 @@
-export interface IPayload {
-    [key: string]: unknown;
-}
+export interface IPayload {}
 
 export interface IMetadata {
     readonly schema: string;
@@ -19,13 +17,13 @@ export abstract class Message {
     }
 }
 
-export interface MessageStore {
+export interface IMessageStore {
     add(message: Message): void;
     get(criteria: Partial<IPayload> | Partial<IMetadata>): Message[];
     remove(criteria: Partial<IPayload> | Partial<IMetadata>): void;
 }
 
-export class InMemoryMessageStore implements MessageStore {
+export class InMemoryMessageStore implements IMessageStore {
     private messages: Message[] = [];
 
     add(message: Message): void {
@@ -47,3 +45,5 @@ export class InMemoryMessageStore implements MessageStore {
         );
     }
 }
+
+export const MESSAGE_STORE = Symbol('IMessageStore')

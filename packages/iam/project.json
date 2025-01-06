@@ -22,7 +22,6 @@
         "tsConfig": "packages/iam/tsconfig.lib.json",
         "format": ["cjs"],
         "assets": ["packages/iam/*.md"],
-        "generatePackageJson": true
       }
     },
     "nx-release-publish": {

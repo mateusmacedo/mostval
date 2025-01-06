@@ -22,7 +22,6 @@
         "tsConfig": "packages/users/tsconfig.lib.json",
         "format": ["cjs"],
         "assets": ["packages/users/*.md"],
-        "generatePackageJson": true
       }
     },
     "nx-release-publish": {

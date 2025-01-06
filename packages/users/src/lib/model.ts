@@ -1,10 +1,10 @@
 import { IPayload, MessageStore } from '@mostval/common'
-import { TClientCredentials } from '@mostval/iam'
-import { ChangeUserCredentialsCommand, UserCreated, UserCredentialsChanged } from './message'
+import { ICredentials } from '@mostval/iam'
+import { ChangeUserCredentialsCommand, UserCredentialsChanged } from './message'
 
 export interface UserProps extends IPayload {
   readonly id: string
-  readonly credentials: TClientCredentials
+  readonly credentials: ICredentials
 }
 
 export class User<T extends UserProps> {

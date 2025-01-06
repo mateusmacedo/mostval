@@ -1,6 +1,6 @@
 import { IMessageStore, InMemoryMessageStore, MESSAGE_STORE } from '@mostval/common'
 import { InMemoryUserRepository, USER_FACTORY, USER_REPOSITORY, UserFactory } from '@mostval/users'
-export const UserProvider = {
+export const UserFactoryProvider = {
   provide: USER_FACTORY,
   useFactory: (msgStore: IMessageStore) => {
     return new UserFactory(msgStore)

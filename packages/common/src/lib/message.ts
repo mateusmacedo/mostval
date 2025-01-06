@@ -1,3 +1,6 @@
+/*
+eslint-disable
+*/
 export interface IPayload {}
 
 export interface IMetadata {

@@ -1,5 +1,6 @@
 import { IMetadata, Message } from '@mostval/common'
 import { UserProps } from './model'
+import { ICredentials } from '@mostval/iam'
 
 export class CreateUserCommand extends Message {
   constructor(payload: Partial<UserProps>, metadata: IMetadata) {
@@ -14,13 +15,13 @@ export class UserCreated extends Message {
 }
 
 export class ChangeUserCredentialsCommand extends Message {
-  constructor(payload: Pick<UserProps, 'credentials'>, metadata: IMetadata) {
+  constructor(payload: ICredentials, metadata: IMetadata) {
     super(payload, metadata)
   }
 }
 
 export class UserCredentialsChanged extends Message {
-  constructor(payload: Pick<UserProps, 'credentials'>, metadata: IMetadata) {
+  constructor(payload: ICredentials, metadata: IMetadata) {
     super(payload, metadata)
   }
 }

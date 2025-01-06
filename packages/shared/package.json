@@ -1,7 +1,10 @@
 {
   "name": "@mostval/shared",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@mostval/common": "workspace:*",
+    "@mostval/ddd": "workspace:*"
+  },
   "type": "commonjs",
   "main": "./index.cjs",
   "typings": "./index.d.ts"

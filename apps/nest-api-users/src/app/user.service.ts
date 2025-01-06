@@ -1,4 +1,4 @@
-import { User, UserProps, IUserRepository, IUserFactory, TUserCriteria, ChangeUserCredentialsCommand } from '@mostval/users'
+import { User, UserProps, IUserRepository, IUserFactory, TUserCriteria, ChangeUserCredentialsCommand, UserNotFoundError } from '@mostval/users'
 import { Injectable, Inject } from '@nestjs/common'
 import { USER_FACTORY, USER_REPOSITORY } from '@mostval/users'
 import { ICredentials } from '@mostval/iam'
@@ -27,7 +27,7 @@ export class UserService {
     const criteria: TUserCriteria[] = [['id', command.metadata['id']]]
     const users = await this.userRepository.find(criteria)
     if (users.length === 0) {
-      throw new Error('User not found')
+      throw new UserNotFoundError('User not found')
     }
     const user = users[0]
     user.changeCredentials(command)

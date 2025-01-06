@@ -64,7 +64,8 @@
       "description": "Selecione o app",
       "options": [
         "nest-api",
-        "node-api"
+        "node-api",
+        "nest-api-users"
       ]
     }
   ]

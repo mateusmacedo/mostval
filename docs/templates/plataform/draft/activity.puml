@@ -1,0 +1,16 @@
+@startuml
+start
+:Iniciar Processo;
+if (Requisito Cumprido?) then (Sim)
+    :Emitir Certificado;
+    :Habilitar Capacidade;
+    if (Capacidade Habilitada?) then (Sim)
+        :Executar Atividade;
+    else (Não)
+        :Capacidade Não Disponível;
+    endif
+else (Não)
+    :Requisito Não Cumprido;
+endif
+stop
+@enduml

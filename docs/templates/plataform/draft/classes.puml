@@ -1,0 +1,31 @@
+@startuml
+abstract class Requisito {
+    +id: int
+    +descricao: String
+    +cumprido: Boolean
+    +atender(): void
+}
+
+abstract class Certificado {
+    +id: int
+    +nome: String
+    +emitir(Requisito): void
+}
+
+abstract class Capacidade {
+    +id: int
+    +descricao: String
+    +ativar(Certificado): void
+}
+
+abstract class Atividade {
+    +id: int
+    +nome: String
+    +executar(Capacidade): void
+}
+
+Requisito "1" -- "0..*" Certificado : Atende
+Certificado "1" -- "1..*" Capacidade : Habilita
+Capacidade "1" -- "0..*" Atividade : Permite
+Atividade "1" -- "0..*" Requisito : Satisfaz
+@enduml

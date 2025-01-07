@@ -1,0 +1,53 @@
+@startuml
+package "Sistema de Controle de Produção" {
+  
+  ' Serviços principais
+  [Serviço de Gerenciamento de Produção]
+  [Serviço de Inventário]
+  [Serviço de Ordens de Produção]
+  [Serviço de Ferramentas e Equipamentos]
+  [Serviço de Notificações]
+  [Serviço de Relatórios]
+
+  ' Comunicação via APIs REST
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Inventário] : Verificar Insumos
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Ordens de Produção] : Criar/Atualizar Ordens
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Ferramentas e Equipamentos] : Verificar Ferramentas
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Notificações] : Notificar Progresso
+
+  [Serviço de Inventário] --> [Serviço de Ferramentas e Equipamentos] : Verificar Estado
+  [Serviço de Inventário] --> [Serviço de Ordens de Produção] : Informar Disponibilidade
+  [Serviço de Inventário] --> [Serviço de Notificações] : Informar Baixa no Estoque
+
+  [Serviço de Ordens de Produção] --> [Serviço de Notificações] : Notificar Criação de Ordem
+  [Serviço de Ordens de Produção] --> [Serviço de Relatórios] : Gerar Relatório de Ordens
+
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Notificações] : Informar Manutenção
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Relatórios] : Gerar Relatório de Manutenção
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Inventário] : Atualizar Estado de Ferramentas
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Ordens de Produção] : Verificar Disponibilidade
+
+  ' Comunicação via Mensageria (Kafka/RabbitMQ)
+  package "Kafka Topics" {
+    [producao_etapas]
+    [inventario_reservas]
+    [ordens_producao]
+    [ferramentas_manutencao]
+    [notificacoes_envios]
+  }
+
+  [Serviço de Gerenciamento de Produção] --> [producao_etapas] : Publicar Conclusão de Etapa
+  [Serviço de Inventário] --> [inventario_reservas] : Publicar Reserva de Item
+  [Serviço de Ordens de Produção] --> [ordens_producao] : Publicar Criação de Ordem
+  [Serviço de Ferramentas e Equipamentos] --> [ferramentas_manutencao] : Publicar Agendamento de Manutenção
+  [Serviço de Notificações] --> [notificacoes_envios] : Publicar Notificação Enviada
+
+  [Serviço de Notificações] --> [producao_etapas] : Consumir Conclusão de Etapa
+  [Serviço de Ordens de Produção] --> [inventario_reservas] : Consumir Reserva de Item
+  [Serviço de Gerenciamento de Produção] --> [ferramentas_manutencao] : Consumir Manutenção Agendada
+
+  ' Relatórios
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Relatórios] : Gerar Relatório de Produção
+  [Serviço de Inventário] --> [Serviço de Relatórios] : Gerar Relatório de Estoque
+}
+@enduml

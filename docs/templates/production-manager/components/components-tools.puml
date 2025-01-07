@@ -1,0 +1,8 @@
+@startuml
+package "Sistema de Ferramentas e Equipamentos" {
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Manutenção] : Agendar Manutenção
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Inventário] : Atualizar Estado de Ferramentas
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Notificações] : Informar Manutenção Programada
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Ordens de Produção] : Verificar Disponibilidade
+}
+@enduml

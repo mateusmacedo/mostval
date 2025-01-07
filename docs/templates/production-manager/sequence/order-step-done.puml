@@ -1,0 +1,11 @@
+@startuml
+actor "Usuário" as U
+participant "Serviço de Gerenciamento de Produção" as SGP
+participant "Serviço de Notificações" as SN
+participant "Kafka Topic: producao_etapas" as Kafka
+
+U -> SGP : Concluir Etapa de Produção
+SGP -> Kafka : Publicar Conclusão da Etapa (tópico: producao_etapas)
+Kafka --> SN : Enviar Evento de Conclusão
+SN -> U : Notificar Conclusão de Etapa
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+package "Relatórios do Sistema" {
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Relatórios] : Gerar Relatório de Produção
+  [Serviço de Inventário] --> [Serviço de Relatórios] : Gerar Relatório de Estoque
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Relatórios] : Gerar Relatório de Manutenção
+  [Serviço de Ordens de Produção] --> [Serviço de Relatórios] : Gerar Relatório de Ordens
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant "Serviço de Notificações" as SN
+participant "Usuário" as U
+participant "Técnico" as T
+
+SN -> U : Enviar Notificação de Conclusão de Etapa
+SN -> T : Enviar Notificação de Manutenção Programada
+@enduml

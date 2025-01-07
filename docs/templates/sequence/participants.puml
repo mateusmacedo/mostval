@@ -1,0 +1,13 @@
+@startuml Participants.Sequence
+actor Cliente
+boundary Sistema
+control Controlador
+database BancoDeDados
+
+Cliente -> Sistema: Enviar Dados
+Sistema -> Controlador: Processar Dados
+Controlador -> BancoDeDados: Salvar Dados
+BancoDeDados --> Controlador: Confirmação
+Controlador --> Sistema: Dados Processados
+Sistema --> Cliente: Confirmação
+@enduml

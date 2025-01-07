@@ -1,0 +1,7 @@
+@startuml
+:Cliente: --> (Iniciar Pedido)
+newpage
+:Vendedor: --> (Processar Pedido)
+newpage
+:Admin: --> (Analisar Relatórios)
+@enduml

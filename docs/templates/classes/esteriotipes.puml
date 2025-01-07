@@ -1,0 +1,6 @@
+class Cliente <<Entity>>
+
+note right of Cliente
+A classe Cliente representa um usuário que faz pedidos\n
+no sistema e pode atualizar suas informações pessoais.
+end note

@@ -1,0 +1,12 @@
+@startuml Optional.Sequence
+participant Usuário
+participant Aplicação
+
+Usuário -> Aplicação: Solicitar Função Especial
+
+opt Função Especial Ativada
+    Aplicação -> Usuário: Exibir Função Especial
+end
+
+Usuário -> Aplicação: Continuar Fluxo Normal
+@enduml

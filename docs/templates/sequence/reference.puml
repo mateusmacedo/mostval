@@ -1,0 +1,8 @@
+@startuml Reference.Sequence
+participant Cliente
+participant Sistema
+
+Cliente -> Sistema: Iniciar Processo
+
+ref over Sistema : Verificar Autenticação
+@enduml

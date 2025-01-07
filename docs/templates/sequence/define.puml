@@ -1,0 +1,2 @@
+!define CLIENTE participant Cliente
+!define SISTEMA participant Sistema

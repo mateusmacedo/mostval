@@ -1,0 +1,8 @@
+@startuml Inlude.Sequence
+!include common.puml
+
+Cliente -> Sistema: Solicitar Informações
+Sistema -> BancoDeDados: Consultar Dados
+BancoDeDados --> Sistema: Retornar Dados
+Sistema --> Cliente: Retornar Informações
+@enduml

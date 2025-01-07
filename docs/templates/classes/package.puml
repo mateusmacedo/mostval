@@ -1,0 +1,11 @@
+package "Gestão de Pedidos" {
+    class Pedido
+    class Produto
+}
+
+package "Pagamentos" {
+    class Pagamento
+    interface IPagamento
+    class PagamentoCartao
+    class PagamentoBoleto
+}

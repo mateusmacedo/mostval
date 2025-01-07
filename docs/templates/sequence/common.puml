@@ -1,0 +1,5 @@
+@startuml Common.Sequence
+participant Cliente
+participant Sistema
+participant BancoDeDados
+@enduml

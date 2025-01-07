@@ -1,0 +1,23 @@
+@startuml
+
+skinparam usecase {
+    BackgroundColor<< Principal >> YellowGreen
+    BorderColor<< Principal >> DargGreen
+    BackgroundColor<< Alternativo >> DarkSalmon
+    BorderColor<< Alternativo >> LightCoral
+    FontSize 14
+    FontColor Black
+}
+
+skinparam actorStyle hollow
+actor Cliente
+
+skinparam actorStyle awesome
+:Administrador: as Admin
+
+(Comprar Produto) << Principal >>
+(Devolver Produto) << Alternativo >>
+
+Cliente -> (Comprar Produto)
+Admin -> (Devolver Produto)
+@enduml

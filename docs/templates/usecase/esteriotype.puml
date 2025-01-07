@@ -1,0 +1,10 @@
+@startuml
+actor Cliente << Humano >>
+actor "Sistema de Pagamento" as SP << Sistema >>
+
+(Comprar Produto) << Principal >>
+(Devolver Produto) << Alternativo >>
+
+Cliente -> (Comprar Produto)
+Cliente -> (Devolver Produto)
+@enduml

@@ -1,0 +1,14 @@
+@startuml Groups.Sequence
+participant Cliente
+participant Sistema
+participant BancoDeDados
+
+Cliente -> Sistema: Solicitação de Dados
+
+group Validação de Dados
+    Sistema -> BancoDeDados: Consultar Dados
+    BancoDeDados -> Sistema: Retornar Dados
+end
+
+Sistema -> Cliente: Retornar Resultado
+@enduml

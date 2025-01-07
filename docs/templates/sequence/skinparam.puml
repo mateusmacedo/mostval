@@ -1,0 +1,12 @@
+@startuml Skinparam.Sequence
+skinparam sequence {
+    ArrowColor DeepSkyBlue
+    ActorBackgroundColor LightGreen
+    ParticipantFontName Arial
+    ParticipantFontSize 12
+}
+
+actor Cliente
+participant Sistema
+Cliente -> Sistema: Iniciar Sessão
+@enduml

@@ -1,0 +1,12 @@
+@startuml Notes.Sequence
+participant Alice
+participant Bob
+
+note right of Alice
+Esta é uma nota
+relacionada à Alice.
+end note
+
+Alice -> Bob: Enviar Mensagem
+note left of Bob: Mensagem Recebida e Processada
+@enduml

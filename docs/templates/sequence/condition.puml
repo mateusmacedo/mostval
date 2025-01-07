@@ -1,0 +1,12 @@
+@startuml Condition.Sequence
+participant Cliente
+participant Sistema
+
+Cliente -> Sistema: Solicitar Login
+
+alt Credenciais Válidas
+    Sistema -> Cliente: Login Bem-sucedido
+else Credenciais Inválidas
+    Sistema -> Cliente: Erro de Autenticação
+end
+@enduml

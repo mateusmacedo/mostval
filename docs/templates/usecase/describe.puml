@@ -1,0 +1,3 @@
+@startuml
+usecase UC1 as "Registrar-se\nO usuário se registra no sistema\nusando um e-mail e senha."
+@enduml

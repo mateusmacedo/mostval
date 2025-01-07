@@ -1,0 +1,5 @@
+@startuml Numering.Sequence
+autonumber
+Alice -> Bob: Passo 1
+Bob -> Alice: Passo 2
+@enduml

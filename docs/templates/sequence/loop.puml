@@ -1,0 +1,10 @@
+@startuml Loop.Sequence
+participant Sensor
+participant Servidor
+
+Sensor -> Servidor: Enviar Dados de Medição
+
+loop A Cada 5 Segundos
+    Sensor -> Servidor: Enviar Dados de Medição
+end
+@enduml

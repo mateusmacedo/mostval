@@ -1,0 +1,49 @@
+@startuml SystemsInteractions
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+
+title Sequence Diagram of Content Processing Workflow
+
+Person(user, "User", "User of the system")
+Container(contentPlatform, "Content Platform", "Web/Mobile", "Plataforma de gerenciamento de conteúdo")
+
+ContainerDb(bucketVideo, "Bucket de Vídeos", "S3/Blob Storage")
+ContainerDb(bucketAudio, "Bucket de Áudios", "S3/Blob Storage")
+ContainerDb(bucketTrans, "Bucket de Transcrições", "S3/Blob Storage")
+ContainerDb(bucketTransl, "Bucket de Traduções", "S3/Blob Storage")
+
+Container(storagePublisher, "Storage Publisher", "Service", "Publica eventos de armazenamento")
+Container(contentStorageWatcher, "Content Storage Watcher", "Service", "Orquestra e despacha tarefas")
+Container(orchestrator, "Orchestrator", "Service", "Gerencia o fluxo de trabalho")
+
+Container(audioExtractor, "Audio Extractor", "Service", "Extrai áudio de vídeos")
+Container(STT, "Speech-to-Text Service", "Service", "Transcreve áudio em texto")
+Container(translate, "Translation Service", "Service", "Traduz texto")
+Container(TTS, "Text-to-Speech Service", "Service", "Converte texto em áudio")
+
+ContainerQueue(contentStorageTopic, "Content Storage Topic", "Queue", "RabbitMQ/Kafka/SQS")
+ContainerQueue(audioExtractionJobTopic, "Audio Extraction Job Topic", "Queue", "RabbitMQ/Kafka/SQS")
+ContainerQueue(audioTranscriptionJobTopic, "Audio Transcription Job Topic", "Queue", "RabbitMQ/Kafka/SQS")
+ContainerQueue(textTranslationJobTopic, "Text Translation Job Topic", "Queue", "RabbitMQ/Kafka/SQS")
+ContainerQueue(textToSpeechJobTopic, "Text-to-Speech Job Topic", "Queue", "RabbitMQ/Kafka/SQS")
+
+' Sequence of interactions
+user -> contentPlatform : Uploads Video
+contentPlatform -> bucketVideo : Stores Video
+bucketVideo -> storagePublisher : Triggers Storage Event
+storagePublisher -> contentStorageTopic : Publishes Storage Event
+contentStorageTopic -> orchestrator : Receives Storage Event
+orchestrator -> contentStorageWatcher : Defines Workflow
+contentStorageWatcher -> audioExtractionJobTopic : Sends Audio Extraction Request
+audioExtractionJobTopic -> audioExtractor : Processes Audio Extraction
+audioExtractor -> bucketAudio : Stores Extracted Audio
+audioExtractor -> audioTranscriptionJobTopic : Sends Transcription Request
+audioTranscriptionJobTopic -> STT : Processes Transcription
+STT -> bucketTrans : Stores Transcription
+STT -> textTranslationJobTopic : Sends Translation Request
+textTranslationJobTopic -> translate : Processes Translation
+translate -> bucketTransl : Stores Translation
+translate -> textToSpeechJobTopic : Sends TTS Request
+textToSpeechJobTopic -> TTS : Processes Text-to-Speech
+TTS -> bucketAudio : Stores Generated Audio
+
+@enduml

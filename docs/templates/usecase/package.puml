@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+package "Gestão de Usuários" {
+    actor Cliente
+    (Registrar-se) as UC1
+    (Entrar) as UC2
+}
+
+package "Serviços" {
+    actor Prestador
+    (Solicitar Serviço) as UC3
+    (Confirmar Serviço) as UC4
+}
+
+Cliente -> UC1
+Cliente -> UC2
+Prestador -> UC3
+Prestador -> UC4
+@enduml

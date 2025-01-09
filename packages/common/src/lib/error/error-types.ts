@@ -18,9 +18,9 @@ export enum ErrorCode {
 export const ERRORS = {
   notFound: NotFoundError,
   conflict: ConflictError,
-  DependencyError: DependencyError,
-  InternalError: InternalError,
-  InvalidData: InvalidDataError,
-  Validation: ValidationError,
+  dependency: DependencyError,
+  internal: InternalError,
+  invalidData: InvalidDataError,
+  validation: ValidationError,
 } as const
 export type ErrorsType = keyof typeof ERRORS

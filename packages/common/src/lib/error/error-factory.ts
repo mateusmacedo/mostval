@@ -3,7 +3,7 @@ import { ERRORS, ErrorsType } from './error-types'
 
 export class ErrorFactory {
   private static instance: ErrorFactory
-  private map = new Map<ErrorsType, new (message: ErrorMessage) => AbstractError>()
+  private map = new Map<ErrorsType, new (message: ErrorMessage) => AbstractError<ErrorMessage>>()
 
   private constructor() {
     this.register()
@@ -16,7 +16,7 @@ export class ErrorFactory {
     return ErrorFactory.instance
   }
 
-  public create(type: ErrorsType, message: ErrorMessage): AbstractError {
+  public create(type: ErrorsType, message: ErrorMessage): AbstractError<ErrorMessage> {
     const ErrorClass = this.map.get(type)
     if (!ErrorClass) {
       throw new Error(`Error type '${type}' not registered`)
@@ -24,9 +24,9 @@ export class ErrorFactory {
     return new ErrorClass(message)
   }
 
-  public register(): void {
-    Object.entries(ERRORS).map((err) => {
-      this.map.set(err[0] as ErrorsType, err[1])
+  private register(): void {
+    Object.entries(ERRORS).forEach(([key, ErrorClass]) => {
+      this.map.set(key as ErrorsType, ErrorClass as new (message: ErrorMessage) => AbstractError<ErrorMessage>)
     })
   }
 

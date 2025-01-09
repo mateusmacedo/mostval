@@ -1,7 +1,8 @@
-import { AbstractError } from './abstract-error';
+import { AbstractError, ErrorMessage } from './abstract-error';
 
-export class NotFoundError extends AbstractError<string | Array<string>> {
-  constructor(errorOrMessage: string | Array<string>) {
-    super(errorOrMessage);
+export class NotFoundError extends AbstractError<ErrorMessage> {
+  constructor(message: ErrorMessage) {
+    super(message);
+    this.name = 'NotFoundError';
   }
 }

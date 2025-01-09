@@ -1,21 +1,14 @@
-export type ErrorMessage = string | string[] | Record<string, unknown>
+export type ErrorMessage = string | string[] | Record<string, unknown>;
 
-export abstract class AbstractError<TError = ErrorMessage> {
-  constructor(
-    private errorOrMessage: TError,
-    private code: number = 0,
-    private previousError: AbstractError | null = null,
-  ) {}
+export abstract class AbstractError<T extends ErrorMessage> extends Error {
+  originalMessage: T;
+  code?: number;
+  previousError?: AbstractError<any>;
 
-  getError(): TError {
-    return this.errorOrMessage
-  }
-
-  getCode(): number | undefined {
-    return this.code
-  }
-
-  getPreviousError(): AbstractError | null {
-    return this.previousError
+  constructor(message: T, code?: number, previousError?: AbstractError<any>) {
+    super(typeof message === 'string' ? message : JSON.stringify(message));
+    this.originalMessage = message;
+    this.code = code;
+    this.previousError = previousError;
   }
 }

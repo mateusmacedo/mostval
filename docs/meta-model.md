@@ -2,8 +2,6 @@
 
 A seguir está a documentação completa das interfaces e classes abstratas que compõem os modelos do sistema. Estes componentes são projetados para serem **abstratos**, **genéricos** e **agnósticos ao domínio**, garantindo reutilização, flexibilidade e independência de contextos específicos de negócio. Todas as implementações estão atualizadas para utilizar o **Node.js v20** e o **TypeScript v5.x**.
 
----
-
 ## **Common**
 
 ### **Result**
@@ -59,8 +57,6 @@ const successResult = Result.Ok<string>("Operação bem-sucedida");
 const failureResult = Result.Err<string>("Ocorreu um erro");
 ```
 
----
-
 ## **CQRS (Command Query Responsibility Segregation)**
 
 ### **ICommand**
@@ -72,8 +68,6 @@ export interface ICommand {}
 
 **Descrição:**
 Interface marcadora que define comandos no padrão CQRS. Comandos representam intenções de modificar o estado do sistema.
-
----
 
 ### **ICommandHandler**
 
@@ -90,8 +84,6 @@ export interface ICommandHandler<TCommand extends ICommand, E> {
 **Descrição:**
 Define um manipulador para comandos específicos. Responsável por executar a lógica necessária para processar o comando.
 
----
-
 ### **IQuery**
 
 ```typescript
@@ -101,8 +93,6 @@ export interface IQuery<TResult> {}
 
 **Descrição:**
 Interface marcadora para consultas que retornam um resultado do tipo `TResult`. Consultas são operações de leitura que não alteram o estado do sistema.
-
----
 
 ### **IQueryHandler**
 
@@ -119,8 +109,6 @@ export interface IQueryHandler<TQuery extends IQuery<TResult>, TResult, E> {
 **Descrição:**
 Define um manipulador para consultas específicas. Responsável por executar a lógica necessária para processar a consulta e retornar o resultado.
 
----
-
 ## **Domain**
 
 ### **IDomainEvent**
@@ -134,8 +122,6 @@ export interface IDomainEvent {
 
 **Descrição:**
 Interface para eventos de domínio, representando algo que ocorreu no sistema que é relevante para o domínio.
-
----
 
 ### **IAggregateRoot**
 
@@ -153,8 +139,6 @@ export interface IAggregateRoot {
 **Descrição:**
 Interface para agregados raiz no domínio. Agregados são entidades que agrupam outras entidades e garantem a consistência das operações.
 
----
-
 ### **IRepository**
 
 ```typescript
@@ -169,8 +153,6 @@ export interface IRepository<TAggregate, E> {
 
 **Descrição:**
 Interface para repositórios que gerenciam agregados do tipo `TAggregate`. Define métodos para operações de persistência.
-
----
 
 ## **Event Sourcing**
 
@@ -192,8 +174,6 @@ export interface IEventStore {
 **Descrição:**
 Interface para armazenamento de eventos de domínio. Responsável por persistir e recuperar eventos.
 
----
-
 ### **IEventBus**
 
 ```typescript
@@ -213,8 +193,6 @@ export interface IEventBus {
 **Descrição:**
 Interface para um barramento de eventos que permite publicar e assinar eventos de domínio.
 
----
-
 ### **IProjection**
 
 ```typescript
@@ -229,8 +207,6 @@ export interface IProjection<TReadModel> {
 
 **Descrição:**
 Interface para projeções que atualizam modelos de leitura do tipo `TReadModel` com base nos eventos recebidos.
-
----
 
 ## **Read Model**
 
@@ -249,8 +225,6 @@ export interface IReadModelRepository<TReadModel, E> {
 **Descrição:**
 Interface para repositórios que gerenciam modelos de leitura do tipo `TReadModel`. Define métodos para operações de consulta.
 
----
-
 ### **IProjection**
 
 ```typescript
@@ -265,8 +239,6 @@ export interface IProjection<TReadModel> {
 
 **Descrição:**
 Interface para projeções que atualizam modelos de leitura do tipo `TReadModel` com base nos eventos recebidos.
-
----
 
 ## **Logging**
 
@@ -283,8 +255,6 @@ export interface ILogger {
 
 **Descrição:**
 Interface para registro de logs no sistema. Define métodos para diferentes níveis de log.
-
----
 
 ### **ConsoleLogger**
 
@@ -310,8 +280,6 @@ export class ConsoleLogger implements ILogger {
 **Descrição:**
 Implementação de `ILogger` que registra logs no console. Útil para desenvolvimento e depuração.
 
----
-
 ## **Security**
 
 ### **IDataMasking**
@@ -327,8 +295,6 @@ export interface IDataMasking {
 
 **Descrição:**
 Interface para mascaramento de dados sensíveis, garantindo que informações confidenciais sejam protegidas.
-
----
 
 ### **DataMasking**
 
@@ -359,8 +325,6 @@ export class DataMasking implements IDataMasking {
 **Descrição:**
 Implementação de `IDataMasking` que mascara informações sensíveis, como números de cartão de crédito ou dados pessoais.
 
----
-
 ## **Audit**
 
 ### **IAuditService**
@@ -376,8 +340,6 @@ export interface IAuditService {
 
 **Descrição:**
 Interface para serviços de auditoria que registram ações realizadas no sistema, facilitando a rastreabilidade.
-
----
 
 ### **AuditService**
 
@@ -404,8 +366,6 @@ export class AuditService implements IAuditService {
 **Descrição:**
 Implementação de `IAuditService` que registra ações para auditoria, podendo ser integrado com sistemas de log ou bancos de dados dedicados.
 
----
-
 ## **Dependency Injection**
 
 ### **IDependencyProvider**
@@ -422,8 +382,6 @@ export interface IDependencyProvider {
 
 **Descrição:**
 Interface para provedor de dependências, facilitando a injeção de dependências no sistema.
-
----
 
 ### **DependencyProvider**
 
@@ -452,8 +410,6 @@ export class DependencyProvider implements IDependencyProvider {
 **Descrição:**
 Implementação de `IDependencyProvider` que gerencia instâncias de dependências, permitindo registro e recuperação de dependências por identificador.
 
----
-
 ## **Policies**
 
 ### **IPolicy**
@@ -469,8 +425,6 @@ export interface IPolicy {
 
 **Descrição:**
 Interface para políticas de negócio que podem ser aplicadas no sistema, permitindo regras de validação e autorização.
-
----
 
 ### **MinimumRolePolicy**
 
@@ -494,8 +448,6 @@ export class MinimumRolePolicy implements IPolicy {
 
 **Descrição:**
 Implementação de `IPolicy` que verifica se o usuário possui um papel mínimo requerido para realizar uma ação.
-
----
 
 ### **PolicyValidator**
 
@@ -522,8 +474,6 @@ export class PolicyValidator {
 **Descrição:**
 Classe para validar múltiplas políticas de negócio, garantindo que todas as condições necessárias sejam atendidas.
 
----
-
 ## **Guards**
 
 ### **IGuard**
@@ -539,8 +489,6 @@ export interface IGuard {
 
 **Descrição:**
 Interface para guardas que controlam o acesso a recursos, verificando condições antes da execução de operações.
-
----
 
 ### **RoleGuard**
 
@@ -565,8 +513,6 @@ export class RoleGuard implements IGuard {
 **Descrição:**
 Implementação de `IGuard` que verifica o papel do usuário para determinar se o acesso é permitido.
 
----
-
 ## **Interceptors**
 
 ### **IInterceptor**
@@ -582,8 +528,6 @@ export interface IInterceptor {
 
 **Descrição:**
 Interface para interceptores que podem modificar ou inspecionar a execução de métodos, permitindo a adição de funcionalidades transversais como logging, autenticação ou autorização.
-
----
 
 ### **LoggingInterceptor**
 
@@ -608,8 +552,6 @@ export class LoggingInterceptor implements IInterceptor {
 **Descrição:**
 Implementação de `IInterceptor` que registra logs antes e depois da execução de métodos, auxiliando na monitoração e depuração.
 
----
-
 ## **Middleware**
 
 ### **IMiddleware**
@@ -625,8 +567,6 @@ export interface IMiddleware {
 
 **Descrição:**
 Interface para middlewares que processam requisições ou comandos, permitindo a adição de funcionalidades como autenticação, logging ou validação.
-
----
 
 ### **AuthenticationMiddleware**
 
@@ -659,8 +599,6 @@ export class AuthenticationMiddleware implements IMiddleware {
 **Descrição:**
 Middleware para autenticação de usuários, verificando tokens de acesso e garantindo que apenas usuários autenticados possam acessar determinados recursos.
 
----
-
 ### **LoggingMiddleware**
 
 ```typescript
@@ -683,8 +621,6 @@ export class LoggingMiddleware implements IMiddleware {
 
 **Descrição:**
 Middleware para registro de logs durante o processamento de requisições, auxiliando na monitoração e depuração.
-
----
 
 ### **MiddlewareExecutor**
 
@@ -717,8 +653,6 @@ export class MiddlewareExecutor {
 **Descrição:**
 Executor que aplica uma cadeia de middlewares em sequência, garantindo que cada middleware seja executado de forma ordenada.
 
----
-
 ## **Exception Handling**
 
 ### **IExceptionFilter**
@@ -734,8 +668,6 @@ export interface IExceptionFilter {
 
 **Descrição:**
 Interface para filtros de exceção que capturam e tratam erros não tratados, permitindo respostas consistentes e personalizadas.
-
----
 
 ### **GlobalExceptionFilter**
 
@@ -759,8 +691,6 @@ export class GlobalExceptionFilter implements IExceptionFilter {
 **Descrição:**
 Implementação de `IExceptionFilter` que trata exceções globais no sistema, garantindo que erros sejam registrados e respostas apropriadas sejam retornadas aos clientes.
 
----
-
 ## **Pipes**
 
 ### **IPipe**
@@ -776,8 +706,6 @@ export interface IPipe<T> {
 
 **Descrição:**
 Interface para pipes que transformam ou validam dados antes do processamento, permitindo a manipulação de dados de entrada ou saída de forma modular.
-
----
 
 ### **ValidationPipe**
 
@@ -806,8 +734,6 @@ export class ValidationPipe implements IPipe<any> {
 
 **Descrição:**
 Implementação de `IPipe` que valida dados de entrada utilizando a biblioteca `class-validator`.
-
----
 
 ## **Resilience**
 
@@ -876,8 +802,6 @@ export class CircuitBreaker {
 **Descrição:**
 Implementação do padrão Circuit Breaker para resiliência em chamadas remotas. Previene chamadas repetidas a serviços que estão falhando, permitindo a recuperação gradual.
 
----
-
 ### **RetryPolicy**
 
 ```typescript
@@ -915,8 +839,6 @@ export class RetryPolicy {
 **Descrição:**
 Implementação de política de retentativas com backoff exponencial, permitindo que operações falhas sejam tentadas novamente após intervalos crescentes.
 
----
-
 ## **Event-Driven Components**
 
 ### **IEventOrchestrator**
@@ -933,8 +855,6 @@ export interface IEventOrchestrator {
 
 **Descrição:**
 Interface para orquestradores de eventos que coordenam fluxos de trabalho baseados em eventos, garantindo que sequências de eventos sejam tratadas corretamente.
-
----
 
 ## **Message Patterns**
 
@@ -953,8 +873,6 @@ export interface IMessageChannel<TMessage> {
 **Descrição:**
 Interface para canais de mensagens no padrão Enterprise Integration Patterns (EIP), facilitando a comunicação assíncrona entre componentes.
 
----
-
 ### **IMessageRouter**
 
 ```typescript
@@ -968,8 +886,6 @@ export interface IMessageRouter<TMessage> {
 
 **Descrição:**
 Interface para roteadores de mensagens que direcionam mensagens para destinos apropriados com base em regras definidas.
-
----
 
 ### **IMessageTranslator**
 
@@ -1112,7 +1028,7 @@ Interface para observadores que recebem notificações de objetos observáveis. 
 ```typescript
 class MetricsCollector implements IObserver<StateChange> {
   private readonly id: string;
-  
+
   constructor(id: string) {
     this.id = id;
   }
@@ -1190,8 +1106,6 @@ class RepositoryContractTest implements IContractTest {
 }
 ```
 
----
-
 ## **Tracing**
 
 ### **ITracing**
@@ -1206,8 +1120,6 @@ export interface ITracing {
 **Descrição:**
 Interface para sistemas de rastreamento distribuído, permitindo o monitoramento de solicitações que atravessam múltiplos serviços e componentes.
 
----
-
 ### **ISpan**
 
 ```typescript
@@ -1220,8 +1132,6 @@ export interface ISpan {
 
 **Descrição:**
 Interface para spans que representam uma unidade de trabalho no tracing, encapsulando informações sobre a operação.
-
----
 
 ### **Tracer**
 
@@ -1256,8 +1166,6 @@ export class Tracer implements ITracing {
 **Descrição:**
 Implementação de `ITracing` para criação e gerenciamento de spans, facilitando o rastreamento de operações distribuídas.
 
----
-
 ## **Saga Pattern**
 
 ### **ISaga**
@@ -1274,8 +1182,6 @@ export interface ISaga {
 **Descrição:**
 Interface para sagas que coordenam transações distribuídas, garantindo a consistência de operações que envolvem múltiplos serviços ou agregados.
 
----
-
 ### **ISagaStep**
 
 ```typescript
@@ -1290,8 +1196,6 @@ export interface ISagaStep {
 
 **Descrição:**
 Interface para passos individuais em uma saga, incluindo execução e compensação, permitindo a implementação de fluxos de trabalho complexos.
-
----
 
 ## **Outbox Pattern**
 
@@ -1313,8 +1217,6 @@ export class OutboxMessage {
 **Descrição:**
 Classe que representa uma mensagem armazenada no outbox para processamento posterior, garantindo a confiabilidade na publicação de eventos.
 
----
-
 ### **IOutboxRepository**
 
 ```typescript
@@ -1331,8 +1233,6 @@ export interface IOutboxRepository {
 
 **Descrição:**
 Interface para repositórios que gerenciam mensagens do outbox, permitindo a persistência e recuperação de mensagens para processamento posterior.
-
----
 
 ## **Event Store Implementations**
 
@@ -1394,8 +1294,6 @@ export class InMemoryEventStore implements IEventStore {
 **Descrição:**
 Implementação de `IEventStore` em memória, útil para testes ou ambientes de desenvolvimento onde a persistência de eventos não é necessária.
 
----
-
 ## **Event Bus Implementations**
 
 ### **RxEventBus**
@@ -1435,8 +1333,6 @@ export class RxEventBus implements IEventBus {
 **Descrição:**
 Implementação de `IEventBus` utilizando **RxJS** para gerenciamento de eventos reativos, permitindo assinaturas e publicações assíncronas.
 
----
-
 ## **Messaging**
 
 ### **IMessageBroker**
@@ -1453,8 +1349,6 @@ export interface IMessageBroker {
 
 **Descrição:**
 Interface para brokers de mensagens que gerenciam publicação e assinatura em filas, facilitando a comunicação assíncrona entre componentes.
-
----
 
 ### **MessageBroker**
 
@@ -1493,8 +1387,6 @@ export class MessageBroker implements IMessageBroker {
 **Descrição:**
 Implementação de `IMessageBroker` que utiliza um broker de mensagens, como RabbitMQ ou Kafka, para gerenciar a comunicação entre serviços.
 
----
-
 ## **Tracing**
 
 ### **ITracing**
@@ -1509,8 +1401,6 @@ export interface ITracing {
 **Descrição:**
 Interface para sistemas de rastreamento distribuído, permitindo o monitoramento de solicitações que atravessam múltiplos serviços e componentes.
 
----
-
 ### **ISpan**
 
 ```typescript
@@ -1523,8 +1413,6 @@ export interface ISpan {
 
 **Descrição:**
 Interface para spans que representam uma unidade de trabalho no tracing, encapsulando informações sobre a operação.
-
----
 
 ### **Tracer**
 
@@ -1559,8 +1447,6 @@ export class Tracer implements ITracing {
 **Descrição:**
 Implementação de `ITracing` para criação e gerenciamento de spans, facilitando o rastreamento de operações distribuídas.
 
----
-
 ## **Saga Pattern**
 
 ### **ISaga**
@@ -1577,8 +1463,6 @@ export interface ISaga {
 **Descrição:**
 Interface para sagas que coordenam transações distribuídas, garantindo a consistência de operações que envolvem múltiplos serviços ou agregados.
 
----
-
 ### **ISagaStep**
 
 ```typescript
@@ -1593,8 +1477,6 @@ export interface ISagaStep {
 
 **Descrição:**
 Interface para passos individuais em uma saga, incluindo execução e compensação, permitindo a implementação de fluxos de trabalho complexos.
-
----
 
 ## **Outbox Pattern**
 
@@ -1616,8 +1498,6 @@ export class OutboxMessage {
 **Descrição:**
 Classe que representa uma mensagem armazenada no outbox para processamento posterior, garantindo a confiabilidade na publicação de eventos.
 
----
-
 ### **IOutboxRepository**
 
 ```typescript
@@ -1634,8 +1514,6 @@ export interface IOutboxRepository {
 
 **Descrição:**
 Interface para repositórios que gerenciam mensagens do outbox, permitindo a persistência e recuperação de mensagens para processamento posterior.
-
----
 
 ## **Pipeline Processing**
 
@@ -1701,7 +1579,7 @@ export class Pipeline<TInput, TOutput> implements IPipeline<TInput, TOutput> {
         }
 
         const stage = this.stages[index];
-        
+
         try {
           if (stage.canExecute && !stage.canExecute(result)) {
             executeStages(index + 1);
@@ -1716,7 +1594,7 @@ export class Pipeline<TInput, TOutput> implements IPipeline<TInput, TOutput> {
             }
             result = result.getValue();
           }
-          
+
           executeStages(index + 1);
         } catch (error) {
           subscriber.error(error);
@@ -1772,9 +1650,9 @@ export class ValidationStage<T> implements IStage<T, T> {
 
 ```typescript
 // src/pipeline/stages/CommandStage.ts
-export class CommandStage<TCommand extends ICommand> 
+export class CommandStage<TCommand extends ICommand>
   implements IStage<TCommand, void> {
-  
+
   constructor(
     private readonly commandHandler: ICommandHandler<TCommand, Error>,
     private readonly priority: StagePriority = 0
@@ -1790,9 +1668,9 @@ export class CommandStage<TCommand extends ICommand>
 }
 
 // src/pipeline/stages/EventSourcingStage.ts
-export class EventSourcingStage<T extends IAggregateRoot> 
+export class EventSourcingStage<T extends IAggregateRoot>
   implements IStage<T, void> {
-  
+
   constructor(
     private readonly eventStore: IEventStore,
     private readonly priority: StagePriority = 0
@@ -1832,8 +1710,6 @@ const orderSaga = new Pipeline<OrderContext, void>()
   .addStage(new SendNotificationStage());
 ```
 
----
-
 ## **Considerações Finais**
 
 ### **Benefícios das Implementações**
@@ -1850,8 +1726,6 @@ const orderSaga = new Pipeline<OrderContext, void>()
 2. **Integração com Infraestrutura Real:** Substituir implementações fictícias por integrações reais com bancos de dados, brokers de mensagens e outros serviços externos.
 3. **Testes Automatizados:** Criar testes unitários e de integração para garantir que os componentes funcionem conforme esperado e que os contratos sejam respeitados.
 4. **Documentação e Manutenção:** Manter a documentação atualizada, garantindo que as implementações reflitam o estado atual do sistema e facilitando o onboarding de novos desenvolvedores.
-
----
 
 **Nota:**
 Estas implementações são projetadas para serem independentes de qualquer contexto específico de negócio, permitindo que sejam adaptadas e utilizadas em diversos tipos de sistemas. Elas servem como blocos de construção para uma arquitetura limpa, modular e escalável, promovendo boas práticas de desenvolvimento e manutenção de software.

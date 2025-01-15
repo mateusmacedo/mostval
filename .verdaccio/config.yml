@@ -19,10 +19,15 @@ packages:
     proxy: npmjs
 
 # log settings
-logs:
+log:
   type: stdout
   format: pretty
   level: http
 
 publish:
   allow_offline: true # set offline to true to allow publish offline
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+    max_users: 1000

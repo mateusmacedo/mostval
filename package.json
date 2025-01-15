@@ -7,7 +7,7 @@
     "monorepo",
     "mostval"
   ],
-  "version": "0.0.0",
+  "version": "1.0.0-0",
   "private": false,
   "license": "ISC",
   "contributors": [
@@ -29,7 +29,9 @@
   },
   "scripts": {
     "security-check": "npm audit --only=prod",
-    "update-prod-deps": "npm audit fix --only=prod"
+    "update-prod-deps": "npm audit fix --only=prod",
+    "local-registry": "nx run @mostval/platform:local-registry",
+    "nx-release-publish": "nx run-many -t nx-release-publish"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

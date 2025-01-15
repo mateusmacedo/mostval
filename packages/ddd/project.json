@@ -11,7 +11,7 @@
       }
     }
   },
-  "tags": ["lib"],
+  "tags": ["package"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -27,7 +27,13 @@
         "outputPath": "dist/packages/ddd",
         "main": "packages/ddd/src/index.ts",
         "tsConfig": "packages/ddd/tsconfig.lib.json",
-        "assets": ["packages/ddd/*.md"],
+        "assets": [
+          {
+            "input": "packages/ddd",
+            "glob": "README.md",
+            "output": "/"
+          }
+        ],
         "format": ["cjs"]
       }
     },

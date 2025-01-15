@@ -9,30 +9,42 @@ describe('UserService', () => {
   let userFactory: IUserFactory
   let userRepository: IUserRepository
 
+  const defaultUserProps: UserProps = {
+    id: '1',
+    credentials: {
+      id: 'john.doe@example.com',
+      secret: 'password'
+    }
+  }
+
+  const mockUser = (props: UserProps = defaultUserProps): User<UserProps> => ({
+    props,
+    msgStore: jest.mocked(new InMemoryMessageStore()),
+    changeCredentials: jest.fn()
+  } as unknown as User<UserProps>)
+
   beforeAll(async () => {
     app = await Test.createTestingModule({
       providers: [
-        UserService,
         {
           provide: USER_FACTORY,
-          useValue: {
-            create: jest.fn(),
-          },
+          useValue: { create: jest.fn() }
         },
         {
           provide: USER_REPOSITORY,
           useValue: {
             save: jest.fn(),
             find: jest.fn(),
-            remove: jest.fn(),
-          },
+            remove: jest.fn()
+          }
         },
-      ],
+        UserService
+      ]
     }).compile()
 
-    service = app.get<UserService>(UserService)
-    userFactory = app.get<IUserFactory>(USER_FACTORY)
-    userRepository = app.get<IUserRepository>(USER_REPOSITORY)
+    userFactory = app.get(USER_FACTORY)
+    userRepository = app.get(USER_REPOSITORY)
+    service = app.get(UserService)
   })
 
   it('should be defined', () => {
@@ -43,91 +55,60 @@ describe('UserService', () => {
 
   describe('createUser', () => {
     it('should create a user', async () => {
-      const userPayload: UserProps = {
-        id: '1',
-        credentials: {
-          id: 'john.doe@example.com',
-          secret: 'password',
-        },
-      }
-      userFactory.create = jest.fn().mockReturnValue({
-        props: userPayload,
-      } as User<UserProps>)
-      userRepository.save = jest.fn().mockReturnValue({
-        props: userPayload,
-      } as User<UserProps>)
+      const user = mockUser()
+      userFactory.create = jest.fn().mockReturnValue(user)
+      userRepository.save = jest.fn().mockReturnValue(user)
 
-      const savedUser = await service.createUser(userPayload)
+      const result = await service.createUser(defaultUserProps)
 
-      expect(savedUser).toBeDefined()
-      expect(savedUser.props.id).toEqual(userPayload.id)
-      expect(savedUser.props.credentials.id).toEqual(userPayload.credentials.id)
-      expect(savedUser.props.credentials.secret).toEqual(userPayload.credentials.secret)
+      expect(result.props).toEqual(defaultUserProps)
     })
+
     it('should throw an error when factory fails', async () => {
-      const userPayload: UserProps = {
-        id: '1',
-        credentials: {
-          id: 'john.doe@example.com',
-          secret: 'password',
-        },
-      }
       userFactory.create = jest.fn().mockImplementation(() => {
         throw new Error('User creation failed')
       })
 
-      await expect(service.createUser(userPayload)).rejects.toThrow('User creation failed')
+      await expect(service.createUser(defaultUserProps)).rejects.toThrow('User creation failed')
     })
+
     it('should throw an error when repository fails', async () => {
-      const userPayload: UserProps = {
-        id: '1',
-        credentials: {
-          id: 'john.doe@example.com',
-          secret: 'password',
-        },
-      }
-      userFactory.create = jest.fn().mockReturnValue({
-        props: userPayload,
-      } as User<UserProps>)
+      userFactory.create = jest.fn().mockReturnValue(mockUser())
       userRepository.save = jest.fn().mockImplementation(() => {
         throw new Error('User saving failed')
       })
 
-      await expect(service.createUser(userPayload)).rejects.toThrow('User saving failed')
+      await expect(service.createUser(defaultUserProps)).rejects.toThrow('User saving failed')
     })
   })
 
   describe('findUser', () => {
-    it('should find a user', async () => {
-      const userPayload: UserProps = {
-        id: '1',
-        credentials: {
-          id: 'john.doe@example.com',
-          secret: 'password',
-        },
-      }
-      userRepository.find = jest.fn().mockReturnValue([{
-        props: userPayload,
-      } as User<UserProps>])
+    const criteria = [{ id: '1' }]
 
-      const users = await service.findUser([['id', '1']])
-      expect(users).toBeDefined()
-      expect(users.length).toEqual(1)
+    it('should find a user', async () => {
+      userRepository.find = jest.fn().mockReturnValue([mockUser()])
+
+      const users = await service.findUser(criteria)
+
+      expect(users).toHaveLength(1)
+      expect(users[0].props).toEqual(defaultUserProps)
     })
+
     it('should throw an error when repository fails', async () => {
       userRepository.find = jest.fn().mockImplementation(() => {
         throw new Error('User finding failed')
       })
 
-      await expect(service.findUser([['id', '1']])).rejects.toThrow('User finding failed')
+      await expect(service.findUser(criteria)).rejects.toThrow('User finding failed')
     })
   })
 
   describe('deleteUser', () => {
+    const criteria = [{ id: '1' }]
+
     it('should delete a user', async () => {
-      const repoSpy = jest.spyOn(userRepository, 'remove')
-      await service.deleteUser([['id', '1']])
-      expect(repoSpy).toHaveBeenCalledWith([['id', '1']])
+      await service.deleteUser(criteria)
+      expect(userRepository.remove).toHaveBeenCalledWith(criteria)
     })
 
     it('should throw an error when repository fails', async () => {
@@ -135,72 +116,41 @@ describe('UserService', () => {
         throw new Error('User deleting failed')
       })
 
-      await expect(service.deleteUser([['id', '1']])).rejects.toThrow('User deleting failed')
+      await expect(service.deleteUser(criteria)).rejects.toThrow('User deleting failed')
     })
   })
 
   describe('updateUserCredentials', () => {
-    it('should update a user credentials', async () => {
-      const from = {
-        props: {
-          id: '1',
-          credentials: {
-            id: 'john.doe@example.com',
-            secret: 'password',
-          },
-        },
-        msgStore: jest.mocked(new InMemoryMessageStore()),
-        changeCredentials: jest.fn()
-      } as User<UserProps>
-      userRepository.find = jest.fn().mockReturnValue([from])
+    const updatedCredentials = {
+      id: 'john.doe.updated@example.com',
+      secret: 'password_updated'
+    }
 
-      const to = {
-        props: {
-          id: '1',
-          credentials: {
-            id: 'john.doe.updated@example.com',
-            secret: 'password_updated',
-          },
-        },
-        msgStore: jest.mocked(new InMemoryMessageStore()),
-        changeCredentials: jest.fn(),
-      } as User<UserProps>
-      userRepository.save = jest.fn().mockReturnValue(to)
+    const metadata: IMetadata = {
+      id: '1',
+      schema: 'user',
+      type: 'change-credentials',
+      timestamp: Date.now()
+    }
 
+    const command = new ChangeUserCredentialsCommand(updatedCredentials, metadata)
 
-      const metadata: IMetadata = {
-        id: '1',
-        schema: 'user',
-        type: 'change-credentials',
-        timestamp: Date.now(),
-      }
-      const command = new ChangeUserCredentialsCommand(to.props.credentials, metadata)
+    it('should update user credentials', async () => {
+      const updatedUser = mockUser({
+        ...defaultUserProps,
+        credentials: updatedCredentials
+      })
+
+      userRepository.find = jest.fn().mockReturnValue([mockUser()])
+      userRepository.save = jest.fn().mockReturnValue(updatedUser)
 
       const result = await service.updateUserCredentials(command)
 
-      expect(result).toBeDefined()
-      expect(result.props.credentials.id).toEqual(to.props.credentials.id)
-      expect(result.props.credentials.secret).toEqual(to.props.credentials.secret)
+      expect(result.props.credentials).toEqual(updatedCredentials)
     })
+
     it('should throw an error when user is not found', async () => {
       userRepository.find = jest.fn().mockReturnValue([])
-      const to = {
-        props: {
-          id: '1',
-          credentials: {
-            id: 'john.doe.updated@example.com',
-            secret: 'password_updated',
-          },
-        },
-      } as User<UserProps>
-
-      const metadata: IMetadata = {
-        id: '1',
-        schema: 'user',
-        type: 'change-credentials',
-        timestamp: Date.now(),
-      }
-      const command = new ChangeUserCredentialsCommand(to.props.credentials, metadata)
 
       await expect(service.updateUserCredentials(command)).rejects.toThrow('User not found')
     })

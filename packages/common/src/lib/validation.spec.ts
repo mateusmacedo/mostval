@@ -11,7 +11,10 @@ class MockValidationRule implements ValidationRule {
 describe('ObjectValidationRule', () => {
   it('should validate object properties correctly', () => {
     const rule = new ObjectValidationRule({
-      name: new MockValidationRule((input) => ({ success: typeof input === 'string', errors: [] }))
+      name: new MockValidationRule((input) => ({
+        success: typeof input === 'string',
+        errors: typeof input === 'string' ? [] : ['name must be a string']
+      }))
     });
 
     const validResult = rule.validate({ name: 'John Doe' });

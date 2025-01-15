@@ -1,6 +1,6 @@
 {
   "name": "@mostval/iam",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "dependencies": {},
   "type": "commonjs",
   "main": "./index.cjs",

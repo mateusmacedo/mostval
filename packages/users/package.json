@@ -1,6 +1,6 @@
 {
   "name": "@mostval/users",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "dependencies": {
     "@mostval/common": "workspace:*",
     "@mostval/iam": "workspace:*"

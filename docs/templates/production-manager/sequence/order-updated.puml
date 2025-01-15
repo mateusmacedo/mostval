@@ -1,0 +1,15 @@
+@startuml
+actor "Usuário" as U
+participant "Serviço de Ordens de Produção" as SOP
+participant "Serviço de Inventário" as SI
+participant "Serviço de Ferramentas e Equipamentos" as SFE
+participant "Serviço de Notificações" as SN
+
+U -> SOP : Atualizar Ordem de Produção
+SOP -> SI : Atualizar Reserva de Insumos
+SI --> SOP : Confirmação da Atualização de Insumos
+SOP -> SFE : Atualizar Ferramentas Reservadas
+SFE --> SOP : Confirmação da Atualização de Ferramentas
+SOP -> SN : Notificar Atualização da Ordem
+SN --> U : Enviar Notificação de Atualização da Ordem
+@enduml

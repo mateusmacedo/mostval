@@ -1,0 +1,10 @@
+@startuml Simple.Sequence
+participant Alice
+participant Bob
+
+Alice -> Bob: Solicitação de Autenticação
+Bob --> Alice: Resposta de Autenticação
+
+Alice -> Bob: Outra Solicitação de Autenticação
+Alice <-- Bob: Outra Resposta de Autenticação
+@enduml

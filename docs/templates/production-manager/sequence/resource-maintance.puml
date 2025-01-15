@@ -1,0 +1,11 @@
+@startuml
+actor "Técnico" as T
+participant "Serviço de Ferramentas e Equipamentos" as SFE
+participant "Kafka Topic: ferramentas_manutencao" as Kafka
+participant "Serviço de Notificações" as SN
+
+T -> SFE : Agendar Manutenção de Equipamento
+SFE -> Kafka : Publicar Manutenção Agendada (tópico: ferramentas_manutencao)
+Kafka --> SN : Enviar Evento de Manutenção Agendada
+SN -> T : Notificar Manutenção Agendada
+@enduml

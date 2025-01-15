@@ -5,11 +5,11 @@ export class Result<T, E> {
     private readonly error?: E
   ) {}
 
-  public static Ok<const T>(value: T): Result<T, never> {
+  public static Ok<T>(value: T): Result<T, never> {
     return new Result<T, never>(true, value);
   }
 
-  public static Err<const E>(error: E): Result<never, E> {
+  public static Err<E>(error: E): Result<never, E> {
     return new Result<never, E>(false, undefined, error);
   }
 

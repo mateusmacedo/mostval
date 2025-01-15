@@ -1,5 +1,5 @@
 import { IValueObject } from '@mostval/ddd';
-import { IValidator } from '@mostval/common';
+import { ValidationRule, ValidationResult } from '@mostval/common';
 
 export type TEmail = {
     readonly email: string;
@@ -35,25 +35,30 @@ export class InvalidEmailError extends Error {
     }
 }
 
-export class EmailValidator implements IValidator<TEmail> {
-    validate(email: TEmail): boolean {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.email);
+export class EmailValidator implements ValidationRule<TEmail> {
+    validate(email: TEmail, path = ''): ValidationResult {
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.email);
+        return {
+            success: isValid,
+            errors: isValid ? [] : [`${path}email: Invalid email format`]
+        };
     }
 }
 
 export class EmailService {
 
-    constructor(private validator: IValidator<TEmail>) {
+    constructor(private validator: ValidationRule<TEmail>) {
     }
 
     createEmail(email: TEmail): Email {
-        if (!this.validator.validate(email)) {
-            throw new InvalidEmailError('Invalid email');
+        const validationResult = this.validator.validate(email);
+        if (!validationResult.success) {
+            throw new InvalidEmailError('Invalid email: ' + validationResult.errors.join(', '));
         }
         return new Email(email);
     }
 
     isEmail(email: TEmail): boolean {
-        return this.validator.validate(email);
+        return this.validator.validate(email).success;
     }
 }

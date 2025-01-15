@@ -1,0 +1,13 @@
+@startuml
+package "Sistema Abstrato de Gestão" {
+    [Entidade Requisito]
+    [Entidade Certificado]
+    [Entidade Capacidade]
+    [Entidade Atividade]
+
+    [Entidade Requisito] --> [Entidade Certificado] : Atende
+    [Entidade Certificado] --> [Entidade Capacidade] : Habilita
+    [Entidade Capacidade] --> [Entidade Atividade] : Permite
+    [Entidade Atividade] --> [Entidade Requisito] : Satisfaz
+}
+@enduml

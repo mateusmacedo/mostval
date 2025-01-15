@@ -1,0 +1,8 @@
+@startuml
+package "Serviço de Notificações" {
+  [Serviço de Notificações] --> [Serviço de Gerenciamento de Produção] : Enviar Notificação de Progresso
+  [Serviço de Notificações] --> [Serviço de Ordens de Produção] : Enviar Notificação de Criação de Ordem
+  [Serviço de Notificações] --> [Serviço de Inventário] : Informar Baixa no Estoque
+  [Serviço de Notificações] --> [Serviço de Ferramentas e Equipamentos] : Enviar Notificação de Manutenção
+}
+@enduml

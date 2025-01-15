@@ -1,0 +1,65 @@
+@startuml
+left to right direction
+
+actor "Usuário" as U
+actor "Técnico" as T
+actor "Administrador" as A
+
+usecase "Criar Ordem de Produção" as UC1
+usecase "Atualizar Ordem de Produção" as UC2
+usecase "Consultar Inventário" as UC3
+usecase "Reservar Insumos e Ferramentas" as UC4
+usecase "Registrar Ferramentas e Equipamentos" as UC5
+usecase "Agendar Manutenção de Equipamentos" as UC6
+usecase "Receber Notificações" as UC7
+usecase "Concluir Etapas de Produção" as UC8
+usecase "Cancelar Ordem de Produção" as UC9
+usecase "Consultar Status da Produção" as UC10
+usecase "Ajustar Preferências de Notificações" as UC11
+usecase "Visualizar Relatórios de Produção" as UC12
+usecase "Visualizar Relatórios de Inventário" as UC13
+usecase "Visualizar Relatórios de Manutenção" as UC14
+usecase "Remover Equipamento" as UC16
+usecase "Rever Histórico de Manutenção" as UC17
+
+UC1 -[#blue]-> UC4 : <<include>> 
+UC1 -[#blue]-> UC3 : <<include>> 
+UC1 -[#blue]-> UC7 : <<include>>
+UC1 -[#blue]-> UC10 : <<include>> 
+
+UC8 -[#blue]-> UC7 : <<include>>
+UC6 -[#blue]-> UC7 : <<include>>
+
+UC2 -[#blue]-> UC4 : <<include>> 
+UC2 -[#blue]-> UC3 : <<include>>
+UC2 -[#blue]-> UC7 : <<include>>
+
+UC5 -[#blue]-> UC11 : <<include>>
+UC5 -[#blue]-> UC14 : <<include>>
+UC5 -[#blue]-> UC17 : <<include>>
+UC5 -[#blue]-> UC16 : <<extend>>
+
+UC9 -[#blue]-> UC7 : <<include>>
+
+U --> UC1 : Criar Ordem
+U --> UC2 : Atualizar Ordem
+U --> UC3 : Consultar Inventário
+U --> UC4 : Reservar Insumos e Ferramentas
+U --> UC7 : Receber Notificações
+U --> UC8 : Concluir Etapas
+U --> UC9 : Cancelar Ordem
+U --> UC10 : Consultar Status
+
+T --> UC5 : Registrar Ferramentas e Equipamentos
+T --> UC6 : Agendar Manutenção
+T --> UC7 : Receber Notificações
+T --> UC17 : Rever Histórico de Manutenção
+
+A --> UC11 : Ajustar Preferências de Notificações
+A --> UC12 : Visualizar Relatórios de Produção
+A --> UC13 : Visualizar Relatórios de Inventário
+A --> UC14 : Visualizar Relatórios de Manutenção
+A --> UC16 : Remover Equipamento
+A --> UC5 : Registrar Ferramentas e Equipamentos
+
+@enduml

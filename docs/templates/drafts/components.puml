@@ -1,0 +1,9 @@
+@startuml SystemsComponent
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Componentes do Sistema
+
+Container_Boundary(alias, "label"){
+    Container(alias, "label", "technology")
+}
+@enduml

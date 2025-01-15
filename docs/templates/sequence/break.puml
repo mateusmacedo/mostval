@@ -1,0 +1,12 @@
+@startuml Break.Sequence
+participant Cliente
+participant Sistema
+
+Cliente -> Sistema: Solicitar Serviço
+alt Serviço Disponível
+    Sistema -> Cliente: Serviço Prestado
+else Serviço Indisponível
+    break
+    Sistema -> Cliente: Serviço Não Disponível
+end
+@enduml

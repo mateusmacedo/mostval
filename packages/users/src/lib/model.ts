@@ -1,6 +1,6 @@
 import { IMessageStore, IPayload } from '@mostval/common'
 import { ICredentials } from '@mostval/iam'
-import { ChangeUserCredentialsCommand, UserCredentialsChanged } from './message'
+import { ChangeUserCredentialsCommand, UserCredentialsChangedEvent } from './message'
 
 export interface UserProps extends IPayload {
   readonly id: string
@@ -8,7 +8,7 @@ export interface UserProps extends IPayload {
 }
 
 export class User<T extends UserProps> {
-  constructor(readonly props: T, readonly msgStore: IMessageStore) {
+  constructor(readonly props: T, private readonly msgStore: IMessageStore) {
   }
 
   changeCredentials(command: ChangeUserCredentialsCommand): User<T> {
@@ -19,7 +19,7 @@ export class User<T extends UserProps> {
       id: this.props.id,
     }
     const credentials = command.payload as ICredentials
-    const event = new UserCredentialsChanged( credentials , meta)
+    const event = new UserCredentialsChangedEvent( credentials , meta)
     this.msgStore.add(event)
     const user = new User({ ...this.props, credentials }, this.msgStore)
     return user

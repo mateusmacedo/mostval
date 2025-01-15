@@ -1,0 +1,16 @@
+networks:
+  shared:
+    external: true
+
+services:
+  plantuml-jetty:
+    image: plantuml/plantuml-server:jetty
+    volumes:
+      - ./plantuml:/var/local/plantuml
+    restart: always
+    networks:
+      - shared
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plantuml.rule=Host(`plantuml.localhost`)"
+      - "traefik.http.services.plantuml.loadbalancer.server.port=8080"

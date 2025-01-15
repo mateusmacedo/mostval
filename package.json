@@ -1,15 +1,29 @@
 {
   "name": "@mostval/platform",
   "description": "Monorepo for Mostaval Libraries, Apps and Tools Development Platform",
+  "keywords": [
+    "nestjs",
+    "nx",
+    "monorepo",
+    "mostval"
+  ],
   "version": "0.0.0",
   "private": false,
-  "license": "MIT",
+  "license": "ISC",
   "contributors": [
     {
       "name": "Mateus Macedo Dos Anjos",
       "email": "macedodosanjosmateus@gmail.com"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mateusmacedo/mostval.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mateusmacedo/mostval/issues"
+  },
+  "homepage": "http://github.com/mateusmacedo/mostval#readme",
   "engines": {
     "node": ">=20.0.0"
   },

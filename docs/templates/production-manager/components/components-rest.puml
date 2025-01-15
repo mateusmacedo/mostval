@@ -1,0 +1,16 @@
+@startuml
+package "Sistema de Controle de Produção" {
+  
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Inventário] : Verificar Insumos
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Ordens de Produção] : Criar/Atualizar Ordens
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Ferramentas e Equipamentos] : Verificar Ferramentas
+  [Serviço de Gerenciamento de Produção] --> [Serviço de Notificações] : Notificar Progresso
+  
+  [Serviço de Inventário] --> [Serviço de Ferramentas e Equipamentos] : Verificar Estado
+  [Serviço de Inventário] --> [Serviço de Ordens de Produção] : Informar Disponibilidade
+  
+  [Serviço de Ordens de Produção] --> [Serviço de Notificações] : Notificar Criação
+  
+  [Serviço de Ferramentas e Equipamentos] --> [Serviço de Notificações] : Informar Manutenção
+}
+@enduml

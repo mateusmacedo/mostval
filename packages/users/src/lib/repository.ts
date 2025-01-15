@@ -12,7 +12,12 @@ export class InMemoryUserRepository implements IUserRepository {
   private users: User<UserProps>[] = []
 
   save(user: User<UserProps>): Promise<User<UserProps>> {
-    this.users.push(user)
+    const idx = this.users.findIndex((item) => item.props.id === user.props.id)
+    if (idx > -1) {
+      this.users[idx] = user
+    } else {
+      this.users.push(user)
+    }
     return Promise.resolve(user)
   }
 

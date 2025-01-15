@@ -1,0 +1,24 @@
+@startuml
+actor Cliente
+(Comprar Produto) as UC1
+(Devolver Produto) as UC2
+
+Cliente -> UC1
+
+note left of Cliente
+O Cliente
+representa qualquer
+pessoa
+que interage com o
+sistema.
+end note
+
+note right of UC1
+Comprar Produto
+inclui adicionar o
+produto
+ao carrinho
+e prosseguir com o
+pagamento.
+end note
+@enduml

@@ -1,0 +1,81 @@
+@startuml Systems
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Cores para os grupos de elementos
+skinparam rectangle {
+    BackgroundColor<<broker>> LightBlue
+    BackgroundColor<<workers>> LightGreen
+    BackgroundColor<<storage>> LightYellow
+    BackgroundColor<<db>> LightGray
+    BackgroundColor<<api>> LightSalmon
+    BackgroundColor<<external>> LightCyan
+}
+
+title Arquitetura de Sistema - Processamento com Filas Singulares, Storage e Produtor de Mensagens
+
+' Frontend (Sistema Externo) no topo
+System_Boundary(frontendBoundary, "Sistema Externo") <<external>> {
+    Container(frontend, "Frontend", "Sistema Externo", "Interface de usuário")
+}
+
+' API de Entrada no centro
+System_Boundary(apiBoundary, "Api de Entrada") <<api>> {
+    Container(contentProcessorAPI, "API de Processamento de Conteúdo", "API HTTP", "Processa vídeos e envia para fila de extração de áudio")
+}
+
+' Broker de Mensagens no centro
+System_Boundary(brokerBoundary, "Broker de Mensagens") <<broker>> {
+    Container(audioExtractionTopic, "Tópico de Extração de Áudio", "RabbitMQ/Kafka/SQS", "Tópico de extração de áudio")
+    Container(audioTranscriptionTopic, "Tópico de Transcrição de Áudio", "RabbitMQ/Kafka/SQS", "Tópico de transcrição de áudio")
+    Container(textTranslationTopic, "Tópico de Tradução de Texto", "RabbitMQ/Kafka/SQS", "Tópico de tradução de texto")
+    Container(textToSpeechTopic, "Tópico de Texto para Fala", "RabbitMQ/Kafka/SQS", "Tópico de texto para fala")
+}
+
+' Serviço de Processamento de Conteúdo (Workers) abaixo dos tópicos
+System_Boundary(contentBoundary, "Serviço de Processamento de Conteúdo") <<workers>> {
+    Container(extract, "Extração de Áudio", "Serviço", "Extrai áudio de vídeos")
+    Container(transcribe, "Transcrição de Áudio", "Serviço", "Transcreve áudio em texto")
+    Container(translate, "Tradução de Texto", "Serviço", "Traduz texto para outro idioma")
+    Container(TTS, "Texto para Fala", "Serviço", "Transforma texto em áudio (TTS)")
+}
+
+' Sistema de Armazenamento (Storage) na parte inferior
+System_Boundary(storageBoundary, "Sistema de Armazenamento") <<storage>> {
+    Container(storageInput, "Storage de Entrada", "S3/Blob Storage", "Armazena vídeos e áudios de entrada")
+    Container(storageOutput, "Storage de Saída", "S3/Blob Storage", "Armazena áudios e transcrições processadas")
+}
+
+' Banco de Dados (Persistência) na parte inferior direita
+System_Boundary(boundaryDB, "Banco de Dados") <<db>> {
+    ContainerDb(dbPrimary, "Banco de Dados Primário", "PostgreSQL", "Armazena os resultados processados")
+    ContainerDb(dbReplica, "Replica de Banco de Dados", "PostgreSQL Replica", "Replica para leitura")
+}
+
+' Definindo as conexões (esquerda para direita)
+Rel(frontend, contentProcessorAPI, "Publica Conteúdo", "HTTP")
+Rel(contentProcessorAPI, audioExtractionTopic, "Publica solicitação de extração de áudio", "AMQP/Kafka/SQS")
+Rel(audioExtractionTopic, extract, "Envia vídeo para extração de áudio", "AMQP/Kafka/SQS")
+Rel(extract, audioTranscriptionTopic, "Envia áudio para transcrição", "AMQP/Kafka/SQS")
+Rel(audioTranscriptionTopic, transcribe, "Envia áudio para transcrição", "AMQP/Kafka/SQS")
+Rel(transcribe, textTranslationTopic, "Envia texto para tradução", "AMQP/Kafka/SQS")
+Rel(textTranslationTopic, translate, "Envia texto para tradução", "AMQP/Kafka/SQS")
+Rel(translate, textToSpeechTopic, "Envia texto para fala", "AMQP/Kafka/SQS")
+Rel(textToSpeechTopic, TTS, "Envia texto para fala", "AMQP/Kafka/SQS")
+
+' Relacionamentos com o Sistema de Storage
+Rel(contentProcessorAPI, storageInput, "Armazena vídeo de entrada", "HTTP/S3 API")
+Rel(extract, storageOutput, "Armazena áudio extraído", "HTTP/S3 API")
+Rel(transcribe, storageOutput, "Armazena transcrição", "HTTP/S3 API")
+Rel(TTS, storageOutput, "Armazena áudio gerado", "HTTP/S3 API")
+
+' Relacionamentos com o Banco de Dados
+Rel(extract, dbPrimary, "Gravação de Dados", "PostgreSQL Primário")
+Rel(transcribe, dbPrimary, "Gravação de Dados", "PostgreSQL Primário")
+Rel(translate, dbPrimary, "Gravação de Dados", "PostgreSQL Primário")
+Rel(TTS, dbPrimary, "Gravação de Dados", "PostgreSQL Primário")
+
+Rel(dbPrimary, dbReplica, "Replica dados para leitura")
+Rel(contentProcessorAPI, dbPrimary, "Gravação de Dados", "PostgreSQL Primário")
+Rel(contentProcessorAPI, dbReplica, "Leitura de Dados", "PostgreSQL Replica")
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml Critical.Sequence
+participant Thread1
+participant Recurso
+participant Thread2
+
+Thread1 -> Recurso: Solicitar Acesso
+critical Seção Crítica
+    Thread1 -> Recurso: Acesso Garantido
+    Thread2 -> Recurso: Esperar
+end
+Recurso -> Thread1: Liberar Acesso
+Recurso -> Thread2: Acesso Agora
+@enduml

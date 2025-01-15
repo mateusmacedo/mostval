@@ -1,0 +1,9 @@
+@startuml
+package "Sistema de Controle de Produção" {
+  [Serviço de Gerenciamento de Produção]
+  [Serviço de Inventário]
+  [Serviço de Ordens de Produção]
+  [Serviço de Ferramentas e Equipamentos]
+  [Serviço de Notificações]
+}
+@enduml

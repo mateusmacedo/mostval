@@ -23,13 +23,10 @@ export class UserService {
   }
 
   async updateUserCredentials(command: ChangeUserCredentialsCommand): Promise<User<UserProps>> {
-    const criteria: TUserCriteria[] = [['id', command.metadata['id']]]
-    const users = await this.userRepository.find(criteria)
+    const users = await this.userRepository.find([['id', command.metadata['id']]])
     if (users.length === 0) {
       throw new UserNotFoundError('User not found')
     }
-    const user = users[0]
-    user.changeCredentials(command)
-    return this.userRepository.save(user)
+    return this.userRepository.save(users[0].changeCredentials(command))
   }
 }

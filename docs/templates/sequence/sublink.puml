@@ -1,0 +1,8 @@
+@startuml SubDiagram.Sequence
+participant Cliente
+participant Sistema
+
+Cliente -> Sistema: Solicitar Serviço
+
+ref over Cliente, Sistema : [Diagrama de Autenticação](autenticacao.puml)
+@enduml

@@ -20,13 +20,15 @@ export class UserController {
   constructor(private readonly appService: UserService) {}
 
   @Post()
-  createUser(@Body() user: UserPropsDto) {
-    return this.appService.createUser(user)
+  async createUser(@Body() user: UserPropsDto): Promise<UserProps> {
+    const result = await this.appService.createUser(user)
+    return result.props
   }
 
   @Get()
-  findUser(@Query() criteria: TUserCriteria[]) {
-    return this.appService.findUser(criteria)
+  async findUser(@Query() criteria: TUserCriteria): Promise<UserProps[]> {
+    const result = await this.appService.findUser([criteria])
+    return result.map(user => user.props)
   }
 
   @Delete()
@@ -35,13 +37,14 @@ export class UserController {
   }
 
   @Patch(':id/credentials')
-  updateUserCredentials(@Param('id') id: string, @Body() credentials: UpdateUserCredentialsDto) {
+  async updateUserCredentials(@Param('id') id: string, @Body() credentials: UpdateUserCredentialsDto): Promise<UserProps> {
     const command = new ChangeUserCredentialsCommand(credentials, {
       id,
       schema: 'user',
       type: 'change-credentials',
       timestamp: Date.now(),
     })
-    return this.appService.updateUserCredentials(command)
+    const result = await this.appService.updateUserCredentials(command)
+    return result.props
   }
 }

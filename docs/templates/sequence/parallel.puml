@@ -1,0 +1,11 @@
+@startuml Parallel.Sequence
+participant Usuário
+participant ServiçoA
+participant ServiçoB
+
+Usuário -> ServiçoA: Iniciar Tarefa A
+par
+    ServiçoA -> Usuário: Tarefa A em Progresso
+    ServiçoB -> Usuário: Tarefa B em Progresso
+end
+@enduml

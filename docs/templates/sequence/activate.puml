@@ -1,0 +1,11 @@
+@startuml Activate.Sequence
+participant Usuário
+participant Serviço
+
+Usuário -> Serviço: Fazer Login
+activate Serviço
+
+Serviço -> Serviço: Verificar Credenciais
+Serviço --> Usuário: Login Sucesso
+deactivate Serviço
+@enduml

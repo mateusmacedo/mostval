@@ -1,0 +1,82 @@
+@startuml
+left to right direction
+
+actor Cliente
+
+package "Processo de Venda" {
+    (Iniciar Compra) as UC1
+    (Processar Pagamento) as UC2
+    (Emitir Nota Fiscal) as UC3
+    (Cancelar Pedido) as UC7
+}
+
+package "Gestão de Clientes" {
+    (Registrar Cliente) as UC8
+    (Atualizar Informações) as UC9
+}
+
+Cliente --> UC1 : Inicia a compra
+UC1 -> UC2 : Inclui pagamento
+UC2 -> UC3 : Gera nota fiscal
+UC1 -> UC7 : Cancela pedido (opcional)
+
+Cliente -down-> UC8 : Registro inicial
+Cliente -down-> UC9 : Atualiza informações pessoais
+
+newpage
+left to right direction
+skinparam packageStyle rectangle
+
+actor Vendedor
+
+package "Gestão de Produtos" {
+    (Adicionar Produto) as UC4
+    (Remover Produto) as UC5
+    (Atualizar Estoque) as UC6
+}
+
+Vendedor --> UC4 : Adiciona produtos
+Vendedor --> UC5 : Remove produtos
+Vendedor --> UC6 : Atualiza estoque
+
+newpage
+left to right direction
+skinparam packageStyle rectangle
+
+:Administrador: as Admin
+
+package "Gestão de Produtos" {
+    (Adicionar Produto) as UC4
+    (Remover Produto) as UC5
+    (Atualizar Estoque) as UC6
+}
+
+package "Gestão de Clientes" {
+    (Registrar Cliente) as UC8
+    (Atualizar Informações) as UC9
+}
+
+Admin --> UC4 : Gestão de produtos
+Admin --> UC5
+Admin --> UC6
+
+Admin --> UC8 : Gestão de clientes
+Admin --> UC9
+
+newpage
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Suporte ao Cliente" as Suporte
+
+package "Suporte ao Cliente" {
+    (Abrir Chamado) as UC10
+    (Responder Chamado) as UC11
+    (Fechar Chamado) as UC12
+}
+
+Suporte --> UC10 : Abre chamado de cliente
+Suporte --> UC11 : Responde ao chamado
+Suporte --> UC12 : Fecha chamado
+
+@enduml

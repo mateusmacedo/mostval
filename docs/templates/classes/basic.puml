@@ -1,0 +1,62 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "Gestão de Usuários" {
+    class Usuario {
+        -id: int
+        -nome: String
+        -senha: String
+        +autenticar(): boolean
+    }
+
+    class Cliente {
+        -email: String
+        +registrar(): void
+    }
+
+    Usuario <|-- Cliente
+}
+
+package "Gestão de Pedidos" {
+    class Pedido {
+        -numero: int
+        -data: Date
+        -itens: List<Produto>
+        +calcularTotal(): double
+        +cancelar(): void
+    }
+
+    class Produto {
+        -codigo: int
+        -descricao: String
+        -preco: double
+        +atualizarEstoque(): void
+    }
+
+    Pedido "1" --> "*" Produto : contém
+}
+
+package "Pagamentos" {
+    interface IPagamento {
+        +processar(): void
+    }
+
+    class Pagamento {
+        -id: int
+        -valor: double
+        +realizarPagamento(): void
+    }
+
+    class PagamentoCartao implements IPagamento {
+        +processar(): void
+    }
+
+    class PagamentoBoleto implements IPagamento {
+        +processar(): void
+    }
+
+    Pedido "1" --> "1" Pagamento : inclui
+    Pagamento <|.. IPagamento
+}
+
+@enduml

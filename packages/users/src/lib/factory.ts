@@ -1,6 +1,6 @@
 import { IMessageStore } from '@mostval/common'
 import { User, UserProps } from './model'
-import { UserCreated } from './message'
+import { UserCreatedEvent } from './message'
 
 export interface IUserFactory {
   create(props: UserProps): User<UserProps>
@@ -11,7 +11,7 @@ export class UserFactory implements IUserFactory {
 
   create(props: UserProps): User<UserProps> {
     const user = new User(props, this.msgStore)
-    const userCreatedEvent = new UserCreated({ ...props }, {
+    const userCreatedEvent = new UserCreatedEvent({ ...props }, {
       schema: 'user',
       type: 'created',
       timestamp: Date.now(),

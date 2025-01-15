@@ -1,0 +1,21 @@
+@startuml
+package "Kafka Topics" {
+  [producao_etapas] 
+  [inventario_reservas]
+  [ordens_producao]
+  [ferramentas_manutencao]
+  [notificacoes_envios]
+}
+
+package "Serviços" {
+  [Serviço de Gerenciamento de Produção] --> [producao_etapas] : Publicar Conclusão de Etapa
+  [Serviço de Inventário] --> [inventario_reservas] : Publicar Reserva de Item
+  [Serviço de Ordens de Produção] --> [ordens_producao] : Publicar Criação de Ordem
+  [Serviço de Ferramentas e Equipamentos] --> [ferramentas_manutencao] : Publicar Agendamento de Manutenção
+  [Serviço de Notificações] --> [notificacoes_envios] : Publicar Notificação Enviada
+  
+  [Serviço de Notificações] --> [producao_etapas] : Consumir Conclusão de Etapa
+  [Serviço de Ordens de Produção] --> [inventario_reservas] : Consumir Reserva de Item
+  [Serviço de Gerenciamento de Produção] --> [ferramentas_manutencao] : Consumir Manutenção Agendada
+}
+@enduml

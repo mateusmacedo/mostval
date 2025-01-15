@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+actor Cliente
+actor Vendedor
+
+(Comprar) as UC1
+(Emitir Nota) as UC2
+
+Cliente -right-> UC1
+UC1 -left-> UC2
+@enduml

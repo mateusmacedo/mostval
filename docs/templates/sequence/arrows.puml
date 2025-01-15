@@ -1,0 +1,6 @@
+@startuml Arrows.Sequence
+Alice -> Bob: Solicitar Dados
+Bob --> Alice: Enviar Dados
+Bob ->o Alice: Dados Perdidos
+Alice <-> Bob: Comunicação Bidirecional
+@enduml

@@ -1,0 +1,8 @@
+@startuml IncludeDefine.Sequence
+!include define.puml
+
+CLIENTE
+SISTEMA
+
+Cliente -> Sistema: Enviar Pedido
+@enduml

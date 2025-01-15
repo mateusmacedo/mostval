@@ -1,0 +1,14 @@
+@startuml
+actor Sistema
+participant "Requisitos" as Requisitos
+participant "Certificados" as Certificados
+participant "Capacidades" as Capacidades
+participant "Atividades" as Atividades
+
+Sistema -> Requisitos: Validar Dados do Email
+Requisitos -> Certificados: Conferir Validade dos Dados
+Certificados -> Certificados: Emitir Certificado de Validação
+Certificados -> Capacidades: Habilitar Capacidade de Envio
+Capacidades -> Atividades: Permitir Envio do Email
+Atividades -> Sistema: Email Enviado com Sucesso
+@enduml

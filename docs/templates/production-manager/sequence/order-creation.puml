@@ -1,0 +1,15 @@
+@startuml
+actor "Usuário" as U
+participant "Serviço de Ordens de Produção" as SOP
+participant "Serviço de Inventário" as SI
+participant "Serviço de Ferramentas e Equipamentos" as SFE
+participant "Serviço de Notificações" as SN
+
+U -> SOP : Criar Ordem de Produção
+SOP -> SI : Consultar Disponibilidade de Insumos
+SI --> SOP : Insumos Disponíveis
+SOP -> SFE : Verificar Ferramentas Disponíveis
+SFE --> SOP : Ferramentas Disponíveis
+SOP -> SN : Notificar Criação da Ordem
+SN --> U : Enviar Notificação de Criação de Ordem
+@enduml

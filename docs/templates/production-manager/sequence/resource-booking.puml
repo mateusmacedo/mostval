@@ -1,0 +1,9 @@
+@startuml
+actor "Serviço de Ordens de Produção" as SOP
+participant "Serviço de Inventário" as SI
+participant "Kafka Topic: inventario_reservas" as Kafka
+
+SOP -> SI : Solicitar Reserva de Insumos
+SI -> Kafka : Publicar Reserva de Insumos (tópico: inventario_reservas)
+Kafka --> SOP : Confirmação da Reserva de Insumos
+@enduml

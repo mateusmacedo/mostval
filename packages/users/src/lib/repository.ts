@@ -1,6 +1,8 @@
 import { User, UserProps } from './model'
 
-export type TUserCriteria = [keyof UserProps, UserProps[keyof UserProps]]
+export type TUserCriteria = {
+  [key in keyof Partial<UserProps>]: UserProps[key]
+}
 
 export interface IUserRepository {
   save(user: User<UserProps>): Promise<User<UserProps>>
@@ -22,12 +24,20 @@ export class InMemoryUserRepository implements IUserRepository {
   }
 
   find(criteria: TUserCriteria[]): Promise<User<UserProps>[]> {
-    return Promise.resolve(this.users.filter((user) => criteria.every(([key, value]) => user.props[key] === value)))
+    return Promise.resolve(this.users.filter((user) => criteria.every((criterion) => {
+      const key = Object.keys(criterion)[0] as keyof UserProps;
+      const value = criterion[key];
+      return user.props[key] === value;
+    })));
   }
 
   remove(criteria: TUserCriteria[]): Promise<void> {
-    this.users = this.users.filter((item) => !criteria.every(([key, value]) => item.props[key] === value))
-    return Promise.resolve()
+    this.users = this.users.filter((item) => !criteria.every((criterion) => {
+      const key = Object.keys(criterion)[0] as keyof UserProps;
+      const value = criterion[key];
+      return item.props[key] === value;
+    }));
+    return Promise.resolve();
   }
 }
 

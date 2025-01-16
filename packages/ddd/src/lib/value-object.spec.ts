@@ -51,7 +51,7 @@ describe('ValueObject', () => {
     test('should convert to string correctly', () => {
         const value = 'test';
         const vo = new TestStringValueObject(value);
-        expect(vo.toString()).toBe(value);
+        expect(vo.asString()).toBe(value);
     });
 });
 
@@ -87,13 +87,13 @@ describe('TestComplexNestedValueObject', () => {
     test('should convert to string correctly', () => {
         const value = { value: 'test', nested: { value: 1 } };
         const vo = new TestComplexNestedValueObject(value);
-        expect(vo.toString()).toBe(JSON.stringify(value));
+        expect(vo.asString()).toBe(JSON.stringify(value));
     });
 
     test('should convert to JSON correctly', () => {
         const value = { value: 'test', nested: { value: 1 } };
         const vo = new TestComplexNestedValueObject(value);
-        expect(vo.toJSON()).toBe(JSON.stringify(value));
+        expect(vo.asJSON()).toBe(JSON.stringify(value));
     });
 
     test('should be able to access nested properties', () => {

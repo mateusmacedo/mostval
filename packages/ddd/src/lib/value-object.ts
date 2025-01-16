@@ -1,8 +1,8 @@
 export interface IValueObject<T> {
   getValue(): T;
   equals(other: IValueObject<T>): boolean;
-  toString(): string;
-  toJSON(): string;
+  asString(): string;
+  asJSON(): string;
 }
 
 export abstract class ValueObject<T> implements IValueObject<T> {
@@ -24,14 +24,14 @@ export abstract class ValueObject<T> implements IValueObject<T> {
       return this.value === other.getValue();
     }
 
-    toString(): string {
+    asString(): string {
       if (typeof this.value === 'object') {
         return JSON.stringify(this.value);
       }
       return String(this.value);
     }
 
-    toJSON(): string {
+    asJSON(): string {
       return JSON.stringify(this.value);
     }
   }

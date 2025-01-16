@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common'
-import { NotificationService } from './notification.service'
+import { Body, Controller, Post } from '@nestjs/common';
+import { NotificationDto } from './notification.dto';
+import { NotificationService } from './notification.service';
 
-@Controller()
+@Controller('notification')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Get()
-  get() {
-    return this.notificationService.execute()
+  @Post('/')
+  async notify(@Body() notificationData: NotificationDto<string>) {
+    return await this.notificationService.createAndPersistNotification(
+      notificationData
+    );
   }
 }

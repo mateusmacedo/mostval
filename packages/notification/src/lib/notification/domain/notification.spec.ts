@@ -38,7 +38,7 @@ describe('Notification', () => {
         channels: INotificationChannel<unknown>[],
         content: string,
         status: NotificationStatus
-    ) => TNotificationProps = (channels, content, status) => ({
+    ) => TNotificationProps<string> = (channels, content, status) => ({
         channels,
         content,
         status
@@ -139,7 +139,7 @@ describe('Notification', () => {
             equals: () => false,
             asString: () => '',
             asJSON: () => ''
-        } as IValueObject<TNotificationProps>;
+        } as IValueObject<TNotificationProps<string>>;
 
         expect(notification.equals(differentInstance)).toBe(false);
     });

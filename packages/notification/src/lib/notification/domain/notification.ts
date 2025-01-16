@@ -22,15 +22,15 @@ export interface INotificationChannel<T> {
     address: IValueObject<T>
 }
 
-export type TNotificationProps = {
+export type TNotificationProps<T> = {
     channels: INotificationChannel<unknown>[]
-    content: string
+    content: T
     status: NotificationStatus
 }
 
-export class Notification extends AggregateRoot<string, number> implements IValueObject<TNotificationProps> {
+export class Notification<T> extends AggregateRoot<string, number> implements IValueObject<TNotificationProps<T>> {
     constructor(
-        protected props: TNotificationProps,
+        protected props: TNotificationProps<T>,
         identity?: TIdentity<string, number>,
         timestamps?: ITimestamper
     ) {
@@ -41,11 +41,11 @@ export class Notification extends AggregateRoot<string, number> implements IValu
             timestamps?.updatedAt ?? new Date()
         );
     }
-    getValue(): TNotificationProps {
+    getValue(): TNotificationProps<T> {
         return this.props;
     }
 
-    equals(other: IValueObject<TNotificationProps>): boolean {
+    equals(other: IValueObject<TNotificationProps<T>>): boolean {
         if (!(other instanceof Notification)) {
             return false;
         }

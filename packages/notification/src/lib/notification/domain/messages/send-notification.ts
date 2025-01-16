@@ -10,19 +10,19 @@ export type TNotificationMetadataWhenSendFailed<T> = TNotificationMetadataWhenSe
     readonly error: NotificationError;
 }
 
-export class SendNotification<T> extends Message<Notification<T>> {
+export class SendNotification<T> extends Message<Notification<T>, TNotificationMetadataWhenSending<T>> {
     constructor(payload: Notification<T>, metadata: TNotificationMetadataWhenSending<T>) {
         super(payload, metadata);
     }
 }
 
-export class NotificationSent<T> extends Message<Notification<T>> {
+export class NotificationSent<T> extends Message<Notification<T>, TNotificationMetadata> {
     constructor(payload: Notification<T>, metadata: TNotificationMetadata) {
         super(payload, metadata);
     }
 }
 
-export class NotificationSendFailed<T> extends Message<Notification<T>> {
+export class NotificationSendFailed<T> extends Message<Notification<T>, TNotificationMetadataWhenSendFailed<T>> {
     constructor(payload: Notification<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
         super(payload, metadata);
     }

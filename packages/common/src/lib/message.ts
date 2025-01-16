@@ -1,21 +1,26 @@
-/*
-eslint-disable
-*/
-export interface IPayload {}
+export type TGenericProps<T> = Partial<T>
 
-export interface IMetadata {
-    readonly schema: string;
-    readonly type: string;
-    readonly timestamp: number;
-    readonly id: string;
+export interface IPayload<T> {
+  [field: string]: T
 }
 
-export abstract class Message<T> {
-    readonly payload: T;
-    readonly metadata: IMetadata;
+export interface IMeta<T> {
+  [key: string]: T
+}
 
-    constructor(payload: T, metadata: IMetadata) {
-        this.payload = payload
-        this.metadata = metadata
-    }
+export interface IMetadata {
+  readonly schema: string
+  readonly type: string
+  readonly timestamp: number
+  readonly id: string
+}
+
+export abstract class Message<Tpayload extends IPayload<any>, Tmetadata extends IMeta<any>> {
+  readonly payload: Tpayload
+  readonly metadata: Tmetadata
+
+  constructor(payload: Tpayload, metadata: Tmetadata) {
+    this.payload = payload
+    this.metadata = metadata
+  }
 }

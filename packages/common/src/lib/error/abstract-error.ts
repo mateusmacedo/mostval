@@ -1,4 +1,4 @@
-export type ErrorMessage = string | string[] | Record<string, unknown>;
+export type ErrorMessage = string | Array<string> | Record<string, unknown> | Array<Record<string, unknown>>
 
 export abstract class AbstractError<T extends ErrorMessage> extends Error {
   originalMessage: T;

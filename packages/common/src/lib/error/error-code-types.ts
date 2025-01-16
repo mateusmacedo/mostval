@@ -23,4 +23,5 @@ export const ERRORS = {
   invalidData: InvalidDataError,
   validation: ValidationError,
 } as const
+
 export type ErrorsType = keyof typeof ERRORS

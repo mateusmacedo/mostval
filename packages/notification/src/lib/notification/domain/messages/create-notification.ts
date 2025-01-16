@@ -18,8 +18,14 @@ export class NotificationCreated<T> extends Message<Notification<T>, TNotificati
     }
 }
 
-export class NotificationCreationFailed<T> extends Message<INotificationProps<T>, TNotificationMetadataWhenSendFailed<T>> {
-    constructor(payload: INotificationProps<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
-        super(payload, metadata);
-    }
+export class NotificationCreationFailed<T> extends Message<
+  INotificationProps<T>,
+  TNotificationMetadataWhenSendFailed
+> {
+  constructor(
+    payload: INotificationProps<T>,
+    metadata: TNotificationMetadataWhenSendFailed
+  ) {
+    super(payload, metadata);
+  }
 }

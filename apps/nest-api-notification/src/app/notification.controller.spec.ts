@@ -1,7 +1,13 @@
-import { TCreateNewNotificationInput } from '@mostval/notification';
+import {
+  Notification,
+  NotificationChannelType,
+  NotificationStatus,
+  TCreateNewNotificationInput,
+} from '@mostval/notification';
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
+import { ValueObject } from '@mostval/ddd';
 
 const mockNotificationService = {
   createAndPersistNotification: jest.fn(),
@@ -42,14 +48,30 @@ describe('NotificationController', () => {
         channels: [],
         content: 'Test',
       };
-
-      mockNotificationService.createAndPersistNotification.mockResolvedValue({
-        message: 'Notification API',
-      });
+      const address = new ValueObject('test@test.com');
+      mockNotificationService.createAndPersistNotification.mockResolvedValue(
+        new Notification({
+          channels: [
+            {
+              type: NotificationChannelType.EMAIL,
+              address,
+            },
+          ],
+          content: 'Test',
+          status: NotificationStatus.CREATED,
+        })
+      );
 
       const result = await controller.notify(data);
       expect(result).toEqual({
-        message: 'Notification API',
+        channels: [
+          {
+            type: NotificationChannelType.EMAIL,
+            address,
+          },
+        ],
+        content: 'Test',
+        status: NotificationStatus.CREATED,
       });
     });
   });

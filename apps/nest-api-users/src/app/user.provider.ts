@@ -1,8 +1,10 @@
-import { IMessageStore, InMemoryMessageStore, MESSAGE_STORE } from '@mostval/common'
-import { InMemoryUserRepository, USER_FACTORY, USER_REPOSITORY, UserFactory } from '@mostval/users'
+import { IMessageStore, IMetadata, InMemoryMessageStore, IPayload, Message, MESSAGE_STORE } from '@mostval/common'
+import { InMemoryUserRepository, USER_FACTORY, USER_REPOSITORY, UserFactory, UserProps } from '@mostval/users'
+import { ICredentials } from '@mostval/iam'
+
 export const UserFactoryProvider = {
   provide: USER_FACTORY,
-  useFactory: (msgStore: IMessageStore) => {
+  useFactory: (msgStore: IMessageStore<Message<IPayload<ICredentials>, IMetadata>>) => {
     return new UserFactory(msgStore)
   },
   inject: [MESSAGE_STORE],

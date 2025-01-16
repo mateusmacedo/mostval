@@ -1,1 +1,1 @@
-export * from './lib/notification/domain';
+export * from './lib/notification'

@@ -1,14 +1,13 @@
 import { INotificationBuilder } from '../domain/builder';
-import {
-  INotificationProps,
-  Notification,
-  NotificationStatus,
-} from '../domain/notification';
+import { INotificationProps, Notification } from '../domain/notification';
 import { INotificationPersisterRepository } from '../domain/repository';
 
 type TCreateNewNotificationOutput<T> = Notification<T>;
 
-export type TCreateNewNotificationInput<T> = Partial<INotificationProps<T>>;
+export type TCreateNewNotificationInput<T> = Pick<
+  INotificationProps<T>,
+  'content' | 'channels'
+>;
 
 export class CreateNewNotification {
   constructor(private readonly builder: INotificationBuilder<unknown>) {}

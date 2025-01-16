@@ -21,7 +21,6 @@ describe('notification usecases', () => {
       const useCase = new CreateNewNotification(builder);
       const result = await useCase.execute({
         content: 'Test',
-        status: NotificationStatus.CREATED,
         channels: [],
       });
       expect(result).toBeInstanceOf(Notification);
@@ -38,7 +37,9 @@ describe('notification usecases', () => {
         }),
       } as unknown as INotificationBuilder<unknown>;
       const useCase = new CreateNewNotification(builder);
-      expect(useCase.execute({ content: 'Test' })).rejects.toThrow('Test');
+      expect(
+        useCase.execute({ content: 'Test', channels: [] })
+      ).rejects.toThrow('Test');
     });
   });
 

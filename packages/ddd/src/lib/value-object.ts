@@ -1,13 +1,17 @@
-export interface IValueObject<T> {
+export type ValueObjectProps<T> = {
+  [Property in keyof T]?: T[Property];
+};
+export interface IValueObject<T extends ValueObjectProps<T>> {
   getValue(): T;
   equals(other: IValueObject<T>): boolean;
   asString(): string;
   asJSON(): string;
 }
 
-export abstract class ValueObject<T> implements IValueObject<T> {
+export abstract class ValueObject<T extends ValueObjectProps<T>> implements IValueObject<T> {
 
-    constructor(private readonly value: T) {
+    constructor(protected readonly value: T) {
+      this.value = Object.freeze(value || ({} as T));
     }
 
     getValue(): T {
@@ -18,10 +22,16 @@ export abstract class ValueObject<T> implements IValueObject<T> {
       if (other === null || other === undefined) {
         return false;
       }
-      if (typeof this.value === 'object' && typeof other.getValue() === 'object') {
-        return JSON.stringify(this.value) === JSON.stringify(other.getValue());
+
+      if (this.constructor.name !== other.constructor.name) {
+        return false;
       }
-      return this.value === other.getValue();
+
+      if (typeof this.value === 'object' && typeof other.getValue() === 'object') {
+        return this.asJSON() === other.asJSON();
+      }
+
+      return this.getValue() === other.getValue();
     }
 
     asString(): string {

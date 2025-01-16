@@ -1,4 +1,5 @@
-import { Notification, NotificationChannelType, TNotificationProps, INotificationChannel } from './notification';
+import { IIdentity, ITimestamper, TIdentity } from '@mostval/common';
+import { Notification, NotificationChannelType, TNotificationProps, INotificationChannel, NotificationStatus } from './notification';
 import { IValueObject } from '@mostval/ddd';
 
 class MockAddressValueObject implements IValueObject<string> {
@@ -7,13 +8,13 @@ class MockAddressValueObject implements IValueObject<string> {
         return this.value;
     }
     equals(other: IValueObject<string>): boolean {
-        return this.value === other.getValue();
+        return this.getValue() === other.getValue();
     }
     asString(): string {
-        return this.value;
+        return this.getValue();
     }
     asJSON(): string {
-        return JSON.stringify(this.value);
+        return JSON.stringify(this.getValue());
     }
 }
 
@@ -33,92 +34,177 @@ describe('Notification', () => {
         }
     ];
 
-    const mockProps: TNotificationProps = {
-        templateId: { id: 'template-1', version: 1 },
-        channels: mockChannels,
-        content: 'Test notification content'
-    };
+    const mockProps: (
+        templateId: string,
+        version: number,
+        channels: INotificationChannel<unknown>[],
+        content: string,
+        status: NotificationStatus
+    ) => TNotificationProps = (templateId, version, channels, content, status) => ({
+        templateId: { id: templateId, version },
+        channels,
+        content,
+        status
+    });
 
-    const mockIdentity = {
-        id: 'notification-1',
-        version: 1
-    };
+    const mockIdentity: (id: string, version: number) => TIdentity<string, number> = (id, version) => ({
+        id,
+        version
+    });
 
-    const mockTimestamps = {
-        createdAt: mockDate,
-        updatedAt: mockDate
-    };
+    const mockTimestamps: (createdAt: Date, updatedAt: Date) => ITimestamper = (createdAt, updatedAt) => ({
+        createdAt,
+        updatedAt
+    });
 
     it('should create a notification with default values when identity and timestamps are not provided', () => {
-        const notification = new Notification(mockProps);
+        const notification = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ));
 
         expect(notification.id).toBe('');
         expect(notification.version).toBe(0);
         expect(notification.createdAt).toBeInstanceOf(Date);
         expect(notification.updatedAt).toBeInstanceOf(Date);
-        expect(notification.getValue()).toEqual(mockProps);
+        expect(notification.getValue()).toEqual(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ));
     });
 
     it('should create a notification with provided identity and timestamps', () => {
-        const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
+        const notification = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), { id: 'notification-1', version: 1 }, mockTimestamps(mockDate, mockDate));
 
         expect(notification.id).toBe('notification-1');
         expect(notification.version).toBe(1);
         expect(notification.createdAt).toBe(mockDate);
         expect(notification.updatedAt).toBe(mockDate);
-        expect(notification.getValue()).toEqual(mockProps);
+        expect(notification.getValue()).toEqual(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ));
     });
 
     it('should compare two notifications correctly - equal case', () => {
-        const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
-        const notification2 = new Notification(mockProps, mockIdentity, mockTimestamps);
+        const props = mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        );
+
+        const notification1 = new Notification(props,
+            mockIdentity('notification-1', 1),
+            mockTimestamps(mockDate, mockDate)
+        );
+        const notification2 = new Notification(props,
+            mockIdentity('notification-2', 2), // diferentes IDs não afetam a igualdade
+            mockTimestamps(mockDate, mockDate)
+        );
 
         expect(notification1.equals(notification2)).toBe(true);
     });
 
     it('should compare two notifications correctly - different case', () => {
-        const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
-        const differentProps = {
-            ...mockProps,
-            content: 'Different content'
-        };
-        const notification2 = new Notification(differentProps, mockIdentity, mockTimestamps);
+        const notification1 = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
+        const notification2 = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Different content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
 
         expect(notification1.equals(notification2)).toBe(false);
     });
 
     it('should return false when comparing with a different instance', () => {
-        const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
+        const notification = new Notification(mockProps(
+            'template-1',
+            1,
+            [...mockChannels],
+            'Test notification content',
+            NotificationStatus.CREATED
+        ));
         const differentInstance = {
-            getValue: () => mockProps,
+            getValue: () => mockProps(
+                'template-1',
+                1,
+                mockChannels,
+                'Test notification content',
+                NotificationStatus.CREATED
+            ),
             equals: () => false,
             asString: () => '',
             asJSON: () => ''
-        };
+        } as IValueObject<TNotificationProps>;
 
         expect(notification.equals(differentInstance)).toBe(false);
     });
 
     it('should return false when comparing notifications with different channels', () => {
-        const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
-        const differentChannels = {
-            ...mockProps,
-            channels: [mockChannels[0]] // apenas email
-        };
-        const notification2 = new Notification(differentChannels, mockIdentity, mockTimestamps);
+        const notification1 = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
+        const notification2 = new Notification(mockProps(
+            'template-1',
+            1,
+            [mockChannels[0]], // apenas email
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
 
         expect(notification1.equals(notification2)).toBe(false);
     });
 
     it('should generate a correct string representation', () => {
-        const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
+        const notification = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
         const expected = `Notification: [object Object] Test notification content EMAIL, SMS`;
 
         expect(notification.asString()).toBe(expected);
     });
 
     it('should generate a correct JSON representation', () => {
-        const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
+        const notification = new Notification(mockProps(
+            'template-1',
+            1,
+            mockChannels,
+            'Test notification content',
+            NotificationStatus.CREATED
+        ), mockIdentity('notification-1', 1), mockTimestamps(mockDate, mockDate));
         const jsonString = notification.asJSON();
         const parsed = JSON.parse(jsonString);
 
@@ -128,7 +214,8 @@ describe('Notification', () => {
                 { type: 'EMAIL', address: { value: 'test@example.com' } },
                 { type: 'SMS', address: { value: '+5511999999999' } }
             ],
-            content: 'Test notification content'
+            content: 'Test notification content',
+            status: 'CREATED'
         });
     });
 });

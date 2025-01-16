@@ -21,8 +21,7 @@
         "main": "packages/notification/src/index.ts",
         "tsConfig": "packages/notification/tsconfig.lib.json",
         "format": ["cjs"],
-        "assets": ["packages/notification/*.md"],
-        "generatePackageJson": true
+        "assets": ["packages/notification/*.md"]
       }
     },
     "nx-release-publish": {

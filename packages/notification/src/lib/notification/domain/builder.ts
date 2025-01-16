@@ -1,7 +1,7 @@
 import { INotificationChannel, Notification, NotificationStatus } from './notification';
+import { IBuilder } from '@mostval/common';
 
-export interface INotificationBuilder<T> {
-    build(): Notification<T>;
+export interface INotificationBuilder<T> extends IBuilder<Notification<T>> {
     withChannels(channels: INotificationChannel<unknown>[]): INotificationBuilder<T>;
     withContent(content: T): INotificationBuilder<T>;
     withStatus(status: NotificationStatus): INotificationBuilder<T>;

@@ -12,6 +12,7 @@ import {
   INotificationPersisterRepositorySymbol,
 } from 'packages/notification/src/lib/notification/domain/repository';
 import { InMemoryNotificationPersisterRepository } from './notification.repository';
+import { Logger } from '@nestjs/common';
 
 export const NotificationBuilderProvider = {
   provide: INotificationBuilderSymbol,
@@ -27,7 +28,10 @@ export const CreateNewNotificationProvider = {
 
 export const NotificationPersisterRepositoryProvider = {
   provide: INotificationPersisterRepositorySymbol,
-  useFactory: () => new InMemoryNotificationPersisterRepository(),
+  useFactory: () =>
+    new InMemoryNotificationPersisterRepository(
+      new Logger(InMemoryNotificationPersisterRepository.name)
+    ),
 };
 
 export const PersistNotificationProvider = {

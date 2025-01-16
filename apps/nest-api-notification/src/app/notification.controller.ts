@@ -8,8 +8,10 @@ export class NotificationController {
 
   @Post('/')
   async notify(@Body() notificationData: NotificationDto<string>) {
-    return await this.notificationService.createAndPersistNotification(
-      notificationData
-    );
+    const notification =
+      await this.notificationService.createAndPersistNotification(
+        notificationData
+      );
+    return notification.getValue();
   }
 }

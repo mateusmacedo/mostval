@@ -1,7 +1,7 @@
-import { SendNotification, NotificationSent, NotificationFailed, TNotificationMetadataWhenSending } from './send-notification';
+import { IValueObject } from '@mostval/ddd';
 import { Notification, NotificationChannelType, NotificationStatus, TNotificationProps } from '../../domain';
 import { NotificationError } from '../../domain/error';
-import { IValueObject } from '@mostval/ddd';
+import { NotificationSendFailed, NotificationSent, SendNotification, TNotificationMetadataWhenSending } from './send-notification';
 
 class MockAddressValueObject implements IValueObject<string> {
     constructor(private value: string) {}
@@ -60,7 +60,7 @@ describe('Send Notification Messages', () => {
                 error: new NotificationError('Test error', 404)
             };
 
-            const event = new NotificationFailed(mockNotification, errorMetadata);
+            const event = new NotificationSendFailed(mockNotification, errorMetadata);
 
             expect(event.payload).toBe(mockNotification);
             expect(event.metadata).toBe(errorMetadata);

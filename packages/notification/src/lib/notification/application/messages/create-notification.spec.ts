@@ -1,4 +1,4 @@
-import { CreateNotificationCommand, CreateNotificationError, NotificationCreatedEvent, NotificationCreationFailedEvent } from './create-notification';
+import { CreateNotification, CreateNotificationError, NotificationCreated, NotificationCreationFailed } from './create-notification';
 import { Notification, NotificationChannelType, NotificationStatus } from '../../domain';
 import { NotificationError } from '../../domain/error';
 import { IValueObject } from '@mostval/ddd';
@@ -34,7 +34,7 @@ describe('Create Notification Messages', () => {
 
     describe('CreateNotificationCommand', () => {
         it('should create command with payload and metadata', () => {
-            const command = new CreateNotificationCommand(mockPayload, mockMetadata);
+            const command = new CreateNotification(mockPayload, mockMetadata);
 
             expect(command.payload).toBe(mockPayload);
             expect(command.metadata).toBe(mockMetadata);
@@ -43,7 +43,7 @@ describe('Create Notification Messages', () => {
 
     describe('NotificationCreatedEvent', () => {
         it('should create event with notification and metadata', () => {
-            const event = new NotificationCreatedEvent(mockNotification, mockMetadata);
+            const event = new NotificationCreated(mockNotification, mockMetadata);
 
             expect(event.payload).toBe(mockNotification);
             expect(event.metadata).toBe(mockMetadata);
@@ -57,7 +57,7 @@ describe('Create Notification Messages', () => {
                 error: new CreateNotificationError('Test Create Notification Error', 0, new ProcessingError('Test error'))
             };
 
-            const event = new NotificationCreationFailedEvent(mockPayload, errorMetadata);
+            const event = new NotificationCreationFailed(mockPayload, errorMetadata);
 
             expect(event.payload).toBe(mockPayload);
             expect(event.metadata).toBe(errorMetadata);

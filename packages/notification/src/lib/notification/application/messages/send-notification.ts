@@ -22,7 +22,7 @@ export class NotificationSent<T> extends Message {
     }
 }
 
-export class NotificationFailed<T> extends Message {
+export class NotificationSendFailed<T> extends Message {
     constructor(payload: Notification<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
         super(payload, metadata);
     }

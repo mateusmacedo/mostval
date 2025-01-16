@@ -3,7 +3,7 @@ import { TNotificationMetadata, TNotificationMetadataWhenSendFailed } from './se
 import { Notification, TNotificationProps } from '../../domain';
 import { NotificationError } from '../../domain/error';
 
-export class CreateNotificationCommand<T> extends Message {
+export class CreateNotification<T> extends Message {
     constructor(payload: TNotificationProps<T>, metadata: TNotificationMetadata) {
         super(payload, metadata);
     }
@@ -12,13 +12,13 @@ export class CreateNotificationCommand<T> extends Message {
 export class CreateNotificationError extends NotificationError {
 }
 
-export class NotificationCreatedEvent<T> extends Message {
+export class NotificationCreated<T> extends Message {
     constructor(payload: Notification<T>, metadata: TNotificationMetadata) {
         super(payload, metadata);
     }
 }
 
-export class NotificationCreationFailedEvent<T> extends Message {
+export class NotificationCreationFailed<T> extends Message {
     constructor(payload: TNotificationProps<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
         super(payload, metadata);
     }

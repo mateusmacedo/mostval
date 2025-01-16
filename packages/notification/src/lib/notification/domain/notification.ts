@@ -17,15 +17,15 @@ export enum NotificationChannelType {
     PUSH = 'PUSH'
 }
 
-export interface INotificationChannel<T> {
-    type: NotificationChannelType
-    address: IValueObject<T>
+export interface INotificationChannel {
+  type: NotificationChannelType;
+  address: IValueObject<string>;
 }
 
 export interface INotificationProps<T> {
-    channels: INotificationChannel<unknown>[]
-    content: T
-    status: NotificationStatus
+  channels: INotificationChannel[];
+  content: T;
+  status: NotificationStatus;
 }
 
 export class Notification<T> extends AggregateRoot<string, number> implements IValueObject<INotificationProps<T>> {

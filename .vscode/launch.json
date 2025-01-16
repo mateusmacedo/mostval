@@ -63,9 +63,8 @@
       "type": "pickString",
       "description": "Selecione o app",
       "options": [
-        "nest-api",
-        "node-api",
-        "nest-api-users"
+        "nest-api-users",
+        "nest-api-notification"
       ]
     }
   ]

@@ -1,6 +1,6 @@
 import { IValueObject } from '@mostval/ddd';
-import { Notification, NotificationChannelType, NotificationStatus, TNotificationProps } from '../../domain';
-import { NotificationError } from '../../domain/error';
+import { Notification, NotificationChannelType, NotificationStatus, TNotificationProps } from '..';
+import { NotificationError } from '../error';
 import { NotificationSendFailed, NotificationSent, SendNotification, TNotificationMetadataWhenSending } from './send-notification';
 
 class MockAddressValueObject implements IValueObject<string> {

@@ -1,6 +1,6 @@
 import { CreateNotification, CreateNotificationError, NotificationCreated, NotificationCreationFailed } from './create-notification';
-import { Notification, NotificationChannelType, NotificationStatus } from '../../domain';
-import { NotificationError } from '../../domain/error';
+import { Notification, NotificationChannelType, NotificationStatus } from '..';
+import { NotificationError } from '../error';
 import { IValueObject } from '@mostval/ddd';
 import { IMetadata, ProcessingError } from '@mostval/common';
 import { TNotificationMetadata } from './send-notification';

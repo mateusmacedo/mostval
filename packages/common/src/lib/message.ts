@@ -7,7 +7,7 @@ export interface IMetadata {
     readonly schema: string;
     readonly type: string;
     readonly timestamp: number;
-    readonly id: string;
+    readonly correlationId: string;
 }
 
 export abstract class Message {

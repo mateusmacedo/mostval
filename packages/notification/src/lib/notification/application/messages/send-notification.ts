@@ -2,9 +2,7 @@ import { IMetadata, Message } from '@mostval/common';
 import { Notification } from '../../domain';
 import { NotificationError } from '../../domain/error';
 
-export type TNotificationMetadata = IMetadata & {
-    readonly notificationId: string;
-}
+export type TNotificationMetadata = IMetadata
 
 export type TNotificationMetadataWhenSending<T> = Omit<TNotificationMetadata, 'notificationId'>
 

@@ -4,7 +4,7 @@ class MessageProps {
     constructor(readonly id: string, readonly email: string) {}
 }
 
-class MessageSpec extends Message {
+class MessageSpec extends Message<MessageProps> {
     constructor(payload: MessageProps, metadata: IMetadata) {
         super(payload, metadata);
     }

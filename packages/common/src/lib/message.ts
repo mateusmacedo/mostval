@@ -10,38 +10,38 @@ export interface IMetadata {
     readonly id: string;
 }
 
-export abstract class Message {
-    readonly payload: IPayload;
+export abstract class Message<T> {
+    readonly payload: T;
     readonly metadata: IMetadata;
 
-    constructor(payload: IPayload, metadata: IMetadata) {
+    constructor(payload: T, metadata: IMetadata) {
         this.payload = payload
         this.metadata = metadata
     }
 }
 
 export interface IMessageStore {
-    add(message: Message): void;
-    get(criteria: Partial<IPayload> | Partial<IMetadata>): Message[];
-    remove(criteria: Partial<IPayload> | Partial<IMetadata>): void;
+    add<T extends Message<unknown>>(message: T): void;
+    get<T extends Message<unknown>>(criteria: Partial<T> | Partial<IMetadata>): T[];
+    remove<T extends Message<unknown>>(criteria: Partial<T> | Partial<IMetadata>): void;
 }
 
 export class InMemoryMessageStore implements IMessageStore {
-    private messages: Message[] = [];
+    private messages: Message<unknown>[] = [];
 
-    add(message: Message): void {
+    add<T extends Message<unknown>>(message: T): void {
         this.messages.push(message);
     }
 
-    get(criteria: Partial<IPayload> | Partial<IMetadata>): Message[] {
-        return this.messages.filter(message => this.matches(message, criteria));
+    get<T extends Message<unknown>>(criteria: Partial<T> | Partial<IMetadata>): T[] {
+        return this.messages.filter(message => this.matches(message, criteria)) as T[];
     }
 
-    remove(criteria: Partial<IPayload> | Partial<IMetadata>): void {
+    remove<T extends Message<unknown>>(criteria: Partial<T> | Partial<IMetadata>): void {
         this.messages = this.messages.filter(message => !this.matches(message, criteria));
     }
 
-    private matches(message: Message, criteria: Partial<IPayload> | Partial<IMetadata>): boolean {
+    private matches<T extends Message<unknown>>(message: T, criteria: Partial<T> | Partial<IMetadata>): boolean {
         return Object.keys(criteria).some(key =>
             (typeof message.payload === 'object' && message.payload !== null && key in message.payload && (message.payload as any)[key] === (criteria as any)[key]) ||
             (typeof message.metadata === 'object' && message.metadata !== null && key in message.metadata && (message.metadata as any)[key] === (criteria as any)[key])

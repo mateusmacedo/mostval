@@ -1,8 +1,7 @@
-import { CreateNotification, CreateNotificationError, NotificationCreated, NotificationCreationFailed } from './create-notification';
-import { Notification, NotificationChannelType, NotificationStatus } from '..';
-import { NotificationError } from '../error';
+import { ProcessingError } from '@mostval/common';
 import { IValueObject } from '@mostval/ddd';
-import { IMetadata, ProcessingError } from '@mostval/common';
+import { Notification, NotificationChannelType, NotificationStatus } from '..';
+import { CreateNotification, CreateNotificationError, NotificationCreated, NotificationCreationFailed } from './create-notification';
 import { TNotificationMetadata } from './send-notification';
 
 class MockAddressValueObject implements IValueObject<string> {

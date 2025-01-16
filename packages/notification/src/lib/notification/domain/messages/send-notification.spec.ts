@@ -1,5 +1,5 @@
 import { IValueObject } from '@mostval/ddd';
-import { Notification, NotificationChannelType, NotificationStatus, TNotificationProps } from '..';
+import { Notification, NotificationChannelType, NotificationStatus, INotificationProps } from '..';
 import { NotificationError } from '../error';
 import { NotificationSendFailed, NotificationSent, SendNotification, TNotificationMetadataWhenSending } from './send-notification';
 
@@ -19,7 +19,7 @@ describe('Send Notification Messages', () => {
         type: 'notification.send'
     }
 
-    const mockPayload: TNotificationProps<string> = {
+    const mockPayload: INotificationProps<string> = {
         channels: [{
             type: NotificationChannelType.EMAIL,
             address: new MockAddressValueObject('test@example.com')

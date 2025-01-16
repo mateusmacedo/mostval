@@ -1,5 +1,5 @@
 import { IIdentity, ITimestamper, TIdentity } from '@mostval/common';
-import { Notification, NotificationChannelType, TNotificationProps, INotificationChannel, NotificationStatus } from './notification';
+import { Notification, NotificationChannelType, INotificationProps, INotificationChannel, NotificationStatus } from './notification';
 import { IValueObject } from '@mostval/ddd';
 
 class MockAddressValueObject implements IValueObject<string> {
@@ -38,7 +38,7 @@ describe('Notification', () => {
         channels: INotificationChannel<unknown>[],
         content: string,
         status: NotificationStatus
-    ) => TNotificationProps<string> = (channels, content, status) => ({
+    ) => INotificationProps<string> = (channels, content, status) => ({
         channels,
         content,
         status
@@ -139,7 +139,7 @@ describe('Notification', () => {
             equals: () => false,
             asString: () => '',
             asJSON: () => ''
-        } as IValueObject<TNotificationProps<string>>;
+        } as IValueObject<INotificationProps<string>>;
 
         expect(notification.equals(differentInstance)).toBe(false);
     });

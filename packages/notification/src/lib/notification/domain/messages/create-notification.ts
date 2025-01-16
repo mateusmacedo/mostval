@@ -1,10 +1,10 @@
 import { Message } from '@mostval/common';
 import { TNotificationMetadata, TNotificationMetadataWhenSendFailed } from './send-notification';
-import { Notification, TNotificationProps } from '..';
+import { Notification, INotificationProps } from '..';
 import { NotificationError } from '../error';
 
-export class CreateNotification<T> extends Message<TNotificationProps<T>, TNotificationMetadata> {
-    constructor(payload: TNotificationProps<T>, metadata: TNotificationMetadata) {
+export class CreateNotification<T> extends Message<INotificationProps<T>, TNotificationMetadata> {
+    constructor(payload: INotificationProps<T>, metadata: TNotificationMetadata) {
         super(payload, metadata);
     }
 }
@@ -18,8 +18,8 @@ export class NotificationCreated<T> extends Message<Notification<T>, TNotificati
     }
 }
 
-export class NotificationCreationFailed<T> extends Message<TNotificationProps<T>, TNotificationMetadataWhenSendFailed<T>> {
-    constructor(payload: TNotificationProps<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
+export class NotificationCreationFailed<T> extends Message<INotificationProps<T>, TNotificationMetadataWhenSendFailed<T>> {
+    constructor(payload: INotificationProps<T>, metadata: TNotificationMetadataWhenSendFailed<T>) {
         super(payload, metadata);
     }
 }

@@ -1,18 +1,19 @@
-import { IMetadata, Message } from './message';
+import { IMetadata, Message, IPayload } from './message';
 import { InMemoryMessageStore } from './message-store';
 
-interface TestPayload {
+interface TestPayload extends IPayload<string> {
     value: string;
+    [field: string]: string;
 }
 
-class TestMessage extends Message<TestPayload> {
+class TestMessage extends Message<TestPayload, IMetadata> {
     constructor(value: string, metadata: IMetadata) {
         super({ value }, metadata);
     }
 }
 
 describe('InMemoryMessageStore', () => {
-    let store: InMemoryMessageStore;
+    let store: InMemoryMessageStore<Message<TestPayload, IMetadata>>;
     const baseMetadata: IMetadata = {
         id: 'msg-1',
         schema: 'test/1.0',
@@ -42,12 +43,12 @@ describe('InMemoryMessageStore', () => {
         });
 
         it('should get messages by metadata criteria', () => {
-            const messages = store.get<TestMessage>({ schema: 'test/1.0' });
+            const messages = store.get({ schema: 'test/1.0' });
             expect(messages).toHaveLength(2);
         });
 
         it('should get messages by payload criteria', () => {
-            const messages = store.get<TestMessage>({ payload: { value: 'test1' } });
+            const messages = store.get({ payload: { value: 'test1' } });
             expect(messages).toHaveLength(1);
             expect(messages[0].payload.value).toBe('test1');
         });
@@ -77,15 +78,15 @@ describe('InMemoryMessageStore', () => {
         });
 
         it('should remove messages by metadata criteria', () => {
-            store.remove<TestMessage>({ id: 'msg-1' });
-            const messages = store.get<TestMessage>({});
+            store.remove({ id: 'msg-1' });
+            const messages = store.get({});
             expect(messages).toHaveLength(1);
             expect(messages[0].metadata.id).toBe('msg-2');
         });
 
         it('should remove messages by payload criteria', () => {
-            store.remove<TestMessage>({ payload: { value: 'test1' } });
-            const messages = store.get<TestMessage>({});
+            store.remove({ payload: { value: 'test1' } });
+            const messages = store.get({});
             expect(messages).toHaveLength(1);
             expect(messages[0].payload.value).toBe('test2');
         });

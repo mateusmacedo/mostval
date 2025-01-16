@@ -7,8 +7,9 @@ export interface IValueObject<T extends TGenericProps<T>> {
   asJSON(): string;
 }
 
-export abstract class ValueObject<T extends TGenericProps<T>> implements IValueObject<T> {
-
+export class ValueObject<T extends TGenericProps<T>>
+  implements IValueObject<T>
+{
   constructor(protected readonly value: T) {
     this.value = Object.freeze(value || ({} as T));
   }
@@ -29,7 +30,10 @@ export abstract class ValueObject<T extends TGenericProps<T>> implements IValueO
     return this.compareProps(this.getValue(), other.getValue());
   }
 
-  private compareProps(props1: TGenericProps<T>, props2: TGenericProps<T>): boolean {
+  private compareProps(
+    props1: TGenericProps<T>,
+    props2: TGenericProps<T>
+  ): boolean {
     const keys1 = Object.keys(props1) as Array<keyof T>;
     const keys2 = Object.keys(props2) as Array<keyof T>;
 
@@ -44,7 +48,10 @@ export abstract class ValueObject<T extends TGenericProps<T>> implements IValueO
       const areObjects = this.isObject(val1) && this.isObject(val2);
       if (
         (areObjects &&
-          !this.compareProps(val1 as TGenericProps<T>, val2 as TGenericProps<T>)) ||
+          !this.compareProps(
+            val1 as TGenericProps<T>,
+            val2 as TGenericProps<T>
+          )) ||
         (!areObjects && val1 !== val2)
       ) {
         return false;

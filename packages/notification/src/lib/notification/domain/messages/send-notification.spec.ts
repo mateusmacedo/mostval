@@ -1,5 +1,10 @@
 import { IValueObject } from '@mostval/ddd';
-import { Notification, NotificationChannelType, NotificationStatus, INotificationProps } from '..';
+import {
+  INotificationProps,
+  Notification,
+  NotificationChannelType,
+  NotificationStatus,
+} from '..';
 import { NotificationError } from '../error';
 import { NotificationSendFailed, NotificationSent, SendNotification, TNotificationMetadataWhenSending } from './send-notification';
 

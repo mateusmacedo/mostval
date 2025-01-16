@@ -23,7 +23,6 @@ export interface INotificationChannel<T> {
 }
 
 export type TNotificationProps = {
-    templateId: TIdentity<string, number>
     channels: INotificationChannel<unknown>[]
     content: string
     status: NotificationStatus
@@ -51,8 +50,6 @@ export class Notification extends AggregateRoot<string, number> implements IValu
             return false;
         }
         return (
-            this.props.templateId.id === other.getValue().templateId.id &&
-            this.props.templateId.version === other.getValue().templateId.version &&
             this.props.content === other.getValue().content &&
             this.props.status === other.getValue().status &&
             this.props.channels.length === other.getValue().channels.length &&
@@ -64,7 +61,7 @@ export class Notification extends AggregateRoot<string, number> implements IValu
     }
 
     asString(): string {
-        return `Notification: ${this.props.templateId} ${this.props.content} ${this.props.channels.map(channel => channel.type).join(', ')}`;
+        return `Notification: ${this.props.content} ${this.props.channels.map(channel => channel.type).join(', ')}`;
     }
 
     asJSON(): string {

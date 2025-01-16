@@ -33,20 +33,7 @@ describe('NotificationBuilder', () => {
         }
     ];
 
-    it('should build a notification with default values', () => {
-        const builder = new NotificationBuilder<string>();
-        const notification = builder
-            .withContent('Test content')
-            .build();
-
-        expect(notification.getValue()).toEqual({
-            channels: [],
-            content: 'Test content',
-            status: NotificationStatus.CREATED
-        });
-    });
-
-    it('should build a notification with custom channels', () => {
+    it('should build a notification with minimum required values', () => {
         const builder = new NotificationBuilder<string>();
         const notification = builder
             .withChannels(mockChannels)
@@ -60,17 +47,29 @@ describe('NotificationBuilder', () => {
         });
     });
 
+    it('should throw an error if channels are not provided', () => {
+        const builder = new NotificationBuilder<string>();
+        builder.withContent('Test content');
+        expect(() => builder.build()).toThrow('Channels are required');
+    });
+
+    it('should throw an error if content is not provided', () => {
+        const builder = new NotificationBuilder<string>();
+        builder.withChannels(mockChannels);
+        expect(() => builder.build()).toThrow('Content is required');
+    });
+
     it('should build a notification with custom status', () => {
         const builder = new NotificationBuilder<string>();
         const notification = builder
+            .withChannels(mockChannels)
             .withContent('Test content')
-            .withStatus(NotificationStatus.SENT)
             .build();
 
         expect(notification.getValue()).toEqual({
-            channels: [],
+            channels: mockChannels,
             content: 'Test content',
-            status: NotificationStatus.SENT
+            status: NotificationStatus.CREATED
         });
     });
 
@@ -92,7 +91,7 @@ describe('NotificationBuilder', () => {
     it('should maintain builder fluent interface', () => {
         const builder = new NotificationBuilder<string>();
 
-        expect(builder.withChannels([])).toBe(builder);
+        expect(builder.withChannels(mockChannels)).toBe(builder);
         expect(builder.withContent('test')).toBe(builder);
         expect(builder.withStatus(NotificationStatus.CREATED)).toBe(builder);
     });

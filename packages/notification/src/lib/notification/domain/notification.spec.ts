@@ -49,7 +49,7 @@ describe('Notification', () => {
         updatedAt: mockDate
     };
 
-    it('deve criar uma notificação com valores padrão quando identity e timestamps não são fornecidos', () => {
+    it('should create a notification with default values when identity and timestamps are not provided', () => {
         const notification = new Notification(mockProps);
 
         expect(notification.id).toBe('');
@@ -59,7 +59,7 @@ describe('Notification', () => {
         expect(notification.getValue()).toEqual(mockProps);
     });
 
-    it('deve criar uma notificação com identity e timestamps fornecidos', () => {
+    it('should create a notification with provided identity and timestamps', () => {
         const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
 
         expect(notification.id).toBe('notification-1');
@@ -69,14 +69,14 @@ describe('Notification', () => {
         expect(notification.getValue()).toEqual(mockProps);
     });
 
-    it('deve comparar duas notificações corretamente - caso igual', () => {
+    it('should compare two notifications correctly - equal case', () => {
         const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
         const notification2 = new Notification(mockProps, mockIdentity, mockTimestamps);
 
         expect(notification1.equals(notification2)).toBe(true);
     });
 
-    it('deve comparar duas notificações corretamente - caso diferente', () => {
+    it('should compare two notifications correctly - different case', () => {
         const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
         const differentProps = {
             ...mockProps,
@@ -87,7 +87,7 @@ describe('Notification', () => {
         expect(notification1.equals(notification2)).toBe(false);
     });
 
-    it('deve retornar false ao comparar com uma instância diferente', () => {
+    it('should return false when comparing with a different instance', () => {
         const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
         const differentInstance = {
             getValue: () => mockProps,
@@ -99,7 +99,7 @@ describe('Notification', () => {
         expect(notification.equals(differentInstance)).toBe(false);
     });
 
-    it('deve retornar false ao comparar notificações com canais diferentes', () => {
+    it('should return false when comparing notifications with different channels', () => {
         const notification1 = new Notification(mockProps, mockIdentity, mockTimestamps);
         const differentChannels = {
             ...mockProps,
@@ -110,14 +110,14 @@ describe('Notification', () => {
         expect(notification1.equals(notification2)).toBe(false);
     });
 
-    it('deve gerar uma representação em string correta', () => {
+    it('should generate a correct string representation', () => {
         const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
         const expected = `Notification: [object Object] Test notification content EMAIL, SMS`;
 
         expect(notification.asString()).toBe(expected);
     });
 
-    it('deve gerar uma representação JSON correta', () => {
+    it('should generate a correct JSON representation', () => {
         const notification = new Notification(mockProps, mockIdentity, mockTimestamps);
         const jsonString = notification.asJSON();
         const parsed = JSON.parse(jsonString);

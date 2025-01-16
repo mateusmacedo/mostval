@@ -20,10 +20,10 @@ export class Email implements IValueObject<TEmail> {
         }
         return this.value === other.getValue();
     }
-    toString(): string {
+    asString(): string {
         return this.value.email;
     }
-    toJSON(): string {
+    asJSON(): string {
         return JSON.stringify(this.value);
     }
 }

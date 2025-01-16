@@ -20,7 +20,7 @@ describe('UserController', () => {
 
   const mockedCriteria = { id: '1' }
 
-  const mockedMessageStore: IMessageStore = {
+  const mockedMessageStore: IMessageStore<any> = {
     add: jest.fn(),
     get: jest.fn(),
     remove: jest.fn()

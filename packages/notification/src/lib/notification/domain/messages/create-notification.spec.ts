@@ -14,11 +14,11 @@ class MockAddressValueObject implements IValueObject<string> {
 
 describe('Create Notification Messages', () => {
     const mockMetadata: TNotificationMetadata = {
-        timestamp: new Date('2024-01-01T00:00:00.000Z').getTime(),
-        schema: 'notification/1.0',
-        type: 'notification.create',
-        id: 'notification-1'
-    }
+      schema: 'notification/1.0',
+      type: 'notification.create',
+      id: 'notification-1',
+      timestamp: new Date('2024-01-01T00:00:00.000Z').getTime(),
+    };
 
     const mockPayload = {
         channels: [{

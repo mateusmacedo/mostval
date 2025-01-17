@@ -2,23 +2,20 @@ export type Candidate<T> = T | T[];
 
 export interface Specification<T> {
   isSatisfiedBy(candidate: Candidate<T>): boolean;
-  and(spec: Specification<T>): Specification<T>;
-  or(spec: Specification<T>): Specification<T>;
-  not(): Specification<T>;
 }
 
 export abstract class BaseSpecification<T> implements Specification<T> {
   abstract isSatisfiedBy(candidate: Candidate<T>): boolean;
 
-  and(spec: Specification<T>): Specification<T> {
+  and(spec: Specification<T>): BaseSpecification<T> {
     return new AndSpecification<T>(this, spec);
   }
 
-  or(spec: Specification<T>): Specification<T> {
+  or(spec: Specification<T>): BaseSpecification<T> {
     return new OrSpecification<T>(this, spec);
   }
 
-  not(): Specification<T> {
+  not(): BaseSpecification<T> {
     return new NotSpecification<T>(this);
   }
 }

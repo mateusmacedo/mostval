@@ -28,7 +28,7 @@
         "main": "packages/users/src/index.ts",
         "tsConfig": "packages/users/tsconfig.lib.json",
         "format": ["cjs"],
-        "assets": ["packages/users/*.md"],
+        "assets": ["packages/users/*.md"]
       }
     },
     "nx-release-publish": {

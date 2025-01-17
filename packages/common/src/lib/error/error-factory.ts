@@ -1,5 +1,5 @@
 import { AbstractError, ErrorMessage } from './abstract-error'
-import { ERRORS, ErrorsType } from './error-types'
+import { ERRORS, ErrorsType } from './error-code-types'
 
 export class ErrorFactory {
   private static instance: ErrorFactory

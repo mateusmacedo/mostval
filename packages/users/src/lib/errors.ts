@@ -1,13 +1,13 @@
-export class UserAlreadyExistsError extends Error {
+import { ConflictError, NotFoundError } from '@mostval/common'
+
+export class UserConflictError extends ConflictError {
   constructor(message: string) {
     super(message)
-    this.name = 'UserAlreadyExistsError'
   }
 }
 
-export class UserNotFoundError extends Error {
+export class UserNotFoundError extends NotFoundError {
   constructor(message: string) {
     super(message)
-    this.name = 'UserNotFoundError'
   }
 }

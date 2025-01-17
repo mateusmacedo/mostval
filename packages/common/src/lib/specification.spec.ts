@@ -69,9 +69,9 @@ describe('Specification Pattern', () => {
     it('should handle complex combinations', () => {
       const trueSpec = new TrueSpecification<any>();
       const falseSpec = new FalseSpecification<any>();
-      const notSpec = new NotSpecification(falseSpec);
-      const andSpec = new AndSpecification(trueSpec, notSpec);
-      const orSpec = new OrSpecification(falseSpec, andSpec);
+      const notSpec = falseSpec.not();
+      const andSpec = notSpec.and(trueSpec);
+      const orSpec = andSpec.or(falseSpec);
 
       expect(notSpec.isSatisfiedBy({})).toBe(true);
       expect(andSpec.isSatisfiedBy({})).toBe(true);

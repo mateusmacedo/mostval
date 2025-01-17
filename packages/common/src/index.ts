@@ -6,3 +6,4 @@ export * from './lib/specification';
 export * from './lib/builder';
 export * from './lib/error';
 export * from './lib/message-store';
+export * from './lib/utility-type';

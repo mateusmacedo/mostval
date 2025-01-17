@@ -1,13 +1,11 @@
-import { TGenericPartial } from '@mostval/common';
-
-export interface IValueObject<T extends TGenericPartial<T>> {
+export interface IValueObject<T extends Partial<T>> {
   getValue(): T;
   equals(other: IValueObject<T>): boolean;
   asString(): string;
   asJSON(): string;
 }
 
-export class ValueObject<T extends TGenericPartial<T>> implements IValueObject<T> {
+export class ValueObject<T extends Partial<T>> implements IValueObject<T> {
   constructor(protected readonly value: T) {
     this.value = Object.freeze(value || ({} as T));
   }
@@ -28,10 +26,7 @@ export class ValueObject<T extends TGenericPartial<T>> implements IValueObject<T
     return this.compareProps(this.getValue(), other.getValue());
   }
 
-  private compareProps(
-    props1: TGenericPartial<T>,
-    props2: TGenericPartial<T>
-  ): boolean {
+  private compareProps(props1: Partial<T>, props2: Partial<T>): boolean {
     const keys1 = Object.keys(props1) as Array<keyof T>;
     const keys2 = Object.keys(props2) as Array<keyof T>;
 
@@ -46,10 +41,7 @@ export class ValueObject<T extends TGenericPartial<T>> implements IValueObject<T
       const areObjects = this.isObject(val1) && this.isObject(val2);
       if (
         (areObjects &&
-          !this.compareProps(
-            val1 as TGenericPartial<T>,
-            val2 as TGenericPartial<T>
-          )) ||
+          !this.compareProps(val1 as Partial<T>, val2 as Partial<T>)) ||
         (!areObjects && val1 !== val2)
       ) {
         return false;

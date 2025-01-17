@@ -1,16 +1,5 @@
-/* --------------------------------------------------
- * 🔶 Tipo para construtores abstratos ou concretos
- * -------------------------------------------------- */
-export type AbstractConstructor<T = unknown> = abstract new (
-  ...args: any[]
-) => T;
-
-/* --------------------------------------------------
- * 🔶 Contrato para construtores
- * -------------------------------------------------- */
-export interface IConstructable<T extends AbstractConstructor<unknown>> {
-  new (...args: ConstructorParameters<T>): InstanceType<T>;
-}
+import { IConstructable } from './utility-type';
+import { AbstractConstructor } from './utility-type';
 
 /* --------------------------------------------------
  * 🔶 Interface para descarte de recursos

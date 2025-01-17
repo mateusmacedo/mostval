@@ -1,26 +1,21 @@
-export type TGenericProps<T> = Partial<T>
+import { TFlexible } from './utility-type';
 
-export interface IPayload<T> {
-  [field: string]: T
-}
+export type BaseMetadata = {
+  id: string;
+  schema: string;
+  type: string;
+  timestamp: number;
+};
 
-export interface IMeta<T> {
-  [key: string]: T
-}
+export abstract class Message<
+  Payload extends TFlexible<unknown>,
+  Metadata extends TFlexible<BaseMetadata>,
+> {
+  readonly payload: Payload;
+  readonly metadata: Metadata;
 
-export interface IMetadata {
-  readonly schema: string
-  readonly type: string
-  readonly timestamp: number
-  readonly id: string
-}
-
-export abstract class Message<Tpayload extends IPayload<any>, Tmetadata extends IMeta<any>> {
-  readonly payload: Tpayload
-  readonly metadata: Tmetadata
-
-  constructor(payload: Tpayload, metadata: Tmetadata) {
-    this.payload = payload
-    this.metadata = metadata
+  constructor(payload: Payload, metadata: Metadata) {
+    this.payload = payload;
+    this.metadata = metadata;
   }
 }

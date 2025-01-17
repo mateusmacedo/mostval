@@ -144,6 +144,9 @@ export class SimpleDIContainer implements IDIContainer {
     provider: IConstructable<T> | InstanceType<T>,
     scope: RegistrationScope = RegistrationScope.Transient
   ): void {
+    if (this.registry.has(token)) {
+      throw new Error(`Token já registrado: ${String(token)}`);
+    }
     this.registry.set(token, { scope, provider });
   }
 

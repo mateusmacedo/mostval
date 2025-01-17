@@ -1,172 +1,153 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { BasicFactory, IDIContainer, ILogger } from './Instance-factory';
 
-describe('InstanceFactory', () => {
-  let instanceFactory: BasicFactory;
-  let container: IDIContainer;
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  BasicFactory,
+  SimpleDIContainer,
+  IPreCreationOption,
+  IPostCreationOption,
+  ILogger,
+  RegistrationScope,
+  IDestroyable,
+} from './Instance-factory';
+
+describe('Enhanced BasicFactory and SimpleDIContainer', () => {
+  let container: SimpleDIContainer;
+  let factory: BasicFactory;
   let logger: ILogger;
+  const SERVICE_TOKEN = Symbol('TestService');
+
+  class TestService implements IDestroyable {
+    constructor(public value: string) {}
+    onDestroy(): void {}
+  }
 
   beforeEach(() => {
-    container = {
-      resolve: jest.fn(),
-    } as unknown as IDIContainer;
-
     logger = {
       error: jest.fn(),
       warn: jest.fn(),
       info: jest.fn(),
       debug: jest.fn(),
-    } as unknown as ILogger;
-
-    instanceFactory = new BasicFactory(container, logger);
-  });
-
-  it('should create an instance with the given target and props', () => {
-    const target = jest.fn(function (this: any, ...args: any[]) {
-      Object.assign(this, ...args);
-    }) as unknown as { new (...args: any[]): any };
-
-    const props = [{ prop1: 'value1', prop2: 'value2' }];
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, props);
-
-    expect(target).toHaveBeenCalledWith(...props);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with target, props, and optionTokens', () => {
-    const target = jest.fn(function (this: any, ...args: any[]) {
-      Object.assign(this, ...args);
-    }) as unknown as { new (...args: any[]): any };
-
-    const props = [{ prop1: 'value1', prop2: 'value2' }];
-    const optionTokens = [Symbol('option1'), Symbol('option2')];
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, props, optionTokens);
-
-    expect(target).toHaveBeenCalledWith(...props);
-    expect(container.resolve).toHaveBeenCalledWith(optionTokens[0]);
-    expect(container.resolve).toHaveBeenCalledWith(optionTokens[1]);
-    expect(postCreateMock).toHaveBeenCalledWith(result);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with target and optionTokens', () => {
-    const target = jest.fn(function (this: any, arg?: any) {
-      Object.assign(this, arg);
-    }) as unknown as { new (...args: any[]): any };
-
-    const optionTokens = [Symbol('option1'), Symbol('option2')];
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, [undefined], optionTokens);
-
-    expect(target).toHaveBeenCalledWith(undefined);
-    expect(container.resolve).toHaveBeenCalledWith(optionTokens[0]);
-    expect(container.resolve).toHaveBeenCalledWith(optionTokens[1]);
-    expect(postCreateMock).toHaveBeenCalledWith(result);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with target only', () => {
-    const target = jest.fn(function (this: any, arg?: any) {
-      Object.assign(this, arg);
-    }) as unknown as { new (...args: any[]): any };
-
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, [undefined]);
-
-    expect(target).toHaveBeenCalledWith(undefined);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with target and props as undefined', () => {
-    const target = jest.fn(function (this: any, arg?: any) {
-      Object.assign(this, arg);
-    }) as unknown as { new (...args: any[]): any };
-
-    const props = [undefined];
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, props);
-
-    expect(target).toHaveBeenCalledWith(...props);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with target, props, and empty optionTokens', () => {
-    const target = jest.fn(function (this: any, ...args: any[]) {
-      Object.assign(this, ...args);
-    }) as unknown as { new (...args: any[]): any };
-
-    const props = [{ prop1: 'value1', prop2: 'value2' }];
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target, props, []);
-
-    expect(target).toHaveBeenCalledWith(...props);
-    expect(result).toBeInstanceOf(target as any);
-  });
-
-  it('Create instance with no props', () => {
-    const target = jest.fn(function (this: any) {}) as unknown as {
-      new (...args: any[]): any;
     };
 
-    const postCreateMock = jest.fn();
-
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
-    });
-
-    const result = instanceFactory.create(target);
-
-    expect(target).toHaveBeenCalled();
-    expect(result).toBeInstanceOf(target as any);
+    container = new SimpleDIContainer(logger);
+    factory = new BasicFactory(container, logger);
   });
 
-  it('Create instance with no optionTokens', () => {
-    const target = jest.fn(function (this: any, ...args: any[]) {
-      Object.assign(this, ...args);
-    }) as unknown as { new (...args: any[]): any };
+  it('should create a singleton instance', () => {
+    container.register(SERVICE_TOKEN, TestService, RegistrationScope.Singleton);
+    const instance1 = container.resolve<TestService>(SERVICE_TOKEN);
+    const instance2 = container.resolve<TestService>(SERVICE_TOKEN);
+    expect(instance1).toBe(instance2);
+  });
 
-    const props = [{ prop1: 'value1', prop2: 'value2' }];
-    const postCreateMock = jest.fn();
+  it('should create a transient instance', () => {
+    container.register(SERVICE_TOKEN, TestService, RegistrationScope.Transient);
+    const instance1 = container.resolve<TestService>(SERVICE_TOKEN);
+    const instance2 = container.resolve<TestService>(SERVICE_TOKEN);
+    expect(instance1).not.toBe(instance2);
+  });
 
-    (container.resolve as jest.Mock).mockReturnValue({
-      postCreate: postCreateMock,
+  it('should log error if preCreate hook throws', () => {
+    const preCreateToken = Symbol('PreCreateError');
+    const preCreateMock: IPreCreationOption<any> = {
+      preCreate: jest.fn(() => {
+        throw new Error('Erro no preCreate');
+      }),
+    };
+    container.register(preCreateToken, preCreateMock);
+
+    expect(() =>
+      factory.create(TestService, ['Test'], [preCreateToken])
+    ).toThrow('Erro no preCreate');
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining('Erro em preCreate'),
+      expect.any(Error)
+    );
+  });
+
+  it('should log error if postCreate hook throws', () => {
+    const postCreateToken = Symbol('PostCreateError');
+    const postCreateMock: IPostCreationOption<any> = {
+      postCreate: jest.fn(() => {
+        throw new Error('Erro no postCreate');
+      }),
+    };
+    container.register(postCreateToken, postCreateMock);
+    const instance = factory.create(TestService, ['Test'], [postCreateToken]);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining('Erro em postCreate'),
+      expect.any(Error)
+    );
+  });
+
+  it('should destroy a singleton instance properly', () => {
+    const destroySpy = jest.spyOn(TestService.prototype, 'onDestroy');
+    container.register(SERVICE_TOKEN, TestService, RegistrationScope.Singleton);
+    container.resolve<TestService>(SERVICE_TOKEN);
+    container.destroy(SERVICE_TOKEN);
+    expect(destroySpy).toHaveBeenCalled();
+  });
+
+  it('should log warning when destroying non-registered token', () => {
+    const invalidToken = Symbol('InvalidToken');
+    container.destroy(invalidToken);
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('destroy chamado para token não registrado')
+    );
+  });
+
+  it('should throw error when resolving unregistered token', () => {
+    const invalidToken = Symbol('InvalidToken');
+    expect(() => container.resolve(invalidToken)).toThrow(
+      `Token não registrado: ${String(invalidToken)}`
+    );
+  });
+
+  it('should handle instance creation failure', () => {
+    const faultyTarget = jest.fn(() => {
+      throw new Error('Falha na criação');
     });
+    expect(() => factory.create(faultyTarget as any)).toThrow(
+      'Falha na criação'
+    );
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining('Erro ao instanciar'),
+      expect.any(Error)
+    );
+  });
 
-    const result = instanceFactory.create(target, props);
+  it('should not allow double registration of the same token', () => {
+    container.register(SERVICE_TOKEN, TestService);
+    expect(() => container.register(SERVICE_TOKEN, TestService)).toThrow(
+      `Token já registrado: ${SERVICE_TOKEN.toString()}`
+    );
+  });
 
-    expect(target).toHaveBeenCalledWith(...props);
-    expect(result).toBeInstanceOf(target as any);
+  it('should instantiate multiple instances using createMany', () => {
+    container.register(SERVICE_TOKEN, TestService);
+    const instances = factory.createMany(TestService, [['Value1'], ['Value2']]);
+    expect(instances).toHaveLength(2);
+    expect((instances[0] as TestService).value).toBe('Value1');
+    expect((instances[1] as TestService).value).toBe('Value2');
+  });
+
+  it('should log and skip destroy if onDestroy throws', () => {
+    class FaultyDestroyService implements IDestroyable {
+      onDestroy(): void {
+        throw new Error('Erro ao destruir');
+      }
+    }
+    container.register(
+      SERVICE_TOKEN,
+      FaultyDestroyService,
+      RegistrationScope.Singleton
+    );
+    container.resolve<FaultyDestroyService>(SERVICE_TOKEN);
+    container.destroy(SERVICE_TOKEN);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.stringContaining('Erro ao destruir'),
+      expect.any(Error)
+    );
   });
 });

@@ -1,13 +1,16 @@
-import { IMetadata, Message } from '@mostval/common';
+import { Message } from '@mostval/common';
 import { Notification } from '..';
 import { NotificationError } from '../error';
+import { TFlexible } from '@mostval/common';
 
-export type TNotificationMetadata = IMetadata
+export type TNotificationMetadata = TFlexible<{
+  id: string;
+  schema: string;
+  type: string;
+  timestamp: number;
+}>;
 
-export type TNotificationMetadataWhenSending = Omit<
-  TNotificationMetadata,
-  'notificationId'
->;
+export type TNotificationMetadataWhenSending = Omit<TNotificationMetadata, 'id'>;
 
 export type TNotificationMetadataWhenSendFailed =
   TNotificationMetadataWhenSending & {

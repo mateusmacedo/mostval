@@ -1,13 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/*
-  Exemplo completo de DI Container e Fábrica, com:
-   1) Escopos (Singleton/Transient)
-   2) Hooks de pré/pós-criação (AOP)
-   3) Logger agnóstico
-   4) Gerenciamento de Ciclo de Vida (IDestroyable)
-   5) Type guard para lidar com "Not constructable"
-*/
-
 /* --------------------------------------------------
  * 🔶 Tipo para construtores abstratos ou concretos
  * -------------------------------------------------- */

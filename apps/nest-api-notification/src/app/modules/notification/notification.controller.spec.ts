@@ -6,8 +6,8 @@ import {
 } from '@mostval/notification';
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationController } from './notification.controller';
-import { NotificationService } from './notification.service';
 import { ValueObject } from '@mostval/ddd';
+import { NotificationService } from './notification.service';
 
 const mockNotificationService = {
   createAndPersistNotification: jest.fn(),

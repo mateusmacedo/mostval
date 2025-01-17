@@ -1,14 +1,9 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { NotificationModule } from './app/notification.module';
+import { MainModule } from './app/modules/main.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(NotificationModule);
+  const app = await NestFactory.create(MainModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env['PORT'] || 3000;

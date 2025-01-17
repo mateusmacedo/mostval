@@ -50,7 +50,7 @@ describe('InstanceFactory', () => {
   it('Create instance with target, props, and optionTokens', () => {
     // Arrange
     const target = jest.fn(function (this: any, ...args: any[]) {
-      /* função intencionalmente vazia */
+      Object.assign(this, ...args);
     }) as unknown as {
       new (...args: any[]): any;
     };
@@ -76,7 +76,7 @@ describe('InstanceFactory', () => {
   it('Create instance with target and optionTokens', () => {
     // Arrange
     const target = jest.fn(function (this: any, arg?: any) {
-      /* função intencionalmente vazia */
+      Object.assign(this, arg);
     }) as unknown as {
       new (...args: any[]): any;
     };
@@ -101,7 +101,7 @@ describe('InstanceFactory', () => {
   it('Create instance with target only', () => {
     // Arrange
     const target = jest.fn(function (this: any, arg?: any) {
-      /* função intencionalmente vazia */
+      Object.assign(this, arg);
     }) as unknown as {
       new (...args: any[]): any;
     };
@@ -122,7 +122,7 @@ describe('InstanceFactory', () => {
   it('Create instance with target and props as undefined', () => {
     // Arrange
     const target = jest.fn(function (this: any, arg?: any) {
-      /* função intencionalmente vazia */
+      Object.assign(this, arg);
     }) as unknown as {
       new (...args: any[]): any;
     };
@@ -143,10 +143,9 @@ describe('InstanceFactory', () => {
 
   it('Create instance with target, props, and empty optionTokens', () => {
     // Arrange
-    const target = jest.fn(function (
-      this: any,
-      ...args: any[]
-    ) {}) as unknown as {
+    const target = jest.fn(function (this: any, ...args: any[]) {
+      Object.assign(this, ...args);
+    }) as unknown as {
       new (...args: any[]): any;
     };
     const props = [{ prop1: 'value1', prop2: 'value2' }];
@@ -188,7 +187,7 @@ describe('InstanceFactory', () => {
   it('Create instance with no optionTokens', () => {
     // Arrange
     const target = jest.fn(function (this: any, ...args: any[]) {
-      /* função intencionalmente vazia */
+      Object.assign(this, ...args);
     }) as unknown as {
       new (...args: any[]): any;
     };

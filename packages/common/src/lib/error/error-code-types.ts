@@ -1,8 +1,8 @@
 import { ConflictError } from './conflict-error'
 import { DependencyError } from './dependency-error'
 import { InternalError } from './internal-error'
-import { InvalidDataError } from './Invalid-data-error'
 import { NotFoundError } from './not-found-error'
+import { ProcessingError } from './processing-error'
 import { ValidationError } from './validation-error'
 
 export enum ErrorCode {
@@ -11,7 +11,6 @@ export enum ErrorCode {
   VALIDATION = 400,
   DEPENDENCY = 424,
   INTERNAL = 500,
-  INVALID_DATA = 422,
   PROCESSING = 422,
 }
 
@@ -20,7 +19,8 @@ export const ERRORS = {
   conflict: ConflictError,
   dependency: DependencyError,
   internal: InternalError,
-  invalidData: InvalidDataError,
   validation: ValidationError,
+  processing: ProcessingError,
 } as const
+
 export type ErrorsType = keyof typeof ERRORS

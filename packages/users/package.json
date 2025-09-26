@@ -2,8 +2,8 @@
   "name": "@mostval/users",
   "version": "0.0.0",
   "dependencies": {
-    "@mostval/common": "workspace:*",
-    "@mostval/iam": "workspace:*"
+    "@mostval/common": "^0.0.0",
+    "@mostval/iam": "^0.0.0"
   },
   "type": "commonjs",
   "main": "./index.cjs",

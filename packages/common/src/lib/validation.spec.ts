@@ -32,6 +32,15 @@ describe('ObjectValidationRule', () => {
     expect(result.success).toBeFalsy();
     expect(result.errors.length).toBeGreaterThan(0);
   });
+
+  it('should validate with a almost one undefined rule', () => {
+    const rule = new ObjectValidationRule({
+      name: undefined
+    });
+    const result = rule.validate({});
+    expect(result.success).toBeTruthy();
+    expect(result.errors.length).toBe(0);
+  });
 });
 
 describe('ArrayValidationRule', () => {

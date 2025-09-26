@@ -1,0 +1,10 @@
+{
+  "name": "@mostval/notification",
+  "version": "0.0.1",
+  "dependencies": {
+    "@mostval/ddd": "^0.0.0"
+  },
+  "type": "commonjs",
+  "main": "./index.cjs",
+  "typings": "./index.d.ts"
+}

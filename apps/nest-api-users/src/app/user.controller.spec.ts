@@ -1,7 +1,7 @@
 import { IMessageStore } from '@mostval/common'
 import { InvalidCredentialsError } from '@mostval/iam'
-import { IUserFactory, IUserRepository, TUserCriteria, User, UserAlreadyExistsError, UserNotFoundError, UserProps, USER_FACTORY, USER_REPOSITORY } from '@mostval/users'
-import { Test, TestingModule } from '@nestjs/testing'
+import { User, USER_FACTORY, USER_REPOSITORY, UserConflictError, UserNotFoundError, UserProps } from '@mostval/users'
+import { Test } from '@nestjs/testing'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
 
@@ -20,7 +20,7 @@ describe('UserController', () => {
 
   const mockedCriteria = { id: '1' }
 
-  const mockedMessageStore: IMessageStore = {
+  const mockedMessageStore: IMessageStore<any> = {
     add: jest.fn(),
     get: jest.fn(),
     remove: jest.fn()
@@ -64,7 +64,7 @@ describe('UserController', () => {
     })
 
     it('should throw when user exists', async () => {
-      jest.spyOn(service, 'createUser').mockRejectedValue(new UserAlreadyExistsError('User already exists'))
+      jest.spyOn(service, 'createUser').mockRejectedValue(new UserConflictError('User already exists'))
       await expect(controller.createUser(userProps)).rejects.toThrow('User already exists')
     })
 

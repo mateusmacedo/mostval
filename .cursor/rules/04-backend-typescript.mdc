@@ -1,0 +1,17 @@
+# Backend TypeScript (NestJS/RxJS) — Agent + Inline Edit
+
+## Sintaxe e Versões
+- Uso de NestJS para BFF/APIs; declarar versão e usar `use context7` para validar decorators, pipes, guards e microservices.
+- TypeScript estrito; DTOs/Contracts versionados; validação com class-validator ou zod.
+
+## Arquitetura
+- Domain (entidades ricas) → application (use cases) → adapters (HTTP/Kafka/DB) → infra (repositórios, clients).
+- Outbox, idempotency keys e correlation/causation id.
+
+## Resiliência e Observabilidade
+- HTTP clients com timeout e retry backoff + jitter.
+- Pino/Winston com redaction de PII; OpenTelemetry (traces/metrics).
+
+## Testes
+- Jest unit/integration; testcontainers para DB/mensageria.
+- Ver `08-testing-quality.mcd`.

@@ -1,0 +1,13 @@
+# Segurança & Observabilidade — Agent + Inline Edit
+
+## Segurança
+- Segredos via Secret Manager/Sealed Secrets; nunca no repositório.
+- AuthN/AuthZ consistentes; least privilege; deny by default.
+- DLP/Redaction de PII; logs sem dados sensíveis.
+
+## Observabilidade
+- Tracing ponta-a-ponta com correlation/causation id propagados.
+- Logs estruturados; métricas com labels (serviço, rota, status, tenant).
+
+## Conformidade
+- Evidências para LGPD/ISO/SOC2: retenção de logs, auditoria de acessos, rastreabilidade.

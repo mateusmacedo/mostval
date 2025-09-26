@@ -1,0 +1,64 @@
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# compiled output
+dist
+tmp
+out-tsc
+build
+
+# dependencies
+node_modules
+.pnpm-store
+.pnpm-cache
+.jest-cache
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+**/coverage/
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Nx
+.nx/cache
+.nx/workspace-data
+
+# Cursor
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
+
+# Test outputs
+test-output
+**/coverage.out
+**/coverage/junit.xml
+
+# Go binaries
+apps/go-api/go-api
+libs/go-auth/go-auth
+libs/go-logger/go-logger
+
+# Coverage
+**/coverage/

@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.md": "markdown"
+  },
+  "markdown.preview.breaks": true,
+  "markdown.preview.linkify": true,
+  "typescript.preferences.includePackageJsonAutoImports": "auto"
+}

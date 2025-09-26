@@ -1,0 +1,93 @@
+# k3d cluster config otimizado
+# i7 11th gen, 16GB RAM, 1TB SSD
+# yaml-language-server: $schema=https://raw.githubusercontent.com/k3d-io/k3d/main/pkg/config/v1alpha5/schema.json
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: ${CLUSTER_NAME}
+
+# Configuração  físico
+# 1 servidor + 1 agente no mesmo node
+servers: 1
+agents: 1
+
+# Imagem do k3s (versão estável e leve)
+image: rancher/k3s:${K3S_VERSION}
+
+# Expor API em porta estável
+kubeAPI:
+  hostPort: "6445"
+
+# Mapear portas essenciais
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+  # Porta para registry local (comentado - registry já gerencia a porta)
+  # - port: ${REGISTRY_PORT}:${REGISTRY_PORT}
+  #   nodeFilters:
+  #     - loadbalancer
+
+# Persistência otimizada para SSD
+volumes:
+  - volume: ${CLUSTER_NAME}-server:/var/lib/rancher/k3s
+    nodeFilters:
+      - server:0
+  - volume: ${CLUSTER_NAME}-agent-0:/var/lib/rancher/k3s
+    nodeFilters:
+      - agent:0
+
+# Registry local para desenvolvimento
+registries:
+  create:
+    name: ${REGISTRY_NAME}
+    host: "0.0.0.0"
+    hostPort: "${REGISTRY_PORT}"
+
+# Configurações de rede
+options:
+  k3d:
+    # Usar rede host para melhor acesso ao registry
+    disableLoadbalancer: false
+    disableImageVolume: false
+  k3s:
+    extraArgs:
+      # Otimizações de memória para 16GB
+      - arg: --kubelet-arg=eviction-hard=memory.available<1Gi,nodefs.available<2Gi
+        nodeFilters:
+          - agent:*
+      - arg: --kubelet-arg=eviction-minimum-reclaim=memory.available=200Mi,nodefs.available=500Mi
+        nodeFilters:
+          - agent:*
+      # Limite de pods por nó (conservador )
+      - arg: --kubelet-arg=max-pods=30
+        nodeFilters:
+          - agent:*
+      # Manter servicelb para suporte a LoadBalancer (Traefik)
+      # - arg: --disable=servicelb
+      #   nodeFilters:
+      #     - server:*
+      # Configuração de rede otimizada
+      - arg: --cluster-cidr=10.42.0.0/16
+        nodeFilters:
+          - server:*
+      - arg: --service-cidr=10.43.0.0/16
+        nodeFilters:
+          - server:*
+      # Configurações de escrita
+      - arg: --write-kubeconfig-mode=644
+        nodeFilters:
+          - server:*
+      # Otimizações de performance
+      - arg: --kubelet-arg=feature-gates=KubeletInUserNamespace=true
+        nodeFilters:
+          - agent:*
+  runtime:
+    # Limites de recursos conservadores
+    ulimits:
+      - name: nofile
+        soft: 65536
+        hard: 65536

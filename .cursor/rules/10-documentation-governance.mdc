@@ -1,0 +1,15 @@
+# Documentação & Governança
+
+## Artefatos
+- RFCs (debate técnico), ADRs (decisão consolidada) e RACI (responsabilidades).
+- Diagramas C4 (Contexto, Contêiner, Componentes, Sequência) como código (PlantUML).
+
+## Princípios
+- Cada mudança relevante exige ADR com motivação e impactos.
+- Diagramas e exemplos sincronizados com o estado atual do código.
+
+## Dependências Externas
+- Em referências a sintaxe/flags de ferramentas (PlantUML/C4, plugins, libs), usar `use context7` e declarar a versão consultada.
+
+## Reuso
+- Templates versionados, estilos e sprites padronizados, com reuso via `!include`.

@@ -1,0 +1,13 @@
+# Configurações específicas do pnpm para monorepo
+shamefully-hoist=true
+strict-peer-dependencies=false
+auto-install-peers=true
+prefer-workspace-packages=true
+
+# Configurações de cache do pnpm
+store-dir=~/.pnpm-store
+cache-dir=~/.pnpm-cache
+
+# Configurações de workspace do pnpm
+link-workspace-packages=true
+shared-workspace-lockfile=true

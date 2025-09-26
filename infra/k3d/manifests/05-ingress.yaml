@@ -1,0 +1,300 @@
+# Centralized Ingress - Single URL Base for All Services
+# This approach centralizes all service access through a single domain
+# with path-based routing, similar to the Docker approach
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: centralized-ingress
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: centralized-ingress
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: mostval
+  annotations:
+    # Traefik specific annotations
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - host: mostval.local  # Single domain for all services
+    http:
+      paths:
+              # Keycloak - Authentication
+              - path: /auth
+                pathType: Prefix
+                backend:
+                  service:
+                    name: keycloak
+                    port:
+                      number: 80
+
+              # LocalStack - AWS Emulator
+              - path: /aws
+                pathType: Prefix
+                backend:
+                  service:
+                    name: localstack
+                    port:
+                      number: 80
+
+              # RabbitMQ Management
+              - path: /rabbitmq
+                pathType: Prefix
+                backend:
+                  service:
+                    name: rabbitmq
+                    port:
+                      number: 15672
+
+              # Health check endpoint
+              - path: /health
+                pathType: Exact
+                backend:
+                  service:
+                    name: nginx  # Assuming we have a health check service
+                    port:
+                      number: 80
+
+              # API routes for applications (when deployed)
+              - path: /api/node
+                pathType: Prefix
+                backend:
+                  service:
+                    name: node-api
+                    port:
+                      number: 3000
+
+              - path: /api/go
+                pathType: Prefix
+                backend:
+                  service:
+                    name: go-api
+                    port:
+                      number: 8080
+
+              # Default route (optional - can redirect to docs or dashboard)
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: nginx  # Default service for root path
+                    port:
+                      number: 80
+
+  tls:
+  - hosts:
+    - mostval.local
+    secretName: centralized-tls
+
+---
+# Optional: Create a simple nginx service for health checks and default routes
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/component: web-server
+    app.kubernetes.io/part-of: mostval
+spec:
+  selector:
+    app.kubernetes.io/name: nginx
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/component: web-server
+    app.kubernetes.io/part-of: mostval
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: nginx-html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+      - name: nginx-html
+        configMap:
+          name: nginx-html
+
+---
+# Nginx configuration for centralized routing
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/component: web-server
+    app.kubernetes.io/part-of: mostval
+data:
+  nginx.conf: |
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        # Logging
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log /var/log/nginx/access.log main;
+        error_log /var/log/nginx/error.log;
+
+        # Basic settings
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+
+        # Gzip compression
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 1024;
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+        server {
+            listen 80;
+            server_name mostval.local;
+
+            # Health check endpoint
+            location /health {
+                return 200 '{"status":"ok","timestamp":"$time_iso8601"}';
+                add_header Content-Type application/json;
+            }
+
+            # Default route - show available services
+            location / {
+                root /usr/share/nginx/html;
+                index index.html;
+                try_files $uri $uri/ /index.html;
+            }
+        }
+    }
+
+---
+# HTML page showing available services
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-html
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/component: web-server
+    app.kubernetes.io/part-of: mostval
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mostval - Development Environment</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+            .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+            .service { margin: 20px 0; padding: 15px; background: #ecf0f1; border-radius: 5px; border-left: 4px solid #3498db; }
+            .service h3 { margin: 0 0 10px 0; color: #2c3e50; }
+            .service p { margin: 5px 0; color: #7f8c8d; }
+            .url { font-family: monospace; background: #34495e; color: #ecf0f1; padding: 5px 10px; border-radius: 3px; }
+            .status { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+            .status.ok { background: #27ae60; color: white; }
+            .status.warning { background: #f39c12; color: white; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 Mostval - Ambiente de Desenvolvimento</h1>
+            <p>Bem-vindo ao ambiente de desenvolvimento centralizado! Todos os serviços estão acessíveis através de uma única URL base.</p>
+
+            <div class="service">
+                <h3>🔐 Keycloak - Autenticação</h3>
+                <p><strong>URL:</strong> <span class="url">https://mostval.local/auth/</span></p>
+                <p>Gerenciamento de usuários, roles e autenticação OAuth2/OpenID Connect.</p>
+                <p><span class="status ok">✓ Disponível</span></p>
+            </div>
+
+            <div class="service">
+                <h3>☁️ LocalStack - AWS Emulator</h3>
+                <p><strong>URL:</strong> <span class="url">https://mostval.local/aws/</span></p>
+                <p>Emulador local dos serviços AWS (S3, SQS, DynamoDB, Lambda, etc.).</p>
+                <p><span class="status ok">✓ Disponível</span></p>
+            </div>
+
+            <div class="service">
+                <h3>🐰 RabbitMQ - Sistema de Mensageria</h3>
+                <p><strong>URL:</strong> <span class="url">https://mostval.local/rabbitmq/</span></p>
+                <p>Interface de gerenciamento do RabbitMQ para filas e exchanges.</p>
+                <p><span class="status ok">✓ Disponível</span></p>
+            </div>
+
+            <div class="service">
+                <h3>🔍 Health Check</h3>
+                <p><strong>URL:</strong> <span class="url">https://mostval.local/health</span></p>
+                <p>Endpoint de verificação de saúde do sistema.</p>
+                <p><span class="status ok">✓ Disponível</span></p>
+            </div>
+
+            <div class="service">
+                <h3>📱 APIs de Aplicação</h3>
+                <p><strong>Node.js API:</strong> <span class="url">https://mostval.local/api/node/</span></p>
+                <p><strong>Go API:</strong> <span class="url">https://mostval.local/api/go/</span></p>
+                <p>APIs das aplicações quando implantadas.</p>
+                <p><span class="status warning">⚠️ Disponível quando implantadas</span></p>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: #e8f4f8; border-radius: 5px; border-left: 4px solid #3498db;">
+                <h3>💡 Vantagens desta Abordagem</h3>
+                <ul>
+                    <li><strong>URL Única:</strong> Apenas uma entrada no arquivo hosts</li>
+                    <li><strong>Segurança:</strong> Controle centralizado de acesso</li>
+                    <li><strong>Simplicidade:</strong> Fácil de lembrar e gerenciar</li>
+                    <li><strong>Flexibilidade:</strong> Fácil adição de novos serviços</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    </html>

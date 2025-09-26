@@ -1,0 +1,19 @@
+# Backend Golang (Echo/Gin, Uber Dig, Watermill) — Agent + Inline Edit
+
+## Sintaxe e Versões
+- Declarar versões (Echo/Gin/Watermill) e usar `use context7` ao consultar exemplos e flags.
+
+## Arquitetura
+- Clean Architecture; adapters para HTTP, gRPC, Kafka/SQS.
+- Erros com wrapping (%w) e sentinelas; mensagens ricas em contexto.
+
+## Concorrência e Resiliência
+- Workers com context.Context e graceful shutdown.
+- Retries com backoff + jitter; rate limiters e circuit breakers.
+
+## Observabilidade
+- zap para logs estruturados; OTEL para traces/metrics; pprof controlado.
+
+## Testes
+- testing + testify; testcontainers-go para integração.
+- Ver `08-testing-quality.mcd`.

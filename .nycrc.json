@@ -1,0 +1,28 @@
+{
+  "reporter": ["text", "lcov", "html", "json", "json-summary"],
+  "report-dir": "coverage",
+  "temp-dir": ".nyc_output",
+  "all": true,
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "**/*.d.ts",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/*.config.js",
+    "**/*.config.ts",
+    "**/jest.config.js",
+    "**/jest.config.ts",
+    "**/setup-jest.ts",
+    "**/test-setup.ts",
+    "**/src/test-setup.ts",
+    "**/test-setup.js",
+    "**/src/test-setup.js"
+  ],
+  "check-coverage": true,
+  "lines": 80,
+  "functions": 80,
+  "branches": 80,
+  "statements": 80
+}

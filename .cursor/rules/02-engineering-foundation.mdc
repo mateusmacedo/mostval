@@ -1,0 +1,20 @@
+# Fundamentos de Engenharia
+
+## Arquitetura
+- Clean Architecture: domain, application, adapters, infra.
+- DDD: entidades/aggregates ricos; domain services; repositories.
+- CQRS e, quando adequado, Event Sourcing (event store, projections); Outbox e idempotência em integrações.
+- Sagas para coordenação distribuída, com compensações definidas.
+
+## Padrões e Extensibilidade
+- Strategy, Template Method, Decorator, Specification, Mediator.
+- Ports/Interfaces no domínio; adapters isolando tecnologias (DB/HTTP/Fila).
+
+## Observabilidade e Resiliência
+- Logs estruturados com correlation/causation/tenant id.
+- Tracing (OpenTelemetry) e métricas (latência, erro, throughput, filas).
+- Timeouts, retry com jitter, circuit breaker e rate limiting.
+
+## Qualidade e Segurança
+- Testes unitários e de integração; contratos para interfaces públicas.
+- AuthN/AuthZ consistentes; verificação de aud/iss e rotação de chaves; segredos fora do código.

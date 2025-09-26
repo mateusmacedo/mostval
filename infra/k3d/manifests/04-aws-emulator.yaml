@@ -1,0 +1,480 @@
+# AWS Emulator - LocalStack
+# Consolidated AWS services emulator for Mostval
+# Includes: LocalStack deployment, service, and configuration
+
+---
+# LocalStack Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: localstack-config
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: localstack
+    app.kubernetes.io/component: aws-emulator
+    app.kubernetes.io/part-of: mostval
+data:
+  SERVICES: "s3,sqs,sns,lambda,dynamodb,iam,sts,cloudformation,apigateway,route53,secretsmanager,ssm"
+  PERSISTENCE: "1"
+  LAMBDA_EXECUTOR: "local"
+  LAMBDA_REMOVE_CONTAINERS: "false"
+  HOSTNAME_EXTERNAL: "localstack"
+  AWS_DEFAULT_REGION: "us-east-1"
+  AWS_ACCESS_KEY_ID: "test"
+  AWS_SECRET_ACCESS_KEY: "test"
+  DEBUG: "0"
+
+---
+# LocalStack Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localstack
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: localstack
+    app.kubernetes.io/component: aws-emulator
+    app.kubernetes.io/part-of: mostval
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: localstack
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: localstack
+    spec:
+      containers:
+      - name: localstack
+        image: localstack/localstack:3.0
+        ports:
+        - containerPort: 4566
+          name: http
+        - containerPort: 4510
+          name: external-1
+        - containerPort: 4511
+          name: external-2
+        - containerPort: 4512
+          name: external-3
+        - containerPort: 4513
+          name: external-4
+        - containerPort: 4514
+          name: external-5
+        - containerPort: 4515
+          name: external-6
+        - containerPort: 4516
+          name: external-7
+        - containerPort: 4517
+          name: external-8
+        - containerPort: 4518
+          name: external-9
+        - containerPort: 4519
+          name: external-10
+        - containerPort: 4520
+          name: external-11
+        - containerPort: 4521
+          name: external-12
+        - containerPort: 4522
+          name: external-13
+        - containerPort: 4523
+          name: external-14
+        - containerPort: 4524
+          name: external-15
+        - containerPort: 4525
+          name: external-16
+        - containerPort: 4526
+          name: external-17
+        - containerPort: 4527
+          name: external-18
+        - containerPort: 4528
+          name: external-19
+        - containerPort: 4529
+          name: external-20
+        - containerPort: 4530
+          name: external-21
+        - containerPort: 4531
+          name: external-22
+        - containerPort: 4532
+          name: external-23
+        - containerPort: 4533
+          name: external-24
+        - containerPort: 4534
+          name: external-25
+        - containerPort: 4535
+          name: external-26
+        - containerPort: 4536
+          name: external-27
+        - containerPort: 4537
+          name: external-28
+        - containerPort: 4538
+          name: external-29
+        - containerPort: 4539
+          name: external-30
+        - containerPort: 4540
+          name: external-31
+        - containerPort: 4541
+          name: external-32
+        - containerPort: 4542
+          name: external-33
+        - containerPort: 4543
+          name: external-34
+        - containerPort: 4544
+          name: external-35
+        - containerPort: 4545
+          name: external-36
+        - containerPort: 4546
+          name: external-37
+        - containerPort: 4547
+          name: external-38
+        - containerPort: 4548
+          name: external-39
+        - containerPort: 4549
+          name: external-40
+        - containerPort: 4550
+          name: external-41
+        - containerPort: 4551
+          name: external-42
+        - containerPort: 4552
+          name: external-43
+        - containerPort: 4553
+          name: external-44
+        - containerPort: 4554
+          name: external-45
+        - containerPort: 4555
+          name: external-46
+        - containerPort: 4556
+          name: external-47
+        - containerPort: 4557
+          name: external-48
+        - containerPort: 4558
+          name: external-49
+        - containerPort: 4559
+          name: external-50
+        env:
+        - name: SERVICES
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: SERVICES
+        - name: PERSISTENCE
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: PERSISTENCE
+        - name: LAMBDA_EXECUTOR
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: LAMBDA_EXECUTOR
+        - name: LAMBDA_REMOVE_CONTAINERS
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: LAMBDA_REMOVE_CONTAINERS
+        - name: HOSTNAME_EXTERNAL
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: HOSTNAME_EXTERNAL
+        - name: AWS_DEFAULT_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: AWS_DEFAULT_REGION
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: AWS_SECRET_ACCESS_KEY
+        - name: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: localstack-config
+              key: DEBUG
+        volumeMounts:
+        - name: localstack-storage
+          mountPath: /var/lib/localstack
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /_localstack/health
+            port: 4566
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /_localstack/health
+            port: 4566
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /_localstack/health
+            port: 4566
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 12
+      volumes:
+      - name: localstack-storage
+        persistentVolumeClaim:
+          claimName: localstack-pvc
+
+---
+# LocalStack PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: localstack-pvc
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: localstack
+    app.kubernetes.io/component: aws-emulator
+    app.kubernetes.io/part-of: mostval
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-path
+
+---
+# LocalStack Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: localstack
+  namespace: mostval
+  labels:
+    app.kubernetes.io/name: localstack
+    app.kubernetes.io/component: aws-emulator
+    app.kubernetes.io/part-of: mostval
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 4566
+    protocol: TCP
+    name: http
+  - port: 4510
+    targetPort: 4510
+    protocol: TCP
+    name: external-1
+  - port: 4511
+    targetPort: 4511
+    protocol: TCP
+    name: external-2
+  - port: 4512
+    targetPort: 4512
+    protocol: TCP
+    name: external-3
+  - port: 4513
+    targetPort: 4513
+    protocol: TCP
+    name: external-4
+  - port: 4514
+    targetPort: 4514
+    protocol: TCP
+    name: external-5
+  - port: 4515
+    targetPort: 4515
+    protocol: TCP
+    name: external-6
+  - port: 4516
+    targetPort: 4516
+    protocol: TCP
+    name: external-7
+  - port: 4517
+    targetPort: 4517
+    protocol: TCP
+    name: external-8
+  - port: 4518
+    targetPort: 4518
+    protocol: TCP
+    name: external-9
+  - port: 4519
+    targetPort: 4519
+    protocol: TCP
+    name: external-10
+  - port: 4520
+    targetPort: 4520
+    protocol: TCP
+    name: external-11
+  - port: 4521
+    targetPort: 4521
+    protocol: TCP
+    name: external-12
+  - port: 4522
+    targetPort: 4522
+    protocol: TCP
+    name: external-13
+  - port: 4523
+    targetPort: 4523
+    protocol: TCP
+    name: external-14
+  - port: 4524
+    targetPort: 4524
+    protocol: TCP
+    name: external-15
+  - port: 4525
+    targetPort: 4525
+    protocol: TCP
+    name: external-16
+  - port: 4526
+    targetPort: 4526
+    protocol: TCP
+    name: external-17
+  - port: 4527
+    targetPort: 4527
+    protocol: TCP
+    name: external-18
+  - port: 4528
+    targetPort: 4528
+    protocol: TCP
+    name: external-19
+  - port: 4529
+    targetPort: 4529
+    protocol: TCP
+    name: external-20
+  - port: 4530
+    targetPort: 4530
+    protocol: TCP
+    name: external-21
+  - port: 4531
+    targetPort: 4531
+    protocol: TCP
+    name: external-22
+  - port: 4532
+    targetPort: 4532
+    protocol: TCP
+    name: external-23
+  - port: 4533
+    targetPort: 4533
+    protocol: TCP
+    name: external-24
+  - port: 4534
+    targetPort: 4534
+    protocol: TCP
+    name: external-25
+  - port: 4535
+    targetPort: 4535
+    protocol: TCP
+    name: external-26
+  - port: 4536
+    targetPort: 4536
+    protocol: TCP
+    name: external-27
+  - port: 4537
+    targetPort: 4537
+    protocol: TCP
+    name: external-28
+  - port: 4538
+    targetPort: 4538
+    protocol: TCP
+    name: external-29
+  - port: 4539
+    targetPort: 4539
+    protocol: TCP
+    name: external-30
+  - port: 4540
+    targetPort: 4540
+    protocol: TCP
+    name: external-31
+  - port: 4541
+    targetPort: 4541
+    protocol: TCP
+    name: external-32
+  - port: 4542
+    targetPort: 4542
+    protocol: TCP
+    name: external-33
+  - port: 4543
+    targetPort: 4543
+    protocol: TCP
+    name: external-34
+  - port: 4544
+    targetPort: 4544
+    protocol: TCP
+    name: external-35
+  - port: 4545
+    targetPort: 4545
+    protocol: TCP
+    name: external-36
+  - port: 4546
+    targetPort: 4546
+    protocol: TCP
+    name: external-37
+  - port: 4547
+    targetPort: 4547
+    protocol: TCP
+    name: external-38
+  - port: 4548
+    targetPort: 4548
+    protocol: TCP
+    name: external-39
+  - port: 4549
+    targetPort: 4549
+    protocol: TCP
+    name: external-40
+  - port: 4550
+    targetPort: 4550
+    protocol: TCP
+    name: external-41
+  - port: 4551
+    targetPort: 4551
+    protocol: TCP
+    name: external-42
+  - port: 4552
+    targetPort: 4552
+    protocol: TCP
+    name: external-43
+  - port: 4553
+    targetPort: 4553
+    protocol: TCP
+    name: external-44
+  - port: 4554
+    targetPort: 4554
+    protocol: TCP
+    name: external-45
+  - port: 4555
+    targetPort: 4555
+    protocol: TCP
+    name: external-46
+  - port: 4556
+    targetPort: 4556
+    protocol: TCP
+    name: external-47
+  - port: 4557
+    targetPort: 4557
+    protocol: TCP
+    name: external-48
+  - port: 4558
+    targetPort: 4558
+    protocol: TCP
+    name: external-49
+  - port: 4559
+    targetPort: 4559
+    protocol: TCP
+    name: external-50
+  selector:
+    app.kubernetes.io/name: localstack

@@ -1,0 +1,16 @@
+# Infra & DevOps (Docker/K8s/GitOps) — Agent + Inline Edit
+
+## Contêineres e Orquestração
+- Dockerfiles multi-stage; HEALTHCHECK; execução não-root.
+- K8s: Deployments, Services, Ingress (Traefik v3); requests/limits configurados.
+
+## CI/CD e GitOps
+- Pipelines multi-stage (lint → test → security → build → deploy).
+- Argo CD para GitOps; ambientes dev/hml/prd; progressive delivery e rollback.
+
+## Observabilidade
+- OTEL Collector (≥0.104), Tempo/Jaeger, Loki, Prometheus e Grafana como código.
+- Dashboards e alertas versionados; SLOs explícitos.
+
+## Dependências Externas
+- Em CRDs/flags de OTEL, Traefik, Prometheus e afins, usar `use context7` e declarar a versão validada.

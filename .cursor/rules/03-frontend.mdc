@@ -1,0 +1,15 @@
+# Frontend (Next.js/React) — Agent + Inline Edit
+
+## Diretrizes
+- Next.js 14 (App Router) por padrão; declarar versão e usar `use context7` para confirmar APIs e convenções.
+- Componentização reutilizável e composável; responsabilidades claras.
+- Separar server data/cache de UI state; evitar overfetching.
+- Acessibilidade (ARIA, foco, teclado) e Core Web Vitals como metas mínimas.
+
+## Performance
+- Code splitting, lazy loading, memoização criteriosa e listas virtualizadas.
+- Minimizar bundle (tree-shaking), otimização de imagens e RUM metrics.
+
+## Testes
+- Unit (Testing Library) e e2e (Playwright) focando rotas/edge e interações reais.
+- Ver arquivo `08-testing-quality.mcd` para critérios unificados de testes.

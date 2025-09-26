@@ -1,0 +1,318 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/go.work"
+    ]
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": {
+          "targetName": "build",
+          "configName": "tsconfig.lib.json",
+          "buildDepsName": "build-deps",
+          "watchDepsName": "watch-deps"
+        }
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    },
+    "@nx-go/nx-go",
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps"
+      }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
+    }
+  ],
+  "targetDefaults": {
+    "@nx/js:swc": {
+      "cache": true,
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
+    },
+    "@nx/js:tsc": {
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage"
+      ]
+    },
+    "biome:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome lint {projectRoot} --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "biome:format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format {projectRoot} --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "biome:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check {projectRoot} --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "biome:lint-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome lint {projectRoot} --write --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "biome:format-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format {projectRoot} --write --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "biome:check-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check {projectRoot} --write --reporter=github",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json"
+      ],
+      "outputs": []
+    },
+    "go:lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "golangci-lint run --fix",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default"
+      ],
+      "outputs": []
+    },
+    "go:test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go test -v ./...",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default"
+      ],
+      "outputs": []
+    },
+    "go:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go build ./...",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default"
+      ],
+      "outputs": [
+        "{projectRoot}/bin"
+      ]
+    },
+    "sonar:scan": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sonar-scanner -Dproject.settings=sonar-project.properties",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/sonar-project.properties"
+      ],
+      "outputs": []
+    },
+    "sonar:scan:apps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sonar-scanner -Dproject.settings=sonar-apps.properties",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/sonar-apps.properties"
+      ],
+      "outputs": []
+    },
+    "sonar:scan:libs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sonar-scanner -Dproject.settings=sonar-libs.properties",
+        "cwd": "{workspaceRoot}"
+      },
+      "cache": false,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/sonar-libs.properties"
+      ],
+      "outputs": []
+    },
+  },
+  "release": {
+    "projectsRelationship": "independent",
+    "projects": [
+      "@mostval/tsconfig"
+    ],
+    "version": {
+      "preVersionCommand": "pnpm dlx nx affected -t build --skip-nx-cache || pnpm dlx nx affected -t test --skip-nx-cache",
+      "generatorOptions": {
+        "packageRoot": "{projectRoot}",
+        "currentVersionResolver": "git-tag",
+        "specifierSource": "conventional-commits",
+        "fallbackCurrentVersionResolver": "disk"
+      }
+    },
+    "changelog": {
+      "projectChangelogs": true,
+      "workspaceChangelog": false,
+      "automaticFromRef": "HEAD",
+      "version": {
+        "generator": "@nx/js:release-version",
+        "generatorOptions": {
+          "packageRoot": "{projectRoot}",
+          "currentVersionResolver": "git-tag",
+          "specifierSource": "conventional-commits",
+          "fallbackCurrentVersionResolver": "disk"
+        }
+      },
+      "createRelease": "github",
+      "entry": {
+        "version": {
+          "generator": "@nx/js:release-version",
+          "generatorOptions": {
+            "packageRoot": "{projectRoot}",
+            "currentVersionResolver": "git-tag",
+            "specifierSource": "conventional-commits",
+            "fallbackCurrentVersionResolver": "disk"
+          }
+        },
+        "changelog": {
+          "generator": "@nx/js:release-changelog",
+          "generatorOptions": {
+            "changelogHeader": "# Changelog\n\nAll notable changes to this project will be documented in this file.",
+            "file": "{projectRoot}/CHANGELOG.md"
+          }
+        }
+      }
+    },
+    "git": {
+      "commit": false,
+      "tag": false,
+      "push": false,
+      "commitMessage": "chore(release): publish {version}",
+      "tagMessage": "v{version}",
+      "tagPattern": "{projectName}@{version}"
+    }
+  },
+  "generators": {
+    "@nx/web:application": {
+      "style": "css",
+      "linter": "none",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none"
+    }
+  }
+}

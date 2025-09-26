@@ -1,0 +1,118 @@
+---
+alwaysApply: true
+---
+
+# Catálogo de Agentes (Agent + Inline Edit, @Cursor Rules)
+
+Escopo: descreve quando e como acionar os agentes `.mdc` do repositório, sem alterar a consolidação de testes (regida por `08-testing-quality.mcd`). Para incluir explicitamente estas regras no contexto, usar `@Cursor Rules`. Em dependências sensíveis a versão, usar `use context7` e declarar a versão consultada.
+
+## frontend-developer.mdc
+- Quando usar: implementação/ajuste de UI (Next.js/React), estado, roteamento, SSR/ISR, acessibilidade, otimização de bundle e Web Vitals.
+- Globs: `**/*.tsx`, `**/*.jsx`, `**/components/**`, `**/app/**`, `**/pages/**`, `**/hooks/**`, `**/styles/**`.
+- Entradas: objetivo funcional, restrições (SSR/CSR, responsividade, i18n, tema), Design System.
+- Saídas: componentes reutilizáveis e acessíveis; impactos em LCP/CLS/TBT e recomendações.
+
+## ui-designer.mdc
+- Quando usar: layout, diretrizes visuais, grids responsivos, tokens/typography, heurísticas de UX.
+- Globs: `**/ui/**`, `**/*.tsx` com foco em layout/estilo.
+- Entradas: persona, objetivo, breakpoints, temas.
+- Saídas: layouts responsivos, alinhados ao Design System, com notas de A11y.
+
+## backend-architect.mdc
+- Quando usar: modelagem de serviços/APIs, limites de contexto, mensageria (Kafka/SQS), CQRS/ES, Sagas/Outbox, contratos.
+- Globs: `**/api/**`, `**/server/**`, `**/backend/**`, `**/models/**`, `**/controllers/**`, `**/services/**`, `**/adapters/**`.
+- Entradas: objetivos de negócio, requisitos não-funcionais (SLOs, segurança, compliance), integrações.
+- Saídas: especificação da API/contratos, fluxos (happy/edge/erro), padrões arquiteturais e impactos.
+
+## devops-automator.mdc
+- Quando usar: pipelines CI/CD, contêineres, K8s/Helm, GitOps (Argo CD), segurança de supply chain, automações.
+- Globs: `**/.github/**`, `**/Dockerfile`, `**/k8s/**`, `**/helm/**`, `**/infrastructure/**`, `**/deploy/**`.
+- Entradas: matriz de ambientes, requisitos de build/test/scan, políticas de aprovação e rollout.
+- Saídas: pipelines multi-stage, manifests com requests/limits/probes, GitOps e plano de rollback.
+
+## workflow-optimizer.mdc
+- Quando usar: otimização de fluxo humano↔IA, padronização de prompts, redução de handoffs, políticas de PR e Definition of Done.
+- Globs: `**/.github/workflows/**`, `**/ci/**`, `**/cd/**`, `**/docs/**/guides/**`.
+- Entradas: gargalos e metas (lead time, throughput), políticas da equipe.
+- Saídas: mapa de fluxo “as-is” → “to-be”, prompts operacionais, checklist de DOR/DoD e métricas.
+
+## api-tester.mdc
+- Quando usar: smoke/contract tests de endpoints, casos negativos (auth/limites), validação de schemas, regressão rápida.
+- Globs: `**/openapi/**`, `**/schemas/**`, `**/tests/**`, `**/*.spec.*`, `**/*.test.*`.
+- Entradas: rotas-alvo, estratégia de auth, política de dados de teste.
+- Saídas: suites de contrato/negativos, comandos de execução e relatórios.
+
+## test-writer-fixer.mdc
+- Quando usar: criação/ajuste de testes após mudanças de código; eliminação de flakiness; ampliação de cobertura.
+- Globs: `**/*.spec.*`, `**/*.test.*`, `**/__tests__/**`, `**/tests/**`.
+- Entradas: diffs/arquivos tocados e casos desejados (unit/integração/e2e).
+- Saídas: testes completos e mapeamento mudança→testes afetados.
+
+## test-results-analyzer.mdc
+- Quando usar: análise de relatórios (xml/json), tendências e causas-raiz; priorização de correções e detecção de flakiness/regressões.
+- Globs: `**/test-results/**`, `**/coverage/**`, `**/reports/**`.
+- Entradas: diretórios de relatórios e janela temporal.
+- Saídas: lista priorizada de causas-raiz, ações por serviço, dif de cobertura e recomendações.
+
+## performance-benchmarker.mdc
+- Quando usar: medição de performance (API/serviço/SPA), definição de SLOs, análise de hot paths e impacto de release.
+- Globs: `**/benchmarks/**`, `**/performance/**`, manifests k6/locust/artillery.
+- Entradas: alvos, workload esperado, SLOs e baseline.
+- Saídas: plano de teste de carga/soak/stress, resultados comparativos, gargalos e recomendações.
+# Catálogo de Agentes (Agent + Inline Edit, @Cursor Rules)
+
+Escopo: descreve quando e como acionar os agentes `.mdc` do repositório, sem alterar a consolidação de testes (regida por `08-testing-quality.mcd`). Para incluir explicitamente estas regras no contexto, usar `@Cursor Rules`. Em dependências sensíveis a versão, usar `use context7` e declarar a versão consultada.
+
+## frontend-developer.mdc
+- Quando usar: implementação/ajuste de UI (Next.js/React), estado, roteamento, SSR/ISR, acessibilidade, otimização de bundle e Web Vitals.
+- Globs: `**/*.tsx`, `**/*.jsx`, `**/components/**`, `**/app/**`, `**/pages/**`, `**/hooks/**`, `**/styles/**`.
+- Entradas: objetivo funcional, restrições (SSR/CSR, responsividade, i18n, tema), Design System.
+- Saídas: componentes reutilizáveis e acessíveis; impactos em LCP/CLS/TBT e recomendações.
+
+## ui-designer.mdc
+- Quando usar: layout, diretrizes visuais, grids responsivos, tokens/typography, heurísticas de UX.
+- Globs: `**/ui/**`, `**/*.tsx` com foco em layout/estilo.
+- Entradas: persona, objetivo, breakpoints, temas.
+- Saídas: layouts responsivos, alinhados ao Design System, com notas de A11y.
+
+## backend-architect.mdc
+- Quando usar: modelagem de serviços/APIs, limites de contexto, mensageria (Kafka/SQS), CQRS/ES, Sagas/Outbox, contratos.
+- Globs: `**/api/**`, `**/server/**`, `**/backend/**`, `**/models/**`, `**/controllers/**`, `**/services/**`, `**/adapters/**`.
+- Entradas: objetivos de negócio, requisitos não-funcionais (SLOs, segurança, compliance), integrações.
+- Saídas: especificação da API/contratos, fluxos (happy/edge/erro), padrões arquiteturais e impactos.
+
+## devops-automator.mdc
+- Quando usar: pipelines CI/CD, contêineres, K8s/Helm, GitOps (Argo CD), segurança de supply chain, automações.
+- Globs: `**/.github/**`, `**/Dockerfile`, `**/k8s/**`, `**/helm/**`, `**/infrastructure/**`, `**/deploy/**`.
+- Entradas: matriz de ambientes, requisitos de build/test/scan, políticas de aprovação e rollout.
+- Saídas: pipelines multi-stage, manifests com requests/limits/probes, GitOps e plano de rollback.
+
+## workflow-optimizer.mdc
+- Quando usar: otimização de fluxo humano↔IA, padronização de prompts, redução de handoffs, políticas de PR e Definition of Done.
+- Globs: `**/.github/workflows/**`, `**/ci/**`, `**/cd/**`, `**/docs/**/guides/**`.
+- Entradas: gargalos e metas (lead time, throughput), políticas da equipe.
+- Saídas: mapa de fluxo “as-is” → “to-be”, prompts operacionais, checklist de DOR/DoD e métricas.
+
+## api-tester.mdc
+- Quando usar: smoke/contract tests de endpoints, casos negativos (auth/limites), validação de schemas, regressão rápida.
+- Globs: `**/openapi/**`, `**/schemas/**`, `**/tests/**`, `**/*.spec.*`, `**/*.test.*`.
+- Entradas: rotas-alvo, estratégia de auth, política de dados de teste.
+- Saídas: suites de contrato/negativos, comandos de execução e relatórios.
+
+## test-writer-fixer.mdc
+- Quando usar: criação/ajuste de testes após mudanças de código; eliminação de flakiness; ampliação de cobertura.
+- Globs: `**/*.spec.*`, `**/*.test.*`, `**/__tests__/**`, `**/tests/**`.
+- Entradas: diffs/arquivos tocados e casos desejados (unit/integração/e2e).
+- Saídas: testes completos e mapeamento mudança→testes afetados.
+
+## test-results-analyzer.mdc
+- Quando usar: análise de relatórios (xml/json), tendências e causas-raiz; priorização de correções e detecção de flakiness/regressões.
+- Globs: `**/test-results/**`, `**/coverage/**`, `**/reports/**`.
+- Entradas: diretórios de relatórios e janela temporal.
+- Saídas: lista priorizada de causas-raiz, ações por serviço, dif de cobertura e recomendações.
+
+## performance-benchmarker.mdc
+- Quando usar: medição de performance (API/serviço/SPA), definição de SLOs, análise de hot paths e impacto de release.
+- Globs: `**/benchmarks/**`, `**/performance/**`, manifests k6/locust/artillery.
+- Entradas: alvos, workload esperado, SLOs e baseline.
+- Saídas: plano de teste de carga/soak/stress, resultados comparativos, gargalos e recomendações.

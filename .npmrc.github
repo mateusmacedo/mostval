@@ -1,0 +1,19 @@
+# Configuração para GitHub Packages
+# Este arquivo deve ser copiado para .npmrc durante o build/release
+
+# Registro do GitHub Packages para o escopo @mateusmacedo
+@mateusmacedo:registry=https://npm.pkg.github.com
+
+# Configurações de autenticação
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+
+# Configurações compatíveis com npm e pnpm
+save-exact=true
+engine-strict=true
+audit-level=moderate
+fund=false
+prefer-offline=true
+fetch-retries=3
+fetch-retry-factor=2
+fetch-retry-mintimeout=10000
+fetch-retry-maxtimeout=60000

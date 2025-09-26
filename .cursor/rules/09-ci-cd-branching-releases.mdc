@@ -1,0 +1,19 @@
+# CI/CD, Branching e Releases
+
+## Branching
+- Trunk-based ou git-flow simplificado (definir no README).
+- Branches curtas; PRs pequenos e revisáveis.
+
+## Commits
+- Conventional Commits (≤ 100 caracteres) com escopo e emoji opcional.
+- Lint, format, tests, security e build obrigatórios no PR.
+
+## Versionamento e Releases
+- Versionamento independente por app/lib (quando monorepo) com changelogs automáticos.
+- Tags e releases versionadas; artifacts assinados quando aplicável.
+
+## Deploy
+- Argo CD/GitOps; progressive delivery e rollbacks documentados.
+
+## Segurança de Pipeline
+- SAST/DAST, dependency scan e license check; proteção de main e policies de aprovação.

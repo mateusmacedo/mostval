@@ -1,0 +1,37 @@
+# Testes & Qualidade (Unit, Integração, Contrato, E2E, Performance)
+
+## Princípios
+- Estratégia padrão: unit → integração → contrato → e2e → performance, conforme o escopo.
+- Dados de teste realistas; fixtures estáveis; mocks apenas quando necessário.
+- Padrões de nomes: {arquivo}.spec.ts / {arquivo}_test.go; suites por comportamento.
+
+## Unit
+- TypeScript: Jest/Vitest + Testing Library. Go: testing + testify.
+- Cobrir entidades, serviços, use cases, validações e serialização.
+
+## Integração
+- testcontainers / testcontainers-go para DB/mensageria/HTTP.
+- Verificar transações, locks, índices, idempotência e retry.
+
+## Contrato
+- OpenAPI/JSON Schema como fonte única; validar tipos, status codes, headers.
+- Casos negativos: autenticação/autorização, payload malformado, limites e rate-limit.
+
+## E2E (Web/API)
+- Playwright (UI) e smoke flows críticos; rastreio de latência e erros.
+- Em APIs, simular fluxos ponta-a-ponta (criar → consultar → alterar → deletar).
+
+## Performance
+- Load/Soak/Stress conforme SLOs (P95/P99, throughput, taxa de erro).
+- Analisar hot paths, CPU/I/O/GC/DB; registrar waterfalls e métricas comparativas.
+
+## Critérios de Saída (PR/CI)
+- Quality gate mínimo por serviço (cobertura e suites essenciais verdes).
+- Relatórios com ação recomendada (ex.: aumentar timeout, corrigir N+1, criar índice, refatorar hot path).
+- Para mudanças sensíveis: matriz de casos (happy/edge/erro), dif de cobertura antes/depois e resumo de performance (baseline vs. atual).
+
+## Integração Operacional
+- Gerar/atualizar testes a partir de diffs e requisitos explícitos.
+- Analisar relatórios (xml/json) para priorizar correções e detectar flakiness/regressões.
+- Definir cenários de carga e metas de SLO com plano de execução e comandos.
+- Em ferramentas/CLIs com flags sensíveis a versão, usar `use context7` e declarar a versão.

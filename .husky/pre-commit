@@ -1,0 +1,22 @@
+# Verificar se há changesets pendentes
+if [ -d ".changeset" ] && [ "$(ls -A .changeset/*.md 2>/dev/null)" ]; then
+  echo "✅ Changesets encontrados - pronto para release"
+else
+  echo "⚠️  Nenhum changeset encontrado. Considere criar um com 'pnpm changeset:add'"
+fi
+
+# Verificar se é o primeiro commit (sem histórico Git)
+if [ -z "$(git rev-list --count HEAD 2>/dev/null)" ]; then
+  echo "🚀 Primeiro commit detectado - executando linting em todos os arquivos..."
+  # Executar linting em todos os arquivos para o primeiro commit
+  biome lint . --reporter=github
+  echo "✅ Linting concluído para primeiro commit"
+else
+  # Executar linting com Nx (aproveitando cache e paralelização)
+  echo "🔍 Executando linting com Biome via Nx..."
+  nx affected --target=biome:lint
+
+  # Executar linting Go (se projetos Go forem afetados)
+  echo "🔍 Executando linting Go via Nx..."
+  nx affected --target=go:lint
+fi

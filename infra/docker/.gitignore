@@ -1,0 +1,43 @@
+# Arquivos de ambiente com senhas
+.env
+.env.local
+.env.*.local
+
+# Secrets e certificados
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+certs/
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+.dockerignore
+
+# Backup files
+*.bak
+*.backup
+
+# Volumes Docker
+volumes/
+data/
+
+# SSL certificates
+ssl/
+

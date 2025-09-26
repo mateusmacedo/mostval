@@ -1,0 +1,16 @@
+# Comunicação e Forma da Entrega (Agent + Inline Edit, @Cursor Rules)
+
+## Idioma e Estrutura
+- Responder em português, formal e técnico.
+- Organizar em seções autoexplicativas, com resumo executivo quando aplicável e passo a passo (pré-requisitos → execução → validação).
+- Explicitar riscos, limitações e trade-offs.
+
+## Código
+- Sem placeholders. TypeScript estrito; em Go, erros encadeados (%w) com contexto.
+- Comentários curtos e contextuais (intenção e decisão).
+
+## Aplicação das Regras
+- Usar `@Cursor Rules` no prompt para garantir a inclusão destas regras no contexto do Agent/Inline Edit.
+
+## Dependências Externas
+- Em frameworks/SDKs/CLIs/APIs com sintaxe sensível a versão, usar `use context7` e declarar a versão consultada.

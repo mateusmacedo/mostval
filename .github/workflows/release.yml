@@ -1,0 +1,107 @@
+name: 🚀 Release
+
+# Workflow de release integrado que combina Nx Release + Changeset
+# - Changeset atua como gate (verifica se há changesets pendentes)
+# - Nx Release atua como executor (faz versionamento e publicação)
+# - Garante que não haverá releases sem changeset pendente
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: 📦 Release Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@mateusmacedo'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        continue-on-error: true
+
+      - name: Install dependencies (fallback)
+        if: failure()
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Configure GitHub Packages
+        run: |
+          # Copiar configuração do GitHub Packages
+          cp .npmrc.github .npmrc
+          echo "✅ Configuração do GitHub Packages aplicada"
+
+      - name: Build packages
+        run: pnpm nx run-many -t build
+
+      - name: 🔍 Check for pending changesets
+        id: changeset-check
+        run: |
+          # Verificar se há arquivos .changeset/*.md (exceto README.md e config.json)
+          if [ -d ".changeset" ]; then
+            changeset_files=$(find .changeset -name "*.md" -not -name "README.md" | wc -l)
+            if [ "$changeset_files" -gt 0 ]; then
+              echo "has-changesets=true" >> $GITHUB_OUTPUT
+              echo "✅ Changesets pendentes encontrados ($changeset_files arquivos)"
+              pnpm changeset status
+            else
+              echo "has-changesets=false" >> $GITHUB_OUTPUT
+              echo "❌ Nenhum changeset pendente encontrado"
+            fi
+          else
+            echo "has-changesets=false" >> $GITHUB_OUTPUT
+            echo "❌ Diretório .changeset não encontrado"
+          fi
+
+      - name: 🚀 Execute Release
+        if: steps.changeset-check.outputs.has-changesets == 'true'
+        run: |
+          echo "🚀 Executando release integrado (Nx + Changeset)..."
+          pnpm release:integrated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⏭️ Skip release (no changesets)
+        if: steps.changeset-check.outputs.has-changesets == 'false'
+        run: |
+          echo "⚠️  Nenhum changeset pendente encontrado"
+          echo ""
+          echo "📝 Para criar um changeset:"
+          echo "   pnpm changeset add"
+          echo ""
+          echo "🔍 Para verificar status:"
+          echo "   pnpm changeset status"
